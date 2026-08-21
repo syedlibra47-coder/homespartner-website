@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Listings — HomesPartner Real Estate</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header" id="header">
+  <div class="container header-inner">
+    <a href="index.html#top" class="brand" id="brandLink">
+      <span class="logo-crop logo-crop--header"><img src="assets/logo.png" alt="HomesPartner Real Estate" class="brand-logo"></span>
+    </a>
+    <nav class="main-nav" id="mainNav"></nav>
+    <div class="header-actions">
+      <a href="index.html#contact" class="btn btn-gold btn-sm" id="headerCtaBtn">Get in Touch</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="hero-bg">
+    <svg class="grid-map" viewBox="0 0 1600 500" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <g class="grid-lines">
+        <line x1="0" y1="120" x2="1600" y2="120"/>
+        <line x1="0" y1="280" x2="1600" y2="280"/>
+        <line x1="270" y1="0" x2="270" y2="500"/>
+        <line x1="800" y1="0" x2="800" y2="500"/>
+        <line x1="1330" y1="0" x2="1330" y2="500"/>
+      </g>
+    </svg>
+  </div>
+  <div class="container page-hero-inner">
+    <p class="eyebrow">Featured Listings</p>
+    <h1 class="display">All Listings</h1>
+    <p>Every ready home currently for sale or rent across Dubai — filter by status, type, bedrooms or community to find yours.</p>
+  </div>
+</section>
+
+<!-- ===== ALL LISTINGS ===== -->
+<section class="all-listings">
+  <div class="container">
+    <div class="filters-bar reveal">
+      <div class="filter-status" id="allListingsStatus">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="sale">For Sale</button>
+        <button class="filter-btn" data-filter="rent">For Rent</button>
+      </div>
+      <select class="filter-select" id="filterType">
+        <option value="all">All Types</option>
+        <option value="villa">Villa</option>
+        <option value="apartment">Apartment</option>
+        <option value="loft">Loft</option>
+        <option value="studio">Studio</option>
+      </select>
+      <select class="filter-select" id="filterBeds">
+        <option value="all">Any Bedrooms</option>
+        <option value="0">Studio</option>
+        <option value="1">1 Bed</option>
+        <option value="2">2 Beds</option>
+        <option value="3">3 Beds</option>
+        <option value="4">4+ Beds</option>
+      </select>
+      <div class="filter-search">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" id="filterKeyword" placeholder="Search by community or project…">
+      </div>
+      <button type="button" class="filter-reset" id="filterReset">Reset</button>
+      <span class="filter-results" id="filterResultsCount">8 properties</span>
+    </div>
+
+    <div class="listing-grid-full" id="allListingsGrid"></div>
+
+    <div class="filter-empty" id="filterEmptyState">
+      <h3 class="display">No listings match your filters</h3>
+      <p>Try widening your search or clearing a filter.</p>
+      <button type="button" class="filter-reset" data-mirror-reset>Reset all filters</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="logo-crop logo-crop--footer"><img src="assets/logo.png" alt="HomesPartner Real Estate" class="footer-logo"></span>
+      <p id="footerBlurb"></p>
+      <a class="footer-email" id="footerEmail" href="mailto:info@homespartner.ae">info@homespartner.ae</a>
+    </div>
+    <div id="footerColumns"></div>
+  </div>
+  <div class="container footer-bottom">
+    <p>&copy; <span id="year"></span> <span id="footerCopyright">HomesPartner Real Estate. All rights reserved.</span></p>
+  </div>
+</footer>
+
+<script src="assets/listings-data.js"></script>
+<script src="assets/site-chrome-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/theme-presets.js"></script>
+<script src="assets/site-settings-data.js"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data-loader.js"></script>
+<script src="site-chrome.js"></script>
+<script src="script.js"></script>
+<script src="listings-page.js"></script>
+</body>
+</html>
