@@ -735,6 +735,8 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   color: var(--navy);
   font-weight: 500;
 }
+.listing-meta span { display: inline-flex; align-items: center; gap: 5px; }
+.listing-meta svg { width: 14px; height: 14px; color: var(--gold-dark); flex-shrink: 0; }
 
 .listing-more { text-align: center; margin-top: 48px; }
 
