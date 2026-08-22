@@ -1190,7 +1190,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   .hero-stats { grid-template-columns: repeat(2, 1fr); }
   .offplan-features { gap: 30px; }
   .search-fields { flex-direction: column; }
-  .search-field, .search-btn { width: 100%; flex-basis: auto; }
+  .search-field, .search-btn, .search-field-row { width: 100%; flex-basis: auto; }
   .listing-grid-full { grid-template-columns: repeat(2, 1fr); }
   .youtube-grid { grid-template-columns: repeat(2, 1fr); }
 }
