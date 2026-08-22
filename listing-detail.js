@@ -10,7 +10,7 @@
     return;
   }
 
-  const WHATSAPP_NUMBER = '971500000000';
+  const WHATSAPP_NUMBER = (window.CONTACT_CONTENT_DATA && window.CONTACT_CONTENT_DATA.whatsappNumber) || '971500000000';
   const whatsappMessage = `Hi, I'm interested in ${listing.title} (${listing.community}, ${listing.city}). Could you share more details?`;
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
 

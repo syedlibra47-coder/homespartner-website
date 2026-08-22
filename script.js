@@ -1,8 +1,7 @@
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// Replace with your real WhatsApp business number (country code, no + or spaces)
-const WHATSAPP_NUMBER = '971500000000';
+const WHATSAPP_NUMBER = (window.CONTACT_CONTENT_DATA && window.CONTACT_CONTENT_DATA.whatsappNumber) || '971500000000';
 document.querySelectorAll('.whatsapp-btn[data-property]').forEach(btn => {
   const message = `Hi, I'm interested in ${btn.dataset.property}. Could you share more details?`;
   btn.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;

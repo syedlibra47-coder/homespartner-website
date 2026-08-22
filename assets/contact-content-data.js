@@ -13,5 +13,8 @@ window.CONTACT_CONTENT_DATA = {
   formHeading: "How Can We Help You?",
   formSubtitle: "Tell us what you're looking for and a HomesPartner advisor from the office nearest you will be in touch shortly.",
   faqEyebrow: "Frequently Asked",
-  faqHeading: "Contacting HomesPartner"
+  faqHeading: "Contacting HomesPartner",
+  whatsappNumber: "971500000000",
+  generalPhone: "",
+  generalEmail: "info@homespartner.ae"
 };

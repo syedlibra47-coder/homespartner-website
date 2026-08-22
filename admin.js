@@ -644,7 +644,8 @@
     cc_introParagraph1: 'intro_paragraph_1', cc_introParagraph2: 'intro_paragraph_2',
     cc_networkEyebrow: 'network_eyebrow', cc_networkHeading: 'network_heading', cc_networkSubtitle: 'network_subtitle',
     cc_formEyebrow: 'form_eyebrow', cc_formHeading: 'form_heading', cc_formSubtitle: 'form_subtitle',
-    cc_faqEyebrow: 'faq_eyebrow', cc_faqHeading: 'faq_heading'
+    cc_faqEyebrow: 'faq_eyebrow', cc_faqHeading: 'faq_heading',
+    cc_whatsappNumber: 'whatsapp_number', cc_generalPhone: 'general_phone', cc_generalEmail: 'general_email'
   };
 
   async function loadContactContent() {

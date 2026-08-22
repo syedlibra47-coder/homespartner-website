@@ -148,7 +148,8 @@ window.dataReady = (async function () {
       introParagraph1: row.intro_paragraph_1, introParagraph2: row.intro_paragraph_2,
       networkEyebrow: row.network_eyebrow, networkHeading: row.network_heading, networkSubtitle: row.network_subtitle,
       formEyebrow: row.form_eyebrow, formHeading: row.form_heading, formSubtitle: row.form_subtitle,
-      faqEyebrow: row.faq_eyebrow, faqHeading: row.faq_heading
+      faqEyebrow: row.faq_eyebrow, faqHeading: row.faq_heading,
+      whatsappNumber: row.whatsapp_number, generalPhone: row.general_phone, generalEmail: row.general_email
     };
   }
 

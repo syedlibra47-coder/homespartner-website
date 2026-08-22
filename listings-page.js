@@ -4,7 +4,7 @@
   const grid = document.getElementById('allListingsGrid');
   if (!grid || !window.LISTINGS_DATA) return;
 
-  const WHATSAPP_NUMBER = '971500000000';
+  const WHATSAPP_NUMBER = (window.CONTACT_CONTENT_DATA && window.CONTACT_CONTENT_DATA.whatsappNumber) || '971500000000';
   const listings = Object.values(window.LISTINGS_DATA);
 
   const statusBtns = document.querySelectorAll('#allListingsStatus .filter-btn');

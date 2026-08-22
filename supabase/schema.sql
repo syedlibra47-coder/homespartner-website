@@ -326,6 +326,11 @@ create policy "Authenticated can insert homepage content" on homepage_content fo
 create trigger homepage_content_set_updated_at before update on homepage_content
   for each row execute function set_updated_at();
 
+-- ===== CONTACT PAGE: general WhatsApp/phone/email used site-wide =====
+alter table contact_page_content add column if not exists whatsapp_number text not null default '971500000000';
+alter table contact_page_content add column if not exists general_phone text not null default '';
+alter table contact_page_content add column if not exists general_email text not null default 'info@homespartner.ae';
+
 -- ===== HOMEPAGE HERO: background media + search filters =====
 alter table homepage_content add column if not exists hero_bg_type text not null default 'image';
 alter table homepage_content add column if not exists hero_bg_image text not null default 'assets/photos/hero-dubai-marina.jpg';

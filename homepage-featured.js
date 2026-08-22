@@ -1,7 +1,7 @@
 (async function () {
   if (window.dataReady) await window.dataReady;
 
-  const WHATSAPP_NUMBER = '971500000000';
+  const WHATSAPP_NUMBER = (window.CONTACT_CONTENT_DATA && window.CONTACT_CONTENT_DATA.whatsappNumber) || '971500000000';
 
   // ===== Featured listings =====
   const listingGrid = document.getElementById('listingGrid');
