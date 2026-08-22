@@ -364,6 +364,145 @@ create trigger site_chrome_set_updated_at before update on site_chrome
   for each row execute function set_updated_at();
 
 -- ============================================================
+-- USER ROLES (super_admin / admin / agent) -- run after everything above
+-- ============================================================
+create table if not exists user_profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  email text not null,
+  full_name text not null default '',
+  role text not null default 'agent' check (role in ('super_admin', 'admin', 'agent')),
+  agent_id text references agents(id) on delete set null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table user_profiles enable row level security;
+
+-- security definer so RLS on user_profiles itself doesn't recurse when
+-- other policies call this to check "what role is the current user".
+create or replace function current_user_role() returns text
+language sql security definer stable
+set search_path = public
+as $$
+  select role from user_profiles where id = auth.uid();
+$$;
+
+-- the agent's own listing email, so listing RLS can check "is this my row".
+create or replace function current_agent_email() returns text
+language sql security definer stable
+set search_path = public
+as $$
+  select a.email from user_profiles up
+  join agents a on a.id = up.agent_id
+  where up.id = auth.uid();
+$$;
+
+create policy "Users can view own profile" on user_profiles for select
+  using (id = auth.uid() or current_user_role() in ('admin', 'super_admin'));
+
+-- The "not exists" clause only ever matters once, for the very first row:
+-- it lets the first logged-in user create their own super_admin profile
+-- (nobody else has a role yet to authorize it). Every insert after that
+-- requires an existing admin/super_admin.
+create policy "Admins can insert profiles" on user_profiles for insert
+  with check (
+    current_user_role() in ('admin', 'super_admin')
+    or not exists (select 1 from user_profiles)
+  );
+
+create policy "Admins can update profiles" on user_profiles for update
+  using (current_user_role() = 'super_admin' or (current_user_role() = 'admin' and role <> 'super_admin'))
+  with check (current_user_role() = 'super_admin' or (current_user_role() = 'admin' and role <> 'super_admin'));
+
+create policy "Admins can delete profiles" on user_profiles for delete
+  using (current_user_role() = 'super_admin' or (current_user_role() = 'admin' and role <> 'super_admin'));
+
+create trigger user_profiles_set_updated_at before update on user_profiles
+  for each row execute function set_updated_at();
+
+-- ===== Re-scope every existing table's write access to admin/super_admin
+-- (previously any logged-in user could write anywhere). Listings gets an
+-- extra carve-out so an agent can update only their own rows. =====
+
+drop policy if exists "Authenticated can insert listings" on listings;
+drop policy if exists "Authenticated can update listings" on listings;
+drop policy if exists "Authenticated can delete listings" on listings;
+create policy "Admins can insert listings" on listings for insert
+  with check (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can delete listings" on listings for delete
+  using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins and own agent can update listings" on listings for update
+  using (current_user_role() in ('admin', 'super_admin') or (current_user_role() = 'agent' and agent_email = current_agent_email()))
+  with check (current_user_role() in ('admin', 'super_admin') or (current_user_role() = 'agent' and agent_email = current_agent_email()));
+
+drop policy if exists "Authenticated can insert offplan" on offplan_projects;
+drop policy if exists "Authenticated can update offplan" on offplan_projects;
+drop policy if exists "Authenticated can delete offplan" on offplan_projects;
+create policy "Admins can insert offplan" on offplan_projects for insert with check (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can update offplan" on offplan_projects for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can delete offplan" on offplan_projects for delete using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can insert services" on services;
+drop policy if exists "Authenticated can update services" on services;
+drop policy if exists "Authenticated can delete services" on services;
+create policy "Admins can insert services" on services for insert with check (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can update services" on services for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can delete services" on services for delete using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can update contact page content" on contact_page_content;
+drop policy if exists "Authenticated can insert contact page content" on contact_page_content;
+create policy "Admins can update contact page content" on contact_page_content for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can insert contact page content" on contact_page_content for insert with check (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can insert offices" on offices;
+drop policy if exists "Authenticated can update offices" on offices;
+drop policy if exists "Authenticated can delete offices" on offices;
+create policy "Admins can insert offices" on offices for insert with check (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can update offices" on offices for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can delete offices" on offices for delete using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can insert faqs" on faqs;
+drop policy if exists "Authenticated can update faqs" on faqs;
+drop policy if exists "Authenticated can delete faqs" on faqs;
+create policy "Admins can insert faqs" on faqs for insert with check (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can update faqs" on faqs for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can delete faqs" on faqs for delete using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can insert agents" on agents;
+drop policy if exists "Authenticated can update agents" on agents;
+drop policy if exists "Authenticated can delete agents" on agents;
+create policy "Admins can insert agents" on agents for insert with check (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can update agents" on agents for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can delete agents" on agents for delete using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can update careers page content" on careers_page_content;
+drop policy if exists "Authenticated can insert careers page content" on careers_page_content;
+create policy "Admins can update careers page content" on careers_page_content for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can insert careers page content" on careers_page_content for insert with check (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can insert job listings" on job_listings;
+drop policy if exists "Authenticated can update job listings" on job_listings;
+drop policy if exists "Authenticated can delete job listings" on job_listings;
+create policy "Admins can insert job listings" on job_listings for insert with check (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can update job listings" on job_listings for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can delete job listings" on job_listings for delete using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can update site settings" on site_settings;
+drop policy if exists "Authenticated can insert site settings" on site_settings;
+create policy "Admins can update site settings" on site_settings for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can insert site settings" on site_settings for insert with check (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can update homepage content" on homepage_content;
+drop policy if exists "Authenticated can insert homepage content" on homepage_content;
+create policy "Admins can update homepage content" on homepage_content for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can insert homepage content" on homepage_content for insert with check (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Authenticated can update site chrome" on site_chrome;
+drop policy if exists "Authenticated can insert site chrome" on site_chrome;
+create policy "Admins can update site chrome" on site_chrome for update using (current_user_role() in ('admin', 'super_admin'));
+create policy "Admins can insert site chrome" on site_chrome for insert with check (current_user_role() in ('admin', 'super_admin'));
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.

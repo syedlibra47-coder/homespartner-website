@@ -12,33 +12,80 @@
     : null;
 
   const loginScreen = document.getElementById('loginScreen');
+  const noRoleScreen = document.getElementById('noRoleScreen');
   const dashboard = document.getElementById('dashboard');
+
+  // ===== Role state (set once per session, after fetching user_profiles) =====
+  let currentUserId = null;
+  let currentRole = null;       // 'super_admin' | 'admin' | 'agent'
+  let currentAgentId = null;
+  let currentAgentEmail = null; // used to scope the listings query for agents
+
+  function applyRoleVisibility(role) {
+    document.querySelectorAll('[data-roles]').forEach(el => {
+      const allowed = el.dataset.roles.split(',');
+      el.style.display = allowed.includes(role) ? '' : 'none';
+    });
+    const listingsLabel = document.getElementById('listingsTabLabel');
+    const listingsTitle = document.getElementById('listingsPanelTitle');
+    const addListingBtn = document.getElementById('addListingBtn');
+    if (role === 'agent') {
+      if (listingsLabel) listingsLabel.textContent = 'My Listings';
+      if (listingsTitle) listingsTitle.textContent = 'My Listings';
+      if (addListingBtn) addListingBtn.style.display = 'none';
+    }
+  }
 
   // ===== Auth =====
   async function checkSession() {
     if (!supabase) return;
     const { data } = await supabase.auth.getSession();
     if (data.session) {
-      showDashboard(data.session.user.email);
+      showDashboard(data.session.user);
     }
   }
 
-  function showDashboard(email) {
+  async function showDashboard(user) {
     loginScreen.style.display = 'none';
+    noRoleScreen.style.display = 'none';
+
+    const { data: profile, error: profileErr } = await supabase
+      .from('user_profiles').select('*').eq('id', user.id).maybeSingle();
+
+    if (profileErr || !profile) {
+      dashboard.style.display = 'none';
+      noRoleScreen.style.display = 'flex';
+      return;
+    }
+
+    currentUserId = user.id;
+    currentRole = profile.role;
+    currentAgentId = profile.agent_id;
+
+    if (currentAgentId) {
+      const { data: agentRow } = await supabase.from('agents').select('email').eq('id', currentAgentId).maybeSingle();
+      currentAgentEmail = agentRow ? agentRow.email : null;
+    }
+
     dashboard.style.display = 'block';
-    document.getElementById('userEmail').textContent = email;
+    document.getElementById('userEmail').textContent = profile.full_name ? `${profile.full_name} (${user.email})` : user.email;
+    applyRoleVisibility(currentRole);
+
     loadListings();
-    loadOffplan();
-    loadServices();
-    loadContactContent();
-    loadOffices();
-    loadFaqs();
-    loadAgents();
-    loadCareersContent();
-    loadJobs();
-    loadHomepageContent();
-    loadChromeSettings();
-    loadThemeSettings();
+    if (currentRole === 'admin' || currentRole === 'super_admin') {
+      loadOffplan();
+      loadServices();
+      loadContactContent();
+      loadOffices();
+      loadFaqs();
+      loadAgents();
+      loadCareersContent();
+      loadJobs();
+      loadHomepageContent();
+      loadChromeSettings();
+      loadThemeSettings();
+      loadUsers();
+    }
   }
 
   document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -50,10 +97,14 @@
     const password = document.getElementById('loginPassword').value;
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) { errorEl.textContent = error.message; return; }
-    showDashboard(data.user.email);
+    showDashboard(data.user);
   });
 
   document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    window.location.reload();
+  });
+  document.getElementById('noRoleLogoutBtn').addEventListener('click', async () => {
     await supabase.auth.signOut();
     window.location.reload();
   });
@@ -209,14 +260,21 @@
   let currentListings = [];
 
   async function loadListings() {
-    const { data, error } = await supabase.from('listings').select('*').order('created_at', { ascending: false });
+    let query = supabase.from('listings').select('*').order('created_at', { ascending: false });
+    if (currentRole === 'agent') {
+      query = query.eq('agent_email', currentAgentEmail || '__no_agent_linked__');
+    }
+    const { data, error } = await query;
     if (error) { console.error(error); return; }
     currentListings = data;
     const tbody = document.getElementById('listingsTableBody');
     if (!data.length) {
-      tbody.innerHTML = `<tr class="admin-empty-row"><td colspan="6">No listings yet — click "Add New Listing" to create one.</td></tr>`;
+      tbody.innerHTML = currentRole === 'agent'
+        ? `<tr class="admin-empty-row"><td colspan="6">No listings are assigned to you yet — ask an admin to set your email as the agent on a listing.</td></tr>`
+        : `<tr class="admin-empty-row"><td colspan="6">No listings yet — click "Add New Listing" to create one.</td></tr>`;
       return;
     }
+    const canDelete = currentRole === 'admin' || currentRole === 'super_admin';
     tbody.innerHTML = data.map(l => `
       <tr>
         <td>${l.title}</td>
@@ -226,7 +284,7 @@
         <td>${l.featured ? '<span class="featured-dot"></span>' : ''}</td>
         <td class="admin-row-actions">
           <button class="edit-btn" data-edit="${l.id}">Edit</button>
-          <button class="delete-btn" data-delete="${l.id}">Delete</button>
+          ${canDelete ? `<button class="delete-btn" data-delete="${l.id}">Delete</button>` : ''}
         </td>
       </tr>`).join('');
     tbody.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openListingForm(b.dataset.edit)));
@@ -1482,5 +1540,100 @@
     if (window.applyTheme) window.applyTheme(selectedPalette, selectedFontPairing);
     successEl.textContent = 'Saved — the new theme is now live across the site.';
     setTimeout(() => { successEl.textContent = ''; }, 4000);
+  });
+
+  // ===== USERS (super_admin / admin only) =====
+  const roleLabels = { super_admin: 'Super Admin', admin: 'Admin', agent: 'Agent' };
+  let currentAgentsForUserForm = [];
+
+  async function loadUsers() {
+    const tbody = document.getElementById('usersTableBody');
+    const [{ data: profiles, error }, { data: agentRows }] = await Promise.all([
+      supabase.from('user_profiles').select('*').order('created_at', { ascending: true }),
+      supabase.from('agents').select('id,name')
+    ]);
+    if (error) { console.error(error); return; }
+    const agentNameById = {};
+    (agentRows || []).forEach(a => { agentNameById[a.id] = a.name; });
+
+    if (!profiles.length) {
+      tbody.innerHTML = `<tr class="admin-empty-row"><td colspan="5">No users yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = profiles.map(p => {
+      const canManage = currentRole === 'super_admin' || (currentRole === 'admin' && p.role !== 'super_admin');
+      const isSelf = p.id === currentUserId;
+      return `
+      <tr>
+        <td>${p.full_name || '—'}</td>
+        <td>${p.email}</td>
+        <td><span class="role-badge role-badge--${p.role}">${roleLabels[p.role] || p.role}</span></td>
+        <td>${p.agent_id ? (agentNameById[p.agent_id] || p.agent_id) : '—'}</td>
+        <td class="admin-row-actions">
+          ${(canManage && !isSelf) ? `<button class="delete-btn" data-delete-user="${p.id}">Delete</button>` : (isSelf ? '<span style="color:var(--gray);font-size:0.82rem;">You</span>' : '')}
+        </td>
+      </tr>`;
+    }).join('');
+    tbody.querySelectorAll('[data-delete-user]').forEach(b => b.addEventListener('click', () => deleteUser(b.dataset.deleteUser)));
+  }
+
+  async function deleteUser(userId) {
+    if (!confirm('Remove this user? They will immediately lose access.')) return;
+    const { data, error } = await supabase.functions.invoke('invite-user', { body: { action: 'delete', userId } });
+    if (error || (data && data.error)) { alert((data && data.error) || error.message); return; }
+    loadUsers();
+  }
+
+  async function populateAgentDropdown() {
+    const select = document.getElementById('us_agentId');
+    if (!currentAgentsForUserForm.length) {
+      const { data } = await supabase.from('agents').select('id,name').order('name', { ascending: true });
+      currentAgentsForUserForm = data || [];
+    }
+    select.innerHTML = '<option value="">— None —</option>' +
+      currentAgentsForUserForm.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+  }
+
+  function toggleAgentRow() {
+    const role = document.getElementById('us_role').value;
+    document.getElementById('us_agentRow').style.display = role === 'agent' ? '' : 'none';
+  }
+
+  document.getElementById('us_role').addEventListener('change', toggleAgentRow);
+
+  document.getElementById('addUserBtn').addEventListener('click', async () => {
+    document.getElementById('userForm').reset();
+    document.getElementById('userFormError').textContent = '';
+    document.getElementById('userFormSuccess').textContent = '';
+    await populateAgentDropdown();
+    toggleAgentRow();
+    // Only a super admin can hand out the super_admin role.
+    const roleSelect = document.getElementById('us_role');
+    roleSelect.querySelector('option[value="super_admin"]').disabled = currentRole !== 'super_admin';
+    openModal('userModal');
+  });
+
+  document.getElementById('userForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('userFormError');
+    const successEl = document.getElementById('userFormSuccess');
+    errorEl.textContent = '';
+    successEl.textContent = '';
+
+    const body = {
+      email: document.getElementById('us_email').value.trim(),
+      fullName: document.getElementById('us_fullName').value.trim(),
+      role: document.getElementById('us_role').value,
+      agentId: document.getElementById('us_agentId').value || null
+    };
+    const saveBtn = document.getElementById('userSaveBtn');
+    saveBtn.disabled = true; saveBtn.textContent = 'Sending…';
+    const { data, error } = await supabase.functions.invoke('invite-user', { body });
+    saveBtn.disabled = false; saveBtn.textContent = 'Send Invite';
+
+    if (error || (data && data.error)) { errorEl.textContent = (data && data.error) || error.message; return; }
+    successEl.textContent = 'Invite sent.';
+    loadUsers();
+    setTimeout(() => closeModal('userModal'), 1200);
   });
 })();

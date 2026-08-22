@@ -30,6 +30,16 @@
   </form>
 </div>
 
+<!-- ===== NO ROLE ASSIGNED ===== -->
+<div class="admin-login-screen" id="noRoleScreen" style="display:none;">
+  <div class="admin-login-card">
+    <span class="logo-crop logo-crop--header"><img src="assets/logo.png" alt="HomesPartner Real Estate"></span>
+    <h1>No Access Yet</h1>
+    <p class="admin-login-sub">Your login works, but no role has been assigned to it yet. Ask a super admin or admin to invite you (or assign your role) from the Users tab.</p>
+    <button type="button" class="btn btn-navy" id="noRoleLogoutBtn">Log Out</button>
+  </div>
+</div>
+
 <!-- ===== DASHBOARD ===== -->
 <div class="admin-dashboard" id="dashboard" style="display:none;">
   <div class="admin-shell">
@@ -40,24 +50,28 @@
       <nav class="admin-sidebar-nav">
         <div class="admin-nav-group">
           <p class="admin-nav-group-label">Properties</p>
-          <button type="button" class="admin-tab active" data-tab="listings"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M8 22 24 8l16 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 20v18h24V20" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 38v-10h8v10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Listings</span></button>
-          <button type="button" class="admin-tab" data-tab="offplan"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6 6 16v6h36v-6L24 6Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M10 22v16M18 22v16M30 22v16M38 22v16" stroke="currentColor" stroke-width="3"/><path d="M6 42h36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Off-Plan Projects</span></button>
-          <button type="button" class="admin-tab" data-tab="services"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M33 8a9 9 0 0 0-11.8 11.8L9 32l7 7 12.2-12.2A9 9 0 0 0 40 15l-6.5 6.5-5-5L34.5 10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Services</span></button>
+          <button type="button" class="admin-tab active" data-tab="listings"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M8 22 24 8l16 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 20v18h24V20" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 38v-10h8v10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span id="listingsTabLabel">Listings</span></button>
+          <button type="button" class="admin-tab" data-tab="offplan" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6 6 16v6h36v-6L24 6Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M10 22v16M18 22v16M30 22v16M38 22v16" stroke="currentColor" stroke-width="3"/><path d="M6 42h36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Off-Plan Projects</span></button>
+          <button type="button" class="admin-tab" data-tab="services" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M33 8a9 9 0 0 0-11.8 11.8L9 32l7 7 12.2-12.2A9 9 0 0 0 40 15l-6.5 6.5-5-5L34.5 10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Services</span></button>
         </div>
-        <div class="admin-nav-group">
+        <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">Pages</p>
-          <button type="button" class="admin-tab" data-tab="homepage"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M6 40h36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="10" y="28" width="6" height="12" stroke="currentColor" stroke-width="3"/><rect x="21" y="20" width="6" height="20" stroke="currentColor" stroke-width="3"/><rect x="32" y="12" width="6" height="28" stroke="currentColor" stroke-width="3"/></svg></span><span>Homepage</span></button>
-          <button type="button" class="admin-tab" data-tab="contact"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 42s12-11 12-20a12 12 0 1 0-24 0c0 9 12 20 12 20Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="24" cy="22" r="4" stroke="currentColor" stroke-width="3"/></svg></span><span>Contact Page</span></button>
-          <button type="button" class="admin-tab" data-tab="careers"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="16" cy="24" r="8" stroke="currentColor" stroke-width="3"/><path d="M24 24h16M34 24v6M40 24v4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Careers</span></button>
+          <button type="button" class="admin-tab" data-tab="homepage" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M6 40h36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="10" y="28" width="6" height="12" stroke="currentColor" stroke-width="3"/><rect x="21" y="20" width="6" height="20" stroke="currentColor" stroke-width="3"/><rect x="32" y="12" width="6" height="28" stroke="currentColor" stroke-width="3"/></svg></span><span>Homepage</span></button>
+          <button type="button" class="admin-tab" data-tab="contact" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 42s12-11 12-20a12 12 0 1 0-24 0c0 9 12 20 12 20Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="24" cy="22" r="4" stroke="currentColor" stroke-width="3"/></svg></span><span>Contact Page</span></button>
+          <button type="button" class="admin-tab" data-tab="careers" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="16" cy="24" r="8" stroke="currentColor" stroke-width="3"/><path d="M24 24h16M34 24v6M40 24v4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Careers</span></button>
         </div>
-        <div class="admin-nav-group">
+        <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">People</p>
-          <button type="button" class="admin-tab" data-tab="agents"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6l14 5v11c0 9-6 15-14 18-8-3-14-9-14-18V11l14-5Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M18 24l4 4 8-8" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Agents</span></button>
+          <button type="button" class="admin-tab" data-tab="agents" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6l14 5v11c0 9-6 15-14 18-8-3-14-9-14-18V11l14-5Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M18 24l4 4 8-8" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Agents</span></button>
         </div>
-        <div class="admin-nav-group">
+        <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">Site Settings</p>
-          <button type="button" class="admin-tab" data-tab="chrome"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M14 6h14l8 8v28H14V6Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M28 6v8h8" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M18 26h12M18 32h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Header &amp; Footer</span></button>
-          <button type="button" class="admin-tab" data-tab="theme"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6l5.5 11.5L42 19l-9 8.8 2.1 12.2L24 34l-11.1 6 2.1-12.2L6 19l12.5-1.5L24 6Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></span><span>Theme</span></button>
+          <button type="button" class="admin-tab" data-tab="chrome" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M14 6h14l8 8v28H14V6Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M28 6v8h8" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M18 26h12M18 32h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Header &amp; Footer</span></button>
+          <button type="button" class="admin-tab" data-tab="theme" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6l5.5 11.5L42 19l-9 8.8 2.1 12.2L24 34l-11.1 6 2.1-12.2L6 19l12.5-1.5L24 6Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></span><span>Theme</span></button>
+        </div>
+        <div class="admin-nav-group" data-roles="admin,super_admin">
+          <p class="admin-nav-group-label">Administration</p>
+          <button type="button" class="admin-tab" data-tab="users" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="18" cy="16" r="7" stroke="currentColor" stroke-width="3"/><path d="M6 41c0-8 5.4-13 12-13s12 5 12 13" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M31 10.5a7 7 0 0 1 0 13.6M36 41c0-6.5-3.6-11-9-12.6" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Users</span></button>
         </div>
       </nav>
       <div class="admin-sidebar-foot">
@@ -72,10 +86,10 @@
     <main class="admin-main">
       <div class="admin-content">
 
-  <!-- LISTINGS TAB -->
+  <!-- LISTINGS TAB (full list for admin/super_admin, own-listings-only for agents) -->
   <section class="admin-panel active" id="panel-listings">
     <div class="admin-panel-head">
-      <h2>Listings</h2>
+      <h2 id="listingsPanelTitle">Listings</h2>
       <button type="button" class="btn btn-gold btn-sm" id="addListingBtn">+ Add New Listing</button>
     </div>
     <div class="admin-table-wrap">
@@ -465,6 +479,21 @@
     </form>
   </section>
 
+  <!-- USERS TAB (super_admin / admin only) -->
+  <section class="admin-panel" id="panel-users">
+    <div class="admin-panel-head">
+      <h2>Users</h2>
+      <button type="button" class="btn btn-gold btn-sm" id="addUserBtn">+ Invite User</button>
+    </div>
+    <p style="font-size:0.82rem;color:var(--gray);margin-bottom:16px;">Inviting someone sends them an email to set their own password. Agents can only edit listings assigned to them (matched by email) — link their login to their agent profile below.</p>
+    <div class="admin-table-wrap">
+      <table class="admin-table" id="usersTable">
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Linked Agent</th><th></th></tr></thead>
+        <tbody id="usersTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
       </div>
     </main>
   </div>
@@ -790,6 +819,39 @@
         <button type="submit" class="btn btn-navy" id="jobSaveBtn">Save Job Listing</button>
       </div>
       <p class="admin-form-error" id="jobFormError"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ===== INVITE USER MODAL ===== -->
+<div class="admin-modal" id="userModal">
+  <div class="admin-modal-card">
+    <div class="admin-modal-head">
+      <h3>Invite User</h3>
+      <button type="button" class="admin-modal-close" data-close-modal="userModal">&times;</button>
+    </div>
+    <form id="userForm" class="admin-form">
+      <label class="admin-form-full">Email <input type="email" id="us_email" required></label>
+      <label class="admin-form-full">Full Name <input type="text" id="us_fullName" required></label>
+      <label class="admin-form-full">Role
+        <select id="us_role" required>
+          <option value="agent">Agent — sees only their own listings</option>
+          <option value="admin">Admin — full content &amp; user access</option>
+          <option value="super_admin">Super Admin — every right, including other super admins</option>
+        </select>
+      </label>
+      <label class="admin-form-full" id="us_agentRow">Linked Agent Profile (so their listings can be matched)
+        <select id="us_agentId">
+          <option value="">— None —</option>
+        </select>
+      </label>
+      <p style="font-size:0.78rem;color:var(--gray);margin:-8px 0 14px;">They'll get an email with a link to set their own password. This can't be used to edit an existing user's role — delete and re-invite instead.</p>
+      <div class="admin-form-actions">
+        <button type="button" class="btn btn-sm" data-close-modal="userModal">Cancel</button>
+        <button type="submit" class="btn btn-navy" id="userSaveBtn">Send Invite</button>
+      </div>
+      <p class="admin-form-error" id="userFormError"></p>
+      <p class="admin-form-success" id="userFormSuccess"></p>
     </form>
   </div>
 </div>
