@@ -249,13 +249,10 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 /* ===== NETWORK DIAGRAM (Offices section) ===== */
 .network-diagram { max-width: 980px; margin: 0 auto 64px; }
 .network-diagram svg { width: 100%; height: auto; display: block; }
-.map-credit { text-align: center; font-size: 0.68rem; color: var(--line); margin-top: 4px; }
-.map-credit a { color: var(--line); }
-.map-credit a:hover { color: var(--gray); }
 
 .network-diagram .map-bg path {
   fill: var(--paper-flat);
-  stroke: var(--paper-flat);
+  stroke: var(--line);
   stroke-width: 0.6;
 }
 
