@@ -7,25 +7,39 @@
 // `await` before reading window.LISTINGS_DATA / window.OFFPLAN_DATA.
 // ============================================================
 // Applies a curated background/accent palette (see assets/theme-presets.js)
-// plus per-role typography (heading/body/data font + color) to every page,
-// by overriding the :root CSS custom properties defined in styles.css and
-// lazily loading whichever Google Fonts are chosen. Safe to call with only
-// one argument, or with defaults — it's a no-op wherever there's nothing to set.
+// plus per-role typography (font + color, independently for headings, body
+// text, data/prices, listing & project cards, blog/video cards and the
+// listing-page enquiry form) to every page, by overriding the :root CSS
+// custom properties defined in styles.css and lazily loading whichever
+// Google Fonts are chosen. Safe to call with only one argument, or with
+// defaults — it's a no-op wherever there's nothing to set.
 window.applyTheme = function (paletteKey, typography) {
   const palette = window.THEME_PALETTES && window.THEME_PALETTES[paletteKey];
   const tokens = Object.assign({}, palette ? palette.tokens : {});
 
+  // role key -> [font token(s), color token, fallback font stack]
+  const roleMap = {
+    heading: [['--font-serif', '--font-head'], '--heading-color', 'Georgia, serif'],
+    body: [['--font-body'], '--body-color', "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"],
+    data: [['--font-mono'], '--data-color', "'SF Mono', ui-monospace, monospace"],
+    card: [['--font-card'], '--card-color', "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"],
+    blog: [['--font-blog'], '--blog-color', "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"],
+    form: [['--font-form'], '--form-color', "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"]
+  };
+
+  const families = [];
   if (typography) {
-    if (typography.headingFont) {
-      const stack = `'${typography.headingFont}', Georgia, serif`;
-      tokens['--font-serif'] = stack;
-      tokens['--font-head'] = stack;
-    }
-    if (typography.bodyFont) tokens['--font-body'] = `'${typography.bodyFont}', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
-    if (typography.dataFont) tokens['--font-mono'] = `'${typography.dataFont}', 'SF Mono', ui-monospace, monospace`;
-    if (typography.headingColor) tokens['--heading-color'] = typography.headingColor;
-    if (typography.bodyColor) tokens['--body-color'] = typography.bodyColor;
-    if (typography.dataColor) tokens['--data-color'] = typography.dataColor;
+    Object.keys(roleMap).forEach(role => {
+      const [fontTokens, colorToken, fallback] = roleMap[role];
+      const font = typography[role + 'Font'];
+      const color = typography[role + 'Color'];
+      if (font) {
+        const stack = `'${font}', ${fallback}`;
+        fontTokens.forEach(t => { tokens[t] = stack; });
+        families.push(font);
+      }
+      if (color) tokens[colorToken] = color;
+    });
   }
 
   if (!Object.keys(tokens).length) return;
@@ -39,20 +53,18 @@ window.applyTheme = function (paletteKey, typography) {
   }
   styleTag.textContent = css;
 
-  if (typography) {
-    const families = [...new Set([typography.headingFont, typography.bodyFont, typography.dataFont].filter(Boolean))];
-    if (families.length) {
-      const href = 'https://fonts.googleapis.com/css2?' +
-        families.map(f => `family=${encodeURIComponent(f)}:wght@400;500;600;700;800`).join('&') + '&display=swap';
-      let fontLink = document.getElementById('theme-google-fonts');
-      if (!fontLink) {
-        fontLink = document.createElement('link');
-        fontLink.id = 'theme-google-fonts';
-        fontLink.rel = 'stylesheet';
-        document.head.appendChild(fontLink);
-      }
-      if (fontLink.href !== href) fontLink.href = href;
+  const uniqueFamilies = [...new Set(families)];
+  if (uniqueFamilies.length) {
+    const href = 'https://fonts.googleapis.com/css2?' +
+      uniqueFamilies.map(f => `family=${encodeURIComponent(f)}:wght@400;500;600;700;800`).join('&') + '&display=swap';
+    let fontLink = document.getElementById('theme-google-fonts');
+    if (!fontLink) {
+      fontLink = document.createElement('link');
+      fontLink.id = 'theme-google-fonts';
+      fontLink.rel = 'stylesheet';
+      document.head.appendChild(fontLink);
     }
+    if (fontLink.href !== href) fontLink.href = href;
   }
 };
 
@@ -290,7 +302,10 @@ window.dataReady = (async function () {
         typography: {
           headingFont: s.heading_font, headingColor: s.heading_color,
           bodyFont: s.body_font, bodyColor: s.body_color,
-          dataFont: s.data_font, dataColor: s.data_color
+          dataFont: s.data_font, dataColor: s.data_color,
+          cardFont: s.card_font, cardColor: s.card_color,
+          blogFont: s.blog_font, blogColor: s.blog_color,
+          formFont: s.form_font, formColor: s.form_color
         }
       };
     }

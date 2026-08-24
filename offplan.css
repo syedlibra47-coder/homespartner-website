@@ -32,7 +32,7 @@
 
 .offplan-card-body { padding: 22px; }
 .offplan-card-price { font-family: var(--font-mono); font-weight: 700; font-size: 1.15rem; color: var(--navy); margin-bottom: 8px; }
-.offplan-card-body h3 { font-size: 1.1rem; margin-bottom: 6px; }
+.offplan-card-body h3 { font-family: var(--font-card); color: var(--card-color); font-size: 1.1rem; margin-bottom: 6px; }
 .offplan-card-location { display: flex; align-items: center; gap: 6px; color: var(--gray); font-size: 0.88rem; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--line); }
 .offplan-card-location svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--gold-dark); }
 

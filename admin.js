@@ -1502,53 +1502,72 @@
     });
   }
 
-  function populateFontDatalists() {
+  // Each role's <select id="ty_{role}FontPreset">, text <input id="ty_{role}Font">,
+  // color <input id="ty_{role}Color"> and preview <p id="ty_{role}Preview"> follow
+  // the same naming pattern, so all six roles are driven from this one list.
+  const typoRoles = ['heading', 'body', 'data', 'card', 'blog', 'form'];
+  const typoFallback = { heading: 'Georgia,serif', body: 'sans-serif', data: 'monospace', card: 'sans-serif', blog: 'sans-serif', form: 'sans-serif' };
+
+  function populateFontPresetSelects() {
     const s = window.THEME_FONT_SUGGESTIONS;
     if (!s) return;
-    document.getElementById('fontListHeading').innerHTML = s.heading.map(f => `<option value="${f}">`).join('');
-    document.getElementById('fontListBody').innerHTML = s.body.map(f => `<option value="${f}">`).join('');
-    document.getElementById('fontListData').innerHTML = s.data.map(f => `<option value="${f}">`).join('');
+    typoRoles.forEach(role => {
+      const select = document.getElementById(`ty_${role}FontPreset`);
+      select.innerHTML = '<option value="">— Choose from list —</option>' +
+        s[role].map(f => `<option value="${f}">${f}</option>`).join('');
+      select.addEventListener('change', () => {
+        if (!select.value) return;
+        const textInput = document.getElementById(`ty_${role}Font`);
+        textInput.value = select.value;
+        textInput.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    });
   }
 
   function updateTypoPreviews() {
-    const headingFont = document.getElementById('ty_headingFont').value;
-    const headingColor = document.getElementById('ty_headingColor').value;
-    const bodyFont = document.getElementById('ty_bodyFont').value;
-    const bodyColor = document.getElementById('ty_bodyColor').value;
-    const dataFont = document.getElementById('ty_dataFont').value;
-    const dataColor = document.getElementById('ty_dataColor').value;
-    document.getElementById('ty_headingPreview').style.cssText = `font-family:'${headingFont}',Georgia,serif;color:${headingColor};`;
-    document.getElementById('ty_bodyPreview').style.cssText = `font-family:'${bodyFont}',sans-serif;color:${bodyColor};`;
-    document.getElementById('ty_dataPreview').style.cssText = `font-family:'${dataFont}',monospace;color:${dataColor};`;
+    typoRoles.forEach(role => {
+      const font = document.getElementById(`ty_${role}Font`).value;
+      const color = document.getElementById(`ty_${role}Color`).value;
+      document.getElementById(`ty_${role}Preview`).style.cssText = `font-family:'${font}',${typoFallback[role]};color:${color};`;
+      // Keep the dropdown in sync when the typed value matches one of its options.
+      const select = document.getElementById(`ty_${role}FontPreset`);
+      select.value = [...select.options].some(o => o.value === font) ? font : '';
+    });
   }
 
-  ['ty_headingFont', 'ty_headingColor', 'ty_bodyFont', 'ty_bodyColor', 'ty_dataFont', 'ty_dataColor'].forEach(id => {
-    document.getElementById(id).addEventListener('input', updateTypoPreviews);
+  typoRoles.forEach(role => {
+    document.getElementById(`ty_${role}Font`).addEventListener('input', updateTypoPreviews);
+    document.getElementById(`ty_${role}Color`).addEventListener('input', updateTypoPreviews);
   });
 
   function readTypography() {
-    return {
-      headingFont: document.getElementById('ty_headingFont').value,
-      headingColor: document.getElementById('ty_headingColor').value,
-      bodyFont: document.getElementById('ty_bodyFont').value,
-      bodyColor: document.getElementById('ty_bodyColor').value,
-      dataFont: document.getElementById('ty_dataFont').value,
-      dataColor: document.getElementById('ty_dataColor').value
-    };
+    const typography = {};
+    typoRoles.forEach(role => {
+      typography[role + 'Font'] = document.getElementById(`ty_${role}Font`).value;
+      typography[role + 'Color'] = document.getElementById(`ty_${role}Color`).value;
+    });
+    return typography;
   }
 
+  const typoDefaults = {
+    heading: { font: 'Fraunces', color: '#1F275C' },
+    body: { font: 'Manrope', color: '#1B1D28' },
+    data: { font: 'IBM Plex Mono', color: '#1F275C' },
+    card: { font: 'Manrope', color: '#1F275C' },
+    blog: { font: 'Manrope', color: '#1F275C' },
+    form: { font: 'Manrope', color: '#1F275C' }
+  };
+
   async function loadThemeSettings() {
-    populateFontDatalists();
+    populateFontPresetSelects();
     const { data, error } = await supabase.from('site_settings').select('*').eq('id', 'main').maybeSingle();
     if (error) { console.error(error); renderThemeOptions(); return; }
     if (data) {
       selectedPalette = data.color_palette || 'navy-gold';
-      document.getElementById('ty_headingFont').value = data.heading_font || 'Fraunces';
-      document.getElementById('ty_headingColor').value = data.heading_color || '#1F275C';
-      document.getElementById('ty_bodyFont').value = data.body_font || 'Manrope';
-      document.getElementById('ty_bodyColor').value = data.body_color || '#1B1D28';
-      document.getElementById('ty_dataFont').value = data.data_font || 'IBM Plex Mono';
-      document.getElementById('ty_dataColor').value = data.data_color || '#1F275C';
+      typoRoles.forEach(role => {
+        document.getElementById(`ty_${role}Font`).value = data[role + '_font'] || typoDefaults[role].font;
+        document.getElementById(`ty_${role}Color`).value = data[role + '_color'] || typoDefaults[role].color;
+      });
     }
     renderThemeOptions();
     updateTypoPreviews();
@@ -1562,13 +1581,11 @@
     successEl.textContent = '';
 
     const typography = readTypography();
-    const record = {
-      id: 'main',
-      color_palette: selectedPalette,
-      heading_font: typography.headingFont, heading_color: typography.headingColor,
-      body_font: typography.bodyFont, body_color: typography.bodyColor,
-      data_font: typography.dataFont, data_color: typography.dataColor
-    };
+    const record = { id: 'main', color_palette: selectedPalette };
+    typoRoles.forEach(role => {
+      record[role + '_font'] = typography[role + 'Font'];
+      record[role + '_color'] = typography[role + 'Color'];
+    });
     const { error } = await supabase.from('site_settings').upsert(record);
     if (error) { errorEl.textContent = error.message; return; }
     if (window.applyTheme) window.applyTheme(selectedPalette, typography);

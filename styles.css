@@ -26,6 +26,12 @@
   --heading-color: var(--navy);
   --body-color: var(--ink);
   --data-color: var(--navy);
+  --font-card: var(--font-head);
+  --card-color: var(--navy);
+  --font-blog: var(--font-head);
+  --blog-color: var(--navy);
+  --font-form: var(--font-head);
+  --form-color: var(--navy);
 
   --shadow-soft: 0 10px 30px rgba(18, 23, 61, 0.08);
   --shadow-card: 0 16px 40px rgba(18, 23, 61, 0.10);
@@ -729,7 +735,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .listing-body { padding: 24px; }
 .listing-price { font-family: var(--font-mono); font-weight: 600; font-size: 1.2rem; color: var(--data-color); margin-bottom: 6px; }
 .listing-price span { font-family: var(--font-body); font-weight: 500; font-size: 0.8rem; color: var(--gray); }
-.listing-body h3 { font-size: 1.1rem; margin-bottom: 4px; }
+.listing-body h3 { font-family: var(--font-card); color: var(--card-color); font-size: 1.1rem; margin-bottom: 4px; }
 .listing-location { color: var(--gray); font-size: 0.88rem; margin-bottom: 14px; }
 .listing-location::before { content: '📍 '; }
 
@@ -1064,7 +1070,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .youtube-thumb:hover .youtube-play { background: var(--gold-dark); color: var(--navy-deep); transform: translate(-50%, -50%) scale(1.08); }
 
 .youtube-body { padding: 20px 22px 24px; }
-.youtube-body h3 { font-size: 1.02rem; line-height: 1.35; margin-bottom: 8px; }
+.youtube-body h3 { font-family: var(--font-blog); color: var(--blog-color); font-size: 1.02rem; line-height: 1.35; margin-bottom: 8px; }
 .youtube-meta { font-family: var(--font-mono); font-size: 0.78rem; color: var(--gray); }
 
 /* ===== WHY US ===== */

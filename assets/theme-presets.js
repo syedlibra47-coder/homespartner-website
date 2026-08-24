@@ -58,5 +58,17 @@ window.THEME_FONT_SUGGESTIONS = {
   data: [
     "IBM Plex Mono", "JetBrains Mono", "Roboto Mono", "Space Mono",
     "Source Code Pro", "Fira Code", "Inconsolata"
+  ],
+  card: [
+    "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
+    "Outfit", "Karla", "Poppins", "Fraunces"
+  ],
+  blog: [
+    "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
+    "Outfit", "Karla", "Poppins", "Fraunces"
+  ],
+  form: [
+    "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
+    "Outfit", "Karla", "Poppins"
   ]
 };

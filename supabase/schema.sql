@@ -333,6 +333,12 @@ alter table site_settings add column if not exists body_font text not null defau
 alter table site_settings add column if not exists body_color text not null default '#1B1D28';
 alter table site_settings add column if not exists data_font text not null default 'IBM Plex Mono';
 alter table site_settings add column if not exists data_color text not null default '#1F275C';
+alter table site_settings add column if not exists card_font text not null default 'Manrope';
+alter table site_settings add column if not exists card_color text not null default '#1F275C';
+alter table site_settings add column if not exists blog_font text not null default 'Manrope';
+alter table site_settings add column if not exists blog_color text not null default '#1F275C';
+alter table site_settings add column if not exists form_font text not null default 'Manrope';
+alter table site_settings add column if not exists form_color text not null default '#1F275C';
 
 -- ===== CONTACT PAGE: general WhatsApp/phone/email used site-wide =====
 alter table contact_page_content add column if not exists whatsapp_number text not null default '971500000000';

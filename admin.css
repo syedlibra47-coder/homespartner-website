@@ -189,7 +189,8 @@
 .admin-theme-swatches { display: flex; gap: 6px; }
 .admin-theme-swatch { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
 .admin-typo-role { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; }
-.admin-typo-role-label { font-weight: 700; font-size: 0.85rem; color: var(--navy); margin-bottom: 10px; }
+.admin-typo-role-label { font-weight: 700; font-size: 0.85rem; color: var(--navy); margin-bottom: 2px; }
+.admin-typo-role-hint { font-size: 0.78rem; color: var(--gray); margin-bottom: 10px; }
 .admin-typo-role input[type="color"] { height: 42px; padding: 4px; cursor: pointer; }
 .admin-typo-preview { font-size: 1.15rem; color: var(--ink); padding-top: 4px; word-break: break-word; }
 .admin-theme-font-sample { font-size: 1.1rem; color: var(--navy); }

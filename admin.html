@@ -469,38 +469,73 @@
       <div class="admin-theme-palette-grid" id="themePaletteGrid"></div>
 
       <h4 class="admin-form-subhead">Typography</h4>
-      <p style="font-size:0.82rem;color:var(--gray);margin:-8px 0 16px;">Pick any font available on Google Fonts for each role, plus its own text color. Colors here apply to standard light-background text — dark sections (hero, footer, off-plan banner) keep their own tuned light-on-dark colors so nothing loses contrast.</p>
+      <p style="font-size:0.82rem;color:var(--gray);margin:-8px 0 16px;">Pick a font from the list, or type any other Google Fonts name — plus its own text color, for each part of the site below. Colors apply to standard light-background text; dark sections (hero, footer, off-plan banner) keep their own tuned light-on-dark colors so nothing loses contrast. The contact page's enquiry form is a third-party embed, so it isn't styleable here — but the "Request a Viewing" form on listing pages is.</p>
 
       <div class="admin-typo-role">
         <p class="admin-typo-role-label">Headings</p>
+        <p class="admin-typo-role-hint">Page and section titles, site-wide.</p>
         <div class="admin-form-grid">
-          <label>Font Family <input type="text" id="ty_headingFont" list="fontListHeading" required></label>
+          <label>Font Family <select id="ty_headingFontPreset"></select></label>
           <label>Color <input type="color" id="ty_headingColor" required></label>
         </div>
+        <label class="admin-form-full" style="margin-top:8px;">Or type any other Google Font <input type="text" id="ty_headingFont" required></label>
         <p class="admin-typo-preview" id="ty_headingPreview">Dubai Real Estate, Handled Right</p>
       </div>
 
       <div class="admin-typo-role">
         <p class="admin-typo-role-label">Body Text</p>
+        <p class="admin-typo-role-hint">Paragraphs, site-wide.</p>
         <div class="admin-form-grid">
-          <label>Font Family <input type="text" id="ty_bodyFont" list="fontListBody" required></label>
+          <label>Font Family <select id="ty_bodyFontPreset"></select></label>
           <label>Color <input type="color" id="ty_bodyColor" required></label>
         </div>
+        <label class="admin-form-full" style="margin-top:8px;">Or type any other Google Font <input type="text" id="ty_bodyFont" required></label>
         <p class="admin-typo-preview" id="ty_bodyPreview">Buy, rent, sell or invest off-plan in Dubai.</p>
       </div>
 
       <div class="admin-typo-role">
         <p class="admin-typo-role-label">Data &amp; Prices</p>
+        <p class="admin-typo-role-hint">Listing prices, stats, specs.</p>
         <div class="admin-form-grid">
-          <label>Font Family <input type="text" id="ty_dataFont" list="fontListData" required></label>
+          <label>Font Family <select id="ty_dataFontPreset"></select></label>
           <label>Color <input type="color" id="ty_dataColor" required></label>
         </div>
+        <label class="admin-form-full" style="margin-top:8px;">Or type any other Google Font <input type="text" id="ty_dataFont" required></label>
         <p class="admin-typo-preview" id="ty_dataPreview">AED 2,150,000</p>
       </div>
 
-      <datalist id="fontListHeading"></datalist>
-      <datalist id="fontListBody"></datalist>
-      <datalist id="fontListData"></datalist>
+      <div class="admin-typo-role">
+        <p class="admin-typo-role-label">Listing &amp; Project Cards</p>
+        <p class="admin-typo-role-hint">Card titles on listings, off-plan projects and similar-properties grids.</p>
+        <div class="admin-form-grid">
+          <label>Font Family <select id="ty_cardFontPreset"></select></label>
+          <label>Color <input type="color" id="ty_cardColor" required></label>
+        </div>
+        <label class="admin-form-full" style="margin-top:8px;">Or type any other Google Font <input type="text" id="ty_cardFont" required></label>
+        <p class="admin-typo-preview" id="ty_cardPreview">Palm Vista Villa</p>
+      </div>
+
+      <div class="admin-typo-role">
+        <p class="admin-typo-role-label">Blog &amp; Video Cards</p>
+        <p class="admin-typo-role-hint">Titles on the "Latest From Our Channel" YouTube cards.</p>
+        <div class="admin-form-grid">
+          <label>Font Family <select id="ty_blogFontPreset"></select></label>
+          <label>Color <input type="color" id="ty_blogColor" required></label>
+        </div>
+        <label class="admin-form-full" style="margin-top:8px;">Or type any other Google Font <input type="text" id="ty_blogFont" required></label>
+        <p class="admin-typo-preview" id="ty_blogPreview">Learning Never Stops</p>
+      </div>
+
+      <div class="admin-typo-role">
+        <p class="admin-typo-role-label">Enquiry Form</p>
+        <p class="admin-typo-role-hint">The "Request a Viewing" form heading on listing pages.</p>
+        <div class="admin-form-grid">
+          <label>Font Family <select id="ty_formFontPreset"></select></label>
+          <label>Color <input type="color" id="ty_formColor" required></label>
+        </div>
+        <label class="admin-form-full" style="margin-top:8px;">Or type any other Google Font <input type="text" id="ty_formFont" required></label>
+        <p class="admin-typo-preview" id="ty_formPreview">Request a Viewing</p>
+      </div>
 
       <div class="admin-form-actions">
         <button type="submit" class="btn btn-navy" id="themeSaveBtn">Save Theme</button>
