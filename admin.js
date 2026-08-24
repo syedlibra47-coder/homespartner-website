@@ -1524,7 +1524,30 @@
     });
   }
 
+  // The admin panel only ever has its own default fonts loaded (Fraunces/
+  // Manrope/IBM Plex Mono) — without this, picking e.g. "Playfair Display"
+  // sets the right CSS but the browser has no such font file, so the
+  // preview silently falls back and looks unchanged.
+  function ensurePreviewFontsLoaded() {
+    const families = typoRoles
+      .map(role => document.getElementById(`ty_${role}Font`).value)
+      .filter(Boolean);
+    const uniqueFamilies = [...new Set(families)];
+    if (!uniqueFamilies.length) return;
+    const href = 'https://fonts.googleapis.com/css2?' +
+      uniqueFamilies.map(f => `family=${encodeURIComponent(f)}:wght@400;600;700`).join('&') + '&display=swap';
+    let fontLink = document.getElementById('admin-preview-google-fonts');
+    if (!fontLink) {
+      fontLink = document.createElement('link');
+      fontLink.id = 'admin-preview-google-fonts';
+      fontLink.rel = 'stylesheet';
+      document.head.appendChild(fontLink);
+    }
+    if (fontLink.href !== href) fontLink.href = href;
+  }
+
   function updateTypoPreviews() {
+    ensurePreviewFontsLoaded();
     typoRoles.forEach(role => {
       const font = document.getElementById(`ty_${role}Font`).value;
       const color = document.getElementById(`ty_${role}Color`).value;
