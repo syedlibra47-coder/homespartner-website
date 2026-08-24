@@ -1478,14 +1478,12 @@
     setTimeout(() => { successEl.textContent = ''; }, 3000);
   });
 
-  // ===== SITE-WIDE THEME =====
+  // ===== SITE-WIDE THEME (palette + per-role typography) =====
   let selectedPalette = 'navy-gold';
-  let selectedFontPairing = 'fraunces-manrope';
 
   function renderThemeOptions() {
     const paletteGrid = document.getElementById('themePaletteGrid');
-    const fontGrid = document.getElementById('themeFontGrid');
-    if (!window.THEME_PALETTES || !window.THEME_FONT_PAIRINGS) return;
+    if (!window.THEME_PALETTES) return;
 
     paletteGrid.innerHTML = Object.keys(window.THEME_PALETTES).map(key => {
       const p = window.THEME_PALETTES[key];
@@ -1496,36 +1494,64 @@
       </div>`;
     }).join('');
 
-    fontGrid.innerHTML = Object.keys(window.THEME_FONT_PAIRINGS).map(key => {
-      const f = window.THEME_FONT_PAIRINGS[key];
-      return `<div class="admin-theme-option${key === selectedFontPairing ? ' selected' : ''}" data-font="${key}">
-        <span class="admin-theme-option-label">${f.label}</span>
-        <div class="admin-theme-font-sample">Aa Bb Cc<small>The quick brown fox</small></div>
-      </div>`;
-    }).join('');
-
     paletteGrid.querySelectorAll('.admin-theme-option').forEach(el => {
       el.addEventListener('click', () => {
         selectedPalette = el.dataset.palette;
         renderThemeOptions();
       });
     });
-    fontGrid.querySelectorAll('.admin-theme-option').forEach(el => {
-      el.addEventListener('click', () => {
-        selectedFontPairing = el.dataset.font;
-        renderThemeOptions();
-      });
-    });
+  }
+
+  function populateFontDatalists() {
+    const s = window.THEME_FONT_SUGGESTIONS;
+    if (!s) return;
+    document.getElementById('fontListHeading').innerHTML = s.heading.map(f => `<option value="${f}">`).join('');
+    document.getElementById('fontListBody').innerHTML = s.body.map(f => `<option value="${f}">`).join('');
+    document.getElementById('fontListData').innerHTML = s.data.map(f => `<option value="${f}">`).join('');
+  }
+
+  function updateTypoPreviews() {
+    const headingFont = document.getElementById('ty_headingFont').value;
+    const headingColor = document.getElementById('ty_headingColor').value;
+    const bodyFont = document.getElementById('ty_bodyFont').value;
+    const bodyColor = document.getElementById('ty_bodyColor').value;
+    const dataFont = document.getElementById('ty_dataFont').value;
+    const dataColor = document.getElementById('ty_dataColor').value;
+    document.getElementById('ty_headingPreview').style.cssText = `font-family:'${headingFont}',Georgia,serif;color:${headingColor};`;
+    document.getElementById('ty_bodyPreview').style.cssText = `font-family:'${bodyFont}',sans-serif;color:${bodyColor};`;
+    document.getElementById('ty_dataPreview').style.cssText = `font-family:'${dataFont}',monospace;color:${dataColor};`;
+  }
+
+  ['ty_headingFont', 'ty_headingColor', 'ty_bodyFont', 'ty_bodyColor', 'ty_dataFont', 'ty_dataColor'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateTypoPreviews);
+  });
+
+  function readTypography() {
+    return {
+      headingFont: document.getElementById('ty_headingFont').value,
+      headingColor: document.getElementById('ty_headingColor').value,
+      bodyFont: document.getElementById('ty_bodyFont').value,
+      bodyColor: document.getElementById('ty_bodyColor').value,
+      dataFont: document.getElementById('ty_dataFont').value,
+      dataColor: document.getElementById('ty_dataColor').value
+    };
   }
 
   async function loadThemeSettings() {
+    populateFontDatalists();
     const { data, error } = await supabase.from('site_settings').select('*').eq('id', 'main').maybeSingle();
     if (error) { console.error(error); renderThemeOptions(); return; }
     if (data) {
       selectedPalette = data.color_palette || 'navy-gold';
-      selectedFontPairing = data.font_pairing || 'fraunces-manrope';
+      document.getElementById('ty_headingFont').value = data.heading_font || 'Fraunces';
+      document.getElementById('ty_headingColor').value = data.heading_color || '#1F275C';
+      document.getElementById('ty_bodyFont').value = data.body_font || 'Manrope';
+      document.getElementById('ty_bodyColor').value = data.body_color || '#1B1D28';
+      document.getElementById('ty_dataFont').value = data.data_font || 'IBM Plex Mono';
+      document.getElementById('ty_dataColor').value = data.data_color || '#1F275C';
     }
     renderThemeOptions();
+    updateTypoPreviews();
   }
 
   document.getElementById('themeForm').addEventListener('submit', async (e) => {
@@ -1535,9 +1561,17 @@
     errorEl.textContent = '';
     successEl.textContent = '';
 
-    const { error } = await supabase.from('site_settings').upsert({ id: 'main', color_palette: selectedPalette, font_pairing: selectedFontPairing });
+    const typography = readTypography();
+    const record = {
+      id: 'main',
+      color_palette: selectedPalette,
+      heading_font: typography.headingFont, heading_color: typography.headingColor,
+      body_font: typography.bodyFont, body_color: typography.bodyColor,
+      data_font: typography.dataFont, data_color: typography.dataColor
+    };
+    const { error } = await supabase.from('site_settings').upsert(record);
     if (error) { errorEl.textContent = error.message; return; }
-    if (window.applyTheme) window.applyTheme(selectedPalette, selectedFontPairing);
+    if (window.applyTheme) window.applyTheme(selectedPalette, typography);
     successEl.textContent = 'Saved — the new theme is now live across the site.';
     setTimeout(() => { successEl.textContent = ''; }, 4000);
   });

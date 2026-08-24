@@ -1,8 +1,9 @@
-// Curated, pre-designed theme options — every palette and font pairing here
-// has been chosen for contrast/readability and brand cohesion, so picking
-// any combination in the admin panel is guaranteed to look intentional.
-// (IBM Plex Mono is kept fixed across all palettes as the site's "data" font
-// for prices/specs/coordinates — it's a structural choice, not a theme one.)
+// Curated background/accent palettes — chosen for contrast/readability and
+// brand cohesion, so picking any of these is guaranteed to look intentional.
+// Typography (heading/body/data font + color) is controlled separately and
+// far more freely under Theme > Typography — see THEME_FONT_SUGGESTIONS
+// below, which is just a helpful shortlist, not a restriction: any Google
+// Fonts family name works.
 
 window.THEME_PALETTES = {
   "navy-gold": {
@@ -43,25 +44,19 @@ window.THEME_PALETTES = {
   }
 };
 
-window.THEME_FONT_PAIRINGS = {
-  "fraunces-manrope": {
-    label: "Fraunces + Manrope",
-    googleFontsUrl: null, // already loaded statically in every page's <head> — no extra request needed
-    tokens: { "--font-serif": "'Fraunces', Georgia, serif", "--font-head": "'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", "--font-body": "'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }
-  },
-  "playfair-inter": {
-    label: "Playfair Display + Inter",
-    googleFontsUrl: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap",
-    tokens: { "--font-serif": "'Playfair Display', Georgia, serif", "--font-head": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", "--font-body": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }
-  },
-  "dmserif-dmsans": {
-    label: "DM Serif Display + DM Sans",
-    googleFontsUrl: "https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700;800&display=swap",
-    tokens: { "--font-serif": "'DM Serif Display', Georgia, serif", "--font-head": "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", "--font-body": "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }
-  },
-  "poppins": {
-    label: "Poppins (Modern Sans)",
-    googleFontsUrl: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap",
-    tokens: { "--font-serif": "'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", "--font-head": "'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", "--font-body": "'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }
-  }
+// Shortlist per role, shown as <datalist> suggestions in the admin Theme
+// tab — the input still accepts any Google Fonts family name typed in.
+window.THEME_FONT_SUGGESTIONS = {
+  heading: [
+    "Fraunces", "Playfair Display", "DM Serif Display", "Merriweather", "Lora",
+    "Cormorant Garamond", "Libre Baskerville", "Crimson Text", "Poppins", "Marcellus"
+  ],
+  body: [
+    "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
+    "Outfit", "Karla", "Mulish", "Poppins"
+  ],
+  data: [
+    "IBM Plex Mono", "JetBrains Mono", "Roboto Mono", "Space Mono",
+    "Source Code Pro", "Fira Code", "Inconsolata"
+  ]
 };

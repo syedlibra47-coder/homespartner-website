@@ -6,18 +6,31 @@
 // Exposes window.dataReady — a Promise every page script should
 // `await` before reading window.LISTINGS_DATA / window.OFFPLAN_DATA.
 // ============================================================
-// Applies a curated palette + font pairing (see assets/theme-presets.js) to
-// every page by overriding the :root CSS custom properties defined in
-// styles.css, and lazily loading the matching Google Fonts if needed.
-// Safe to call with the defaults too — it's a no-op in that case.
-window.applyTheme = function (paletteKey, fontKey) {
+// Applies a curated background/accent palette (see assets/theme-presets.js)
+// plus per-role typography (heading/body/data font + color) to every page,
+// by overriding the :root CSS custom properties defined in styles.css and
+// lazily loading whichever Google Fonts are chosen. Safe to call with only
+// one argument, or with defaults — it's a no-op wherever there's nothing to set.
+window.applyTheme = function (paletteKey, typography) {
   const palette = window.THEME_PALETTES && window.THEME_PALETTES[paletteKey];
-  const fontPairing = window.THEME_FONT_PAIRINGS && window.THEME_FONT_PAIRINGS[fontKey];
-  if (!palette && !fontPairing) return;
+  const tokens = Object.assign({}, palette ? palette.tokens : {});
 
-  const tokens = Object.assign({}, palette ? palette.tokens : {}, fontPairing ? fontPairing.tokens : {});
+  if (typography) {
+    if (typography.headingFont) {
+      const stack = `'${typography.headingFont}', Georgia, serif`;
+      tokens['--font-serif'] = stack;
+      tokens['--font-head'] = stack;
+    }
+    if (typography.bodyFont) tokens['--font-body'] = `'${typography.bodyFont}', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`;
+    if (typography.dataFont) tokens['--font-mono'] = `'${typography.dataFont}', 'SF Mono', ui-monospace, monospace`;
+    if (typography.headingColor) tokens['--heading-color'] = typography.headingColor;
+    if (typography.bodyColor) tokens['--body-color'] = typography.bodyColor;
+    if (typography.dataColor) tokens['--data-color'] = typography.dataColor;
+  }
+
+  if (!Object.keys(tokens).length) return;
+
   const css = ':root {\n' + Object.entries(tokens).map(([k, v]) => `  ${k}: ${v};`).join('\n') + '\n}';
-
   let styleTag = document.getElementById('theme-override-style');
   if (!styleTag) {
     styleTag = document.createElement('style');
@@ -26,13 +39,19 @@ window.applyTheme = function (paletteKey, fontKey) {
   }
   styleTag.textContent = css;
 
-  if (fontPairing && fontPairing.googleFontsUrl) {
-    const existing = document.querySelector(`link[href="${fontPairing.googleFontsUrl}"]`);
-    if (!existing) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = fontPairing.googleFontsUrl;
-      document.head.appendChild(link);
+  if (typography) {
+    const families = [...new Set([typography.headingFont, typography.bodyFont, typography.dataFont].filter(Boolean))];
+    if (families.length) {
+      const href = 'https://fonts.googleapis.com/css2?' +
+        families.map(f => `family=${encodeURIComponent(f)}:wght@400;500;600;700;800`).join('&') + '&display=swap';
+      let fontLink = document.getElementById('theme-google-fonts');
+      if (!fontLink) {
+        fontLink = document.createElement('link');
+        fontLink.id = 'theme-google-fonts';
+        fontLink.rel = 'stylesheet';
+        document.head.appendChild(fontLink);
+      }
+      if (fontLink.href !== href) fontLink.href = href;
     }
   }
 };
@@ -265,10 +284,18 @@ window.dataReady = (async function () {
       window.SITE_CHROME_DATA = siteChromeFromRow(siteChromeRes.data);
     }
     if (!siteSettingsRes.error && siteSettingsRes.data) {
-      window.SITE_SETTINGS_DATA = { colorPalette: siteSettingsRes.data.color_palette, fontPairing: siteSettingsRes.data.font_pairing };
+      const s = siteSettingsRes.data;
+      window.SITE_SETTINGS_DATA = {
+        colorPalette: s.color_palette,
+        typography: {
+          headingFont: s.heading_font, headingColor: s.heading_color,
+          bodyFont: s.body_font, bodyColor: s.body_color,
+          dataFont: s.data_font, dataColor: s.data_color
+        }
+      };
     }
     if (window.SITE_SETTINGS_DATA && window.applyTheme) {
-      window.applyTheme(window.SITE_SETTINGS_DATA.colorPalette, window.SITE_SETTINGS_DATA.fontPairing);
+      window.applyTheme(window.SITE_SETTINGS_DATA.colorPalette, window.SITE_SETTINGS_DATA.typography);
     }
   } catch (err) {
     console.warn('Supabase fetch failed, using static fallback data.', err);

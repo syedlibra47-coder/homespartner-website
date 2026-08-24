@@ -19,6 +19,14 @@
   --font-serif: 'Fraunces', Georgia, serif;
   --font-mono: 'IBM Plex Mono', 'SF Mono', ui-monospace, monospace;
 
+  /* Per-role text color, admin-editable under Theme > Typography. These
+     apply to default/light-background text; sections with a dark
+     background (hero, footer, off-plan navy panel...) keep their own
+     explicit light-text overrides so nothing loses contrast. */
+  --heading-color: var(--navy);
+  --body-color: var(--ink);
+  --data-color: var(--navy);
+
   --shadow-soft: 0 10px 30px rgba(18, 23, 61, 0.08);
   --shadow-card: 0 16px 40px rgba(18, 23, 61, 0.10);
   --radius: 16px;
@@ -30,7 +38,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-body);
-  color: var(--ink);
+  color: var(--body-color);
   background: var(--paper);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -45,7 +53,7 @@ img { max-width: 100%; display: block; }
   padding: 0 28px;
 }
 
-h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--navy); }
+h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--heading-color); }
 h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 
 .display {
@@ -53,6 +61,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   font-weight: 600;
   font-optical-sizing: auto;
   letter-spacing: -0.01em;
+  color: var(--heading-color);
 }
 
 .mono {
@@ -718,7 +727,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .pill--dark { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.85); }
 
 .listing-body { padding: 24px; }
-.listing-price { font-family: var(--font-mono); font-weight: 600; font-size: 1.2rem; color: var(--navy); margin-bottom: 6px; }
+.listing-price { font-family: var(--font-mono); font-weight: 600; font-size: 1.2rem; color: var(--data-color); margin-bottom: 6px; }
 .listing-price span { font-family: var(--font-body); font-weight: 500; font-size: 0.8rem; color: var(--gray); }
 .listing-body h3 { font-size: 1.1rem; margin-bottom: 4px; }
 .listing-location { color: var(--gray); font-size: 0.88rem; margin-bottom: 14px; }

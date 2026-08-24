@@ -326,6 +326,14 @@ create policy "Authenticated can insert homepage content" on homepage_content fo
 create trigger homepage_content_set_updated_at before update on homepage_content
   for each row execute function set_updated_at();
 
+-- ===== TYPOGRAPHY: per-role font + color, on top of the color palette =====
+alter table site_settings add column if not exists heading_font text not null default 'Fraunces';
+alter table site_settings add column if not exists heading_color text not null default '#1F275C';
+alter table site_settings add column if not exists body_font text not null default 'Manrope';
+alter table site_settings add column if not exists body_color text not null default '#1B1D28';
+alter table site_settings add column if not exists data_font text not null default 'IBM Plex Mono';
+alter table site_settings add column if not exists data_color text not null default '#1F275C';
+
 -- ===== CONTACT PAGE: general WhatsApp/phone/email used site-wide =====
 alter table contact_page_content add column if not exists whatsapp_number text not null default '971500000000';
 alter table contact_page_content add column if not exists general_phone text not null default '';

@@ -468,8 +468,39 @@
       <label>Color Palette</label>
       <div class="admin-theme-palette-grid" id="themePaletteGrid"></div>
 
-      <label style="margin-top:24px;display:block;">Font Pairing</label>
-      <div class="admin-theme-font-grid" id="themeFontGrid"></div>
+      <h4 class="admin-form-subhead">Typography</h4>
+      <p style="font-size:0.82rem;color:var(--gray);margin:-8px 0 16px;">Pick any font available on Google Fonts for each role, plus its own text color. Colors here apply to standard light-background text — dark sections (hero, footer, off-plan banner) keep their own tuned light-on-dark colors so nothing loses contrast.</p>
+
+      <div class="admin-typo-role">
+        <p class="admin-typo-role-label">Headings</p>
+        <div class="admin-form-grid">
+          <label>Font Family <input type="text" id="ty_headingFont" list="fontListHeading" required></label>
+          <label>Color <input type="color" id="ty_headingColor" required></label>
+        </div>
+        <p class="admin-typo-preview" id="ty_headingPreview">Dubai Real Estate, Handled Right</p>
+      </div>
+
+      <div class="admin-typo-role">
+        <p class="admin-typo-role-label">Body Text</p>
+        <div class="admin-form-grid">
+          <label>Font Family <input type="text" id="ty_bodyFont" list="fontListBody" required></label>
+          <label>Color <input type="color" id="ty_bodyColor" required></label>
+        </div>
+        <p class="admin-typo-preview" id="ty_bodyPreview">Buy, rent, sell or invest off-plan in Dubai.</p>
+      </div>
+
+      <div class="admin-typo-role">
+        <p class="admin-typo-role-label">Data &amp; Prices</p>
+        <div class="admin-form-grid">
+          <label>Font Family <input type="text" id="ty_dataFont" list="fontListData" required></label>
+          <label>Color <input type="color" id="ty_dataColor" required></label>
+        </div>
+        <p class="admin-typo-preview" id="ty_dataPreview">AED 2,150,000</p>
+      </div>
+
+      <datalist id="fontListHeading"></datalist>
+      <datalist id="fontListBody"></datalist>
+      <datalist id="fontListData"></datalist>
 
       <div class="admin-form-actions">
         <button type="submit" class="btn btn-navy" id="themeSaveBtn">Save Theme</button>
