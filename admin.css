@@ -232,6 +232,18 @@
 }
 .admin-pb-add-btn:hover { background: rgba(201,175,108,0.1); }
 
+.pb-editor-columns-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 10px; }
+.pb-editor-column { border: 1px dashed var(--line); border-radius: 8px; padding: 10px; background: var(--paper-flat); }
+.pb-editor-column-blocks { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+.pb-editor-nested-block { border: 1px solid var(--line); border-radius: 8px; padding: 8px; background: #fff; }
+.pb-editor-nested-head { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.pb-editor-nested-type { font-weight: 700; font-size: 0.75rem; color: var(--navy); flex: 1; }
+.pbn-move { background: none; border: 1px solid var(--line); border-radius: 6px; width: 22px; height: 22px; cursor: pointer; color: var(--gray); font-size: 0.85rem; line-height: 1; flex-shrink: 0; }
+.pbn-move:hover { border-color: var(--gold-dark); color: var(--gold-dark); }
+.pb-editor-nested-head .remove-row { background: none; border: none; color: #D32F2F; font-size: 1.1rem; cursor: pointer; flex-shrink: 0; }
+.pb-editor-column .admin-pb-add-btn { font-size: 0.72rem; padding: 5px 9px; }
+.pb-editor-column .admin-preview { max-width: 100px; max-height: 60px; }
+
 .admin-pb-preview > label { font-weight: 700; font-size: 0.85rem; color: var(--navy); display: block; margin-bottom: 10px; }
 .admin-pb-preview-frame { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; max-height: 720px; overflow-y: auto; background: #fff; }
 .admin-pb-preview-frame .pb-block { padding-top: 28px; padding-bottom: 28px; }

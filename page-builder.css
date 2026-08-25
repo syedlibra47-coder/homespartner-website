@@ -52,6 +52,21 @@
 
 .pb-divider { border: none; border-top: 1px solid var(--line); margin: 0; }
 
+.pb-columns { display: grid; gap: 32px; }
+.pb-columns-2 { grid-template-columns: repeat(2, 1fr); }
+.pb-columns-3 { grid-template-columns: repeat(3, 1fr); }
+.pb-column-heading, .pb-column-text, .pb-column-image, .pb-column-button { margin-bottom: 16px; }
+.pb-column > *:last-child { margin-bottom: 0; }
+.pb-column-heading { font-family: var(--font-serif); }
+.pb-column-text p { line-height: 1.7; margin-bottom: 12px; }
+.pb-column-text p:last-child { margin-bottom: 0; }
+.pb-column-image img { width: 100%; border-radius: 10px; display: block; }
+.pb-bg-navy .pb-column-text p { color: rgba(255,255,255,0.75); }
+
+@media (max-width: 720px) {
+  .pb-columns-2, .pb-columns-3 { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 720px) {
   .pb-split-inner, .pb-split-reverse .pb-split-inner { flex-direction: column; }
   .pb-block { padding-top: 40px; padding-bottom: 40px; }

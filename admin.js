@@ -1739,6 +1739,7 @@
       text: { text: 'Add your text here.', align: 'left' },
       image: { src: '', alt: '', caption: '' },
       button: { label: 'Learn More', href: '#', variant: 'gold', align: 'center' },
+      columns: { columnCount: 2, columns: [[], []] },
       'image-text-split': { src: '', alt: '', heading: 'Heading', text: 'Description text.', buttonLabel: '', buttonHref: '', imagePosition: 'left' },
       'feature-grid': { items: [{ icon: '', title: 'Feature One', text: 'Short description.' }] },
       gallery: { images: [] },
@@ -1784,6 +1785,103 @@
     bgSel.value = block.style.background || '';
     spacingSel.addEventListener('change', () => { block.style.spacing = spacingSel.value; cpRenderPreview(); });
     bgSel.addEventListener('change', () => { block.style.background = bgSel.value; cpRenderPreview(); });
+    return wrap;
+  }
+
+  function cpNestedDefaultProps(type) {
+    const table = {
+      heading: { text: 'Heading', level: 'h3', align: 'left' },
+      text: { text: 'Add text here.', align: 'left' },
+      image: { src: '', alt: '' },
+      button: { label: 'Learn More', href: '#', variant: 'gold', align: 'left' },
+      spacer: { height: 20 },
+      divider: {}
+    };
+    return JSON.parse(JSON.stringify(table[type] || {}));
+  }
+
+  function cpCreateNestedBlock(type) {
+    return { id: 'nblk_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), type, props: cpNestedDefaultProps(type) };
+  }
+
+  // Simplified field set for blocks nested inside a Columns block — no
+  // spacing/background style row (that belongs to the Columns block itself).
+  function cpBuildNestedFields(block, formErrorId) {
+    const wrap = document.createElement('div');
+    wrap.className = 'pb-editor-block-fields';
+    const p = block.props;
+
+    function textInput(key, placeholder) {
+      const input = document.createElement('input');
+      input.type = 'text'; input.placeholder = placeholder; input.value = p[key] || '';
+      input.addEventListener('input', () => { p[key] = input.value; cpRenderPreview(); });
+      return input;
+    }
+    function textArea(key, placeholder, rows) {
+      const ta = document.createElement('textarea');
+      ta.rows = rows || 2; ta.placeholder = placeholder; ta.value = p[key] || '';
+      ta.addEventListener('input', () => { p[key] = ta.value; cpRenderPreview(); });
+      return ta;
+    }
+    function selectInput(key, options, defaultVal) {
+      const sel = document.createElement('select');
+      sel.innerHTML = options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+      sel.value = p[key] || defaultVal;
+      sel.addEventListener('change', () => { p[key] = sel.value; cpRenderPreview(); });
+      return sel;
+    }
+    function row(...els) {
+      const r = document.createElement('div');
+      r.className = 'pb-editor-block-row';
+      els.forEach(el => r.appendChild(el));
+      return r;
+    }
+
+    switch (block.type) {
+      case 'heading':
+        wrap.appendChild(textInput('text', 'Heading text'));
+        wrap.appendChild(row(
+          selectInput('level', [{ value: 'h2', label: 'Medium (H2)' }, { value: 'h3', label: 'Small (H3)' }], 'h3'),
+          selectInput('align', [{ value: 'left', label: 'Left' }, { value: 'center', label: 'Center' }], 'left')
+        ));
+        break;
+      case 'text':
+        wrap.appendChild(textArea('text', 'Text', 3));
+        break;
+      case 'image': {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file'; fileInput.accept = 'image/*';
+        const preview = document.createElement('img');
+        preview.className = 'admin-preview';
+        if (p.src) { preview.src = p.src; preview.style.display = 'block'; } else { preview.style.display = 'none'; }
+        fileInput.addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          try {
+            const url = await uploadImage(file);
+            p.src = url; preview.src = url; preview.style.display = 'block';
+            cpRenderPreview();
+          } catch (err) { document.getElementById(formErrorId).textContent = 'Image upload failed: ' + err.message; }
+        });
+        wrap.appendChild(fileInput);
+        wrap.appendChild(preview);
+        break;
+      }
+      case 'button':
+        wrap.appendChild(row(textInput('label', 'Button text'), textInput('href', 'Link URL')));
+        wrap.appendChild(selectInput('variant', [{ value: 'gold', label: 'Gold' }, { value: 'navy', label: 'Navy' }, { value: 'outline', label: 'Outline' }], 'gold'));
+        break;
+      case 'spacer': {
+        const h = document.createElement('input');
+        h.type = 'number'; h.min = '0'; h.placeholder = 'Height (px)'; h.value = p.height || 20;
+        h.addEventListener('input', () => { p.height = Number(h.value) || 0; cpRenderPreview(); });
+        wrap.appendChild(h);
+        break;
+      }
+      case 'divider':
+        wrap.innerHTML = '<p style="font-size:0.75rem;color:var(--gray);margin:0;">A plain horizontal line.</p>';
+        break;
+    }
     return wrap;
   }
 
@@ -1867,6 +1965,94 @@
           selectInput('align', [{ value: 'left', label: 'Left' }, { value: 'center', label: 'Center' }, { value: 'right', label: 'Right' }], 'center')
         ));
         break;
+      case 'columns': {
+        p.columnCount = p.columnCount || 2;
+        p.columns = p.columns && p.columns.length ? p.columns : Array.from({ length: p.columnCount }, () => []);
+
+        const countSelect = document.createElement('select');
+        countSelect.innerHTML = `<option value="2">2 Columns</option><option value="3">3 Columns</option>`;
+        countSelect.value = String(p.columns.length);
+
+        const columnsWrap = document.createElement('div');
+        columnsWrap.className = 'pb-editor-columns-wrap';
+
+        function renderAllColumns() {
+          columnsWrap.innerHTML = '';
+          for (let colIndex = 0; colIndex < p.columns.length; colIndex++) {
+            const colBox = document.createElement('div');
+            colBox.className = 'pb-editor-column';
+
+            const blocksBox = document.createElement('div');
+            blocksBox.className = 'pb-editor-column-blocks';
+
+            (p.columns[colIndex] || []).forEach((nb, nIdx) => {
+              const card = document.createElement('div');
+              card.className = 'pb-editor-nested-block';
+              const head = document.createElement('div');
+              head.className = 'pb-editor-nested-head';
+              head.innerHTML = `
+                <span class="pb-editor-nested-type">${cpBlockTypeLabel(nb.type)}</span>
+                ${colIndex > 0 ? '<button type="button" class="pbn-move" data-dir="-1" title="Move to previous column">&larr;</button>' : ''}
+                ${colIndex < p.columns.length - 1 ? '<button type="button" class="pbn-move" data-dir="1" title="Move to next column">&rarr;</button>' : ''}
+                <button type="button" class="remove-row" title="Remove">&times;</button>
+              `;
+              head.querySelectorAll('.pbn-move').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  const targetIndex = colIndex + Number(btn.dataset.dir);
+                  if (targetIndex < 0 || targetIndex >= p.columns.length) return;
+                  p.columns[colIndex].splice(nIdx, 1);
+                  p.columns[targetIndex].push(nb);
+                  renderAllColumns();
+                  cpRenderPreview();
+                });
+              });
+              head.querySelector('.remove-row').addEventListener('click', () => {
+                p.columns[colIndex].splice(nIdx, 1);
+                renderAllColumns();
+                cpRenderPreview();
+              });
+              card.appendChild(head);
+              card.appendChild(cpBuildNestedFields(nb, formErrorId));
+              blocksBox.appendChild(card);
+            });
+
+            colBox.appendChild(blocksBox);
+
+            const palette = document.createElement('div');
+            palette.className = 'admin-pb-add-palette';
+            palette.innerHTML = (window.PAGE_BLOCK_NESTABLE_TYPES || []).map(t => `<button type="button" class="admin-pb-add-btn" data-add-nested="${t}">+ ${cpBlockTypeLabel(t)}</button>`).join('');
+            palette.querySelectorAll('[data-add-nested]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                p.columns[colIndex] = p.columns[colIndex] || [];
+                p.columns[colIndex].push(cpCreateNestedBlock(btn.dataset.addNested));
+                renderAllColumns();
+                cpRenderPreview();
+              });
+            });
+            colBox.appendChild(palette);
+
+            columnsWrap.appendChild(colBox);
+          }
+        }
+        renderAllColumns();
+
+        countSelect.addEventListener('change', () => {
+          const newCount = Number(countSelect.value);
+          if (newCount > p.columns.length) {
+            while (p.columns.length < newCount) p.columns.push([]);
+          } else if (newCount < p.columns.length) {
+            const removed = p.columns.splice(newCount);
+            removed.forEach(colBlocks => { p.columns[newCount - 1].push(...colBlocks); });
+          }
+          p.columnCount = newCount;
+          renderAllColumns();
+          cpRenderPreview();
+        });
+
+        wrap.appendChild(countSelect);
+        wrap.appendChild(columnsWrap);
+        break;
+      }
       case 'image-text-split':
         wrap.appendChild(imageUploadField('src', 'alt'));
         wrap.appendChild(textInput('heading', 'Heading'));

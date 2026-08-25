@@ -13,6 +13,7 @@ window.PAGE_BLOCK_TYPES = [
   { type: 'text', label: 'Text' },
   { type: 'image', label: 'Image' },
   { type: 'button', label: 'Button' },
+  { type: 'columns', label: 'Columns (2 or 3 side-by-side)' },
   { type: 'image-text-split', label: 'Image + Text Split' },
   { type: 'feature-grid', label: 'Feature Grid' },
   { type: 'gallery', label: 'Photo Gallery' },
@@ -20,6 +21,11 @@ window.PAGE_BLOCK_TYPES = [
   { type: 'spacer', label: 'Spacer' },
   { type: 'divider', label: 'Divider' }
 ];
+
+// Block types allowed *inside* a Columns block. Kept deliberately small —
+// the compound widgets (feature-grid, gallery, video, columns itself)
+// stay top-level only, so nesting can't spiral into arbitrary depth.
+window.PAGE_BLOCK_NESTABLE_TYPES = ['heading', 'text', 'image', 'button', 'spacer', 'divider'];
 
 function pbEscapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -31,6 +37,42 @@ function pbBlockClasses(block) {
   classes.push('pb-spacing-' + (style.spacing || 'normal'));
   if (style.background) classes.push('pb-bg-' + style.background);
   return classes.join(' ');
+}
+
+// Lightweight renderer for blocks nested inside a Columns block — no
+// outer <section>/<div class="container"> wrapper (the column itself
+// already sits inside one) and no per-block spacing/background controls.
+function pbRenderNestedBlock(block) {
+  const p = block.props || {};
+  switch (block.type) {
+    case 'heading': {
+      const level = ['h2', 'h3'].includes(p.level) ? p.level : 'h3';
+      const align = p.align || 'left';
+      return `<${level} class="pb-column-heading" style="text-align:${align};">${pbEscapeHtml(p.text)}</${level}>`;
+    }
+    case 'text': {
+      const align = p.align || 'left';
+      const paras = String(p.text || '').split(/\n{2,}/).filter(Boolean)
+        .map(t => `<p>${pbEscapeHtml(t).replace(/\n/g, '<br>')}</p>`).join('');
+      return `<div class="pb-column-text" style="text-align:${align};">${paras}</div>`;
+    }
+    case 'image':
+      if (!p.src) return '';
+      return `<div class="pb-column-image"><img src="${pbEscapeHtml(p.src)}" alt="${pbEscapeHtml(p.alt)}"></div>`;
+    case 'button': {
+      const align = p.align || 'left';
+      const variant = p.variant === 'outline' ? 'btn-outline-navy' : (p.variant === 'navy' ? 'btn-navy' : 'btn-gold');
+      return `<div class="pb-column-button" style="text-align:${align};"><a href="${pbEscapeHtml(p.href || '#')}" class="btn ${variant}">${pbEscapeHtml(p.label || 'Learn More')}</a></div>`;
+    }
+    case 'spacer': {
+      const height = Number(p.height) > 0 ? Number(p.height) : 20;
+      return `<div style="height:${height}px;"></div>`;
+    }
+    case 'divider':
+      return `<hr class="pb-divider">`;
+    default:
+      return '';
+  }
 }
 
 function pbRenderBlock(block) {
@@ -62,6 +104,11 @@ function pbRenderBlock(block) {
       return `<section class="${cls}"><div class="container" style="text-align:${align};">
         <a href="${pbEscapeHtml(p.href || '#')}" class="btn ${variant}">${pbEscapeHtml(p.label || 'Learn More')}</a>
       </div></section>`;
+    }
+    case 'columns': {
+      const columns = p.columns && p.columns.length ? p.columns : [[], []];
+      const colsHtml = columns.map(colBlocks => `<div class="pb-column">${(colBlocks || []).map(pbRenderNestedBlock).join('')}</div>`).join('');
+      return `<section class="${cls}"><div class="container"><div class="pb-columns pb-columns-${columns.length}">${colsHtml}</div></div></section>`;
     }
     case 'image-text-split': {
       const reverseClass = p.imagePosition === 'right' ? 'pb-split-reverse' : '';
