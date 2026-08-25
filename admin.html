@@ -68,6 +68,7 @@
           <p class="admin-nav-group-label">Site Settings</p>
           <button type="button" class="admin-tab" data-tab="chrome" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M14 6h14l8 8v28H14V6Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M28 6v8h8" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M18 26h12M18 32h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Header &amp; Footer</span></button>
           <button type="button" class="admin-tab" data-tab="theme" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6l5.5 11.5L42 19l-9 8.8 2.1 12.2L24 34l-11.1 6 2.1-12.2L6 19l12.5-1.5L24 6Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></span><span>Theme</span></button>
+          <button type="button" class="admin-tab" data-tab="pagebg" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="6" y="10" width="36" height="28" rx="2" stroke="currentColor" stroke-width="3"/><path d="M6 19h36" stroke="currentColor" stroke-width="3"/><circle cx="12" cy="14.5" r="1.6" fill="currentColor"/></svg></span><span>Page Backgrounds</span></button>
         </div>
         <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">Administration</p>
@@ -542,6 +543,22 @@
       </div>
       <p class="admin-form-error" id="themeFormError"></p>
       <p class="admin-form-success" id="themeFormSuccess"></p>
+    </form>
+  </section>
+
+  <!-- PAGE BACKGROUNDS TAB (admin/super_admin only) -->
+  <section class="admin-panel" id="panel-pagebg">
+    <div class="admin-panel-head">
+      <h2>Page Header Backgrounds</h2>
+    </div>
+    <form id="pageHeadersForm" class="admin-form admin-form-card">
+      <p style="font-size:0.85rem;color:var(--gray);margin-bottom:20px;">Controls the banner behind each page's title (e.g. "All Listings", "Buy Off-Plan Property in Dubai"). Leave a page on Default to keep its original navy look.</p>
+      <div id="pageHeadersList"></div>
+      <div class="admin-form-actions">
+        <button type="submit" class="btn btn-navy" id="pageHeadersSaveBtn">Save All Page Backgrounds</button>
+      </div>
+      <p class="admin-form-error" id="pageHeadersFormError"></p>
+      <p class="admin-form-success" id="pageHeadersFormSuccess"></p>
     </form>
   </section>
 

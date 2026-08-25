@@ -84,6 +84,7 @@
       loadHomepageContent();
       loadChromeSettings();
       loadThemeSettings();
+      loadPageHeaders();
       loadUsers();
     }
   }
@@ -1614,6 +1615,117 @@
     if (window.applyTheme) window.applyTheme(selectedPalette, typography);
     successEl.textContent = 'Saved — the new theme is now live across the site.';
     setTimeout(() => { successEl.textContent = ''; }, 4000);
+  });
+
+  // ===== PAGE HEADER BACKGROUNDS (secondary-page title banners) =====
+  const PAGE_HEADER_PAGES = [
+    { id: 'listings', label: 'Listings' },
+    { id: 'offplan', label: 'Off-Plan Projects' },
+    { id: 'services', label: 'Services' },
+    { id: 'agents', label: 'Meet the Team (Agents)' },
+    { id: 'careers', label: 'Careers' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
+  function renderPageHeaderBlocks() {
+    const container = document.getElementById('pageHeadersList');
+    container.innerHTML = PAGE_HEADER_PAGES.map(p => `
+      <div class="admin-typo-role" data-page="${p.id}">
+        <p class="admin-typo-role-label">${p.label}</p>
+        <div class="admin-herobg-toggle">
+          <button type="button" class="admin-herobg-option" data-bgtype="default">Default</button>
+          <button type="button" class="admin-herobg-option" data-bgtype="color">Color</button>
+          <button type="button" class="admin-herobg-option" data-bgtype="image">Image</button>
+          <button type="button" class="admin-herobg-option" data-bgtype="video">YouTube Video</button>
+        </div>
+        <input type="hidden" class="pagebg-type" value="default">
+        <div class="pagebg-color-fields" style="display:none;">
+          <label>Background Color <input type="color" class="pagebg-color" value="#1F275C"></label>
+        </div>
+        <div class="pagebg-image-fields" style="display:none;">
+          <label class="admin-form-full">Background Image
+            <input type="file" class="pagebg-image-file" accept="image/*">
+            <input type="hidden" class="pagebg-image">
+            <img class="admin-preview pagebg-image-preview" style="display:none;">
+          </label>
+        </div>
+        <div class="pagebg-video-fields" style="display:none;">
+          <label class="admin-form-full">YouTube Video URL
+            <input type="text" class="pagebg-video-url" placeholder="https://www.youtube.com/watch?v=...">
+          </label>
+          <input type="hidden" class="pagebg-video-id">
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('.admin-typo-role').forEach(block => {
+      function setType(type) {
+        block.querySelector('.pagebg-type').value = type;
+        block.querySelectorAll('.admin-herobg-option').forEach(b => b.classList.toggle('selected', b.dataset.bgtype === type));
+        block.querySelector('.pagebg-color-fields').style.display = type === 'color' ? '' : 'none';
+        block.querySelector('.pagebg-image-fields').style.display = type === 'image' ? '' : 'none';
+        block.querySelector('.pagebg-video-fields').style.display = type === 'video' ? '' : 'none';
+      }
+      block.querySelectorAll('.admin-herobg-option').forEach(btn => {
+        btn.addEventListener('click', () => setType(btn.dataset.bgtype));
+      });
+      block.querySelector('.pagebg-video-url').addEventListener('input', (e) => {
+        block.querySelector('.pagebg-video-id').value = extractYouTubeId(e.target.value);
+      });
+      block.querySelector('.pagebg-image-file').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+          const url = await uploadImage(file);
+          block.querySelector('.pagebg-image').value = url;
+          const preview = block.querySelector('.pagebg-image-preview');
+          preview.src = url; preview.style.display = 'block';
+        } catch (err) { document.getElementById('pageHeadersFormError').textContent = 'Image upload failed: ' + err.message; }
+      });
+      block.__setType = setType;
+    });
+  }
+
+  async function loadPageHeaders() {
+    renderPageHeaderBlocks();
+    const { data, error } = await supabase.from('page_headers').select('*');
+    if (error) { console.error(error); return; }
+    const byId = {};
+    (data || []).forEach(row => { byId[row.page_id] = row; });
+    document.querySelectorAll('#pageHeadersList .admin-typo-role').forEach(block => {
+      const row = byId[block.dataset.page];
+      if (!row) return;
+      block.__setType(row.bg_type || 'default');
+      block.querySelector('.pagebg-color').value = row.bg_color || '#1F275C';
+      block.querySelector('.pagebg-image').value = row.bg_image || '';
+      if (row.bg_image) {
+        const preview = block.querySelector('.pagebg-image-preview');
+        preview.src = row.bg_image; preview.style.display = 'block';
+      }
+      block.querySelector('.pagebg-video-id').value = row.bg_video_id || '';
+      block.querySelector('.pagebg-video-url').value = row.bg_video_id ? `https://www.youtube.com/watch?v=${row.bg_video_id}` : '';
+    });
+  }
+
+  document.getElementById('pageHeadersForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('pageHeadersFormError');
+    const successEl = document.getElementById('pageHeadersFormSuccess');
+    errorEl.textContent = '';
+    successEl.textContent = '';
+
+    const records = [...document.querySelectorAll('#pageHeadersList .admin-typo-role')].map(block => ({
+      page_id: block.dataset.page,
+      bg_type: block.querySelector('.pagebg-type').value,
+      bg_color: block.querySelector('.pagebg-color').value,
+      bg_image: block.querySelector('.pagebg-image').value,
+      bg_video_id: block.querySelector('.pagebg-video-id').value
+    }));
+
+    const { error } = await supabase.from('page_headers').upsert(records);
+    if (error) { errorEl.textContent = error.message; return; }
+    successEl.textContent = 'Saved.';
+    setTimeout(() => { successEl.textContent = ''; }, 3000);
   });
 
   // ===== USERS (super_admin / admin only) =====

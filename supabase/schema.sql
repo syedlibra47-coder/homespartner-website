@@ -517,6 +517,35 @@ create policy "Admins can update site chrome" on site_chrome for update using (c
 create policy "Admins can insert site chrome" on site_chrome for insert with check (current_user_role() in ('admin', 'super_admin'));
 
 -- ============================================================
+-- PAGE HEADER BACKGROUNDS
+-- One row per secondary page — the banner behind each page's title
+-- (e.g. "All Listings", "Buy Off-Plan Property in Dubai") can be left
+-- on the built-in navy gradient ('default'), or set to a flat color,
+-- an uploaded image, or a YouTube video.
+-- ============================================================
+create table if not exists page_headers (
+  page_id text primary key,
+  bg_type text not null default 'default',
+  bg_color text not null default '#1F275C',
+  bg_image text,
+  bg_video_id text
+);
+
+insert into page_headers (page_id) values
+  ('listings'), ('offplan'), ('services'), ('agents'), ('careers'), ('contact')
+on conflict (page_id) do nothing;
+
+alter table page_headers enable row level security;
+
+drop policy if exists "Public can view page headers" on page_headers;
+create policy "Public can view page headers" on page_headers for select using (true);
+
+drop policy if exists "Admins can update page headers" on page_headers;
+create policy "Admins can update page headers" on page_headers for update using (current_user_role() in ('admin', 'super_admin'));
+drop policy if exists "Admins can insert page headers" on page_headers;
+create policy "Admins can insert page headers" on page_headers for insert with check (current_user_role() in ('admin', 'super_admin'));
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.

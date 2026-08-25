@@ -243,7 +243,7 @@ window.dataReady = (async function () {
   }
 
   try {
-    const [listingsRes, offplanRes, servicesRes, officesRes, faqsRes, contactContentRes, agentsRes, jobListingsRes, careersContentRes, siteSettingsRes, homepageContentRes, siteChromeRes] = await Promise.all([
+    const [listingsRes, offplanRes, servicesRes, officesRes, faqsRes, contactContentRes, agentsRes, jobListingsRes, careersContentRes, siteSettingsRes, homepageContentRes, siteChromeRes, pageHeadersRes] = await Promise.all([
       client.from('listings').select('*').order('created_at', { ascending: false }),
       client.from('offplan_projects').select('*').order('created_at', { ascending: false }),
       client.from('services').select('*').order('sort_order', { ascending: true }),
@@ -255,7 +255,8 @@ window.dataReady = (async function () {
       client.from('careers_page_content').select('*').eq('id', 'main').maybeSingle(),
       client.from('site_settings').select('*').eq('id', 'main').maybeSingle(),
       client.from('homepage_content').select('*').eq('id', 'main').maybeSingle(),
-      client.from('site_chrome').select('*').eq('id', 'main').maybeSingle()
+      client.from('site_chrome').select('*').eq('id', 'main').maybeSingle(),
+      client.from('page_headers').select('*')
     ]);
 
     if (!listingsRes.error && listingsRes.data) {
@@ -294,6 +295,13 @@ window.dataReady = (async function () {
     }
     if (!siteChromeRes.error && siteChromeRes.data) {
       window.SITE_CHROME_DATA = siteChromeFromRow(siteChromeRes.data);
+    }
+    if (!pageHeadersRes.error && pageHeadersRes.data) {
+      const map = {};
+      pageHeadersRes.data.forEach(row => {
+        map[row.page_id] = { bgType: row.bg_type, bgColor: row.bg_color, bgImage: row.bg_image, bgVideoId: row.bg_video_id };
+      });
+      window.PAGE_HEADERS_DATA = map;
     }
     if (!siteSettingsRes.error && siteSettingsRes.data) {
       const s = siteSettingsRes.data;
