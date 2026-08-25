@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="page-builder.css">
 <link rel="stylesheet" href="admin.css">
 </head>
 <body class="admin-body">
@@ -59,6 +60,7 @@
           <button type="button" class="admin-tab" data-tab="homepage" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M6 40h36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="10" y="28" width="6" height="12" stroke="currentColor" stroke-width="3"/><rect x="21" y="20" width="6" height="20" stroke="currentColor" stroke-width="3"/><rect x="32" y="12" width="6" height="28" stroke="currentColor" stroke-width="3"/></svg></span><span>Homepage</span></button>
           <button type="button" class="admin-tab" data-tab="contact" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 42s12-11 12-20a12 12 0 1 0-24 0c0 9 12 20 12 20Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="24" cy="22" r="4" stroke="currentColor" stroke-width="3"/></svg></span><span>Contact Page</span></button>
           <button type="button" class="admin-tab" data-tab="careers" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="16" cy="24" r="8" stroke="currentColor" stroke-width="3"/><path d="M24 24h16M34 24v6M40 24v4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Careers</span></button>
+          <button type="button" class="admin-tab" data-tab="custompages" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="2" stroke="currentColor" stroke-width="3"/><path d="M15 16h18M15 24h18M15 32h10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Custom Pages</span></button>
         </div>
         <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">People</p>
@@ -295,6 +297,73 @@
         <thead><tr><th>Order</th><th>Title</th><th>Location</th><th>Active?</th><th></th></tr></thead>
         <tbody id="jobsTableBody"></tbody>
       </table>
+    </div>
+  </section>
+
+  <!-- CUSTOM PAGES TAB (admin/super_admin only) -->
+  <section class="admin-panel" id="panel-custompages">
+    <div class="admin-panel-head">
+      <h2>Custom Pages</h2>
+      <button type="button" class="btn btn-gold btn-sm" id="addCustomPageBtn">+ New Page</button>
+    </div>
+
+    <!-- LIST VIEW -->
+    <div id="cpListView">
+      <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px;">Build standalone pages — neighborhood guides, blog posts, campaign landing pages — from content blocks you add, reorder and edit below. Nothing goes live until its status is set to Published.</p>
+      <div class="admin-table-wrap">
+        <table class="admin-table" id="customPagesTable">
+          <thead><tr><th>Title</th><th>URL</th><th>Status</th><th></th></tr></thead>
+          <tbody id="customPagesTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EDITOR VIEW -->
+    <div id="cpEditView" style="display:none;">
+      <button type="button" class="btn btn-sm" id="cpBackToListBtn">&larr; Back to Custom Pages</button>
+
+      <div class="admin-form admin-form-card" style="margin-top:16px;">
+        <div class="admin-form-grid">
+          <label>Page Title <input type="text" id="cp_title" required placeholder="Living in Dubai Marina"></label>
+          <label>URL Slug
+            <input type="text" id="cp_slug" required pattern="[a-z0-9\-]+" placeholder="dubai-marina-guide">
+          </label>
+        </div>
+        <p style="font-size:0.78rem;color:var(--gray);margin:-8px 0 14px;">Lowercase letters, numbers and hyphens only. Live URL: <code id="cp_slugPreview">custom-page.html?slug=</code></p>
+        <label class="admin-form-full">SEO Description <textarea id="cp_seoDescription" rows="2" placeholder="Shown in Google search results and social shares"></textarea></label>
+        <label class="admin-form-full">Status
+          <select id="cp_status">
+            <option value="draft">Draft (not visible on the live site)</option>
+            <option value="published">Published (live)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="admin-pb-editor">
+        <div class="admin-pb-blocks">
+          <label>Page Content</label>
+          <div id="cpBlocksList"></div>
+          <div class="admin-pb-add-palette" id="cpAddPalette"></div>
+        </div>
+        <div class="admin-pb-preview">
+          <label>Live Preview</label>
+          <div class="admin-pb-preview-frame">
+            <div class="page-hero" style="padding:50px 0 34px;">
+              <div class="container page-hero-inner">
+                <h1 class="display" id="cpPreviewHeading" style="font-size:1.7rem;">Page Title</h1>
+              </div>
+            </div>
+            <div id="cpPreviewBlocks"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-form-actions" style="margin-top:24px;">
+        <button type="button" class="btn btn-navy" id="cpSaveBtn">Save Page</button>
+        <button type="button" class="btn admin-btn-danger" id="cpDeleteBtn">Delete Page</button>
+      </div>
+      <p class="admin-form-error" id="cpFormError"></p>
+      <p class="admin-form-success" id="cpFormSuccess"></p>
     </div>
   </section>
 
@@ -943,6 +1012,7 @@
 <script src="assets/theme-presets.js"></script>
 <script src="assets/supabase-config.js"></script>
 <script src="assets/icon-library.js"></script>
+<script src="assets/page-blocks-render.js"></script>
 <script src="admin.js"></script>
 
 </body>

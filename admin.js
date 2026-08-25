@@ -85,6 +85,8 @@
       loadChromeSettings();
       loadThemeSettings();
       loadPageHeaders();
+      cpShowList();
+      loadCustomPagesList();
       loadUsers();
     }
   }
@@ -1726,6 +1728,401 @@
     if (error) { errorEl.textContent = error.message; return; }
     successEl.textContent = 'Saved.';
     setTimeout(() => { successEl.textContent = ''; }, 3000);
+  });
+
+  // ===== CUSTOM PAGES (page builder: neighborhood guides, blog posts, landing pages) =====
+  let cpEditingSlug = null; // null while creating a brand-new page
+
+  function cpDefaultBlock(type) {
+    const table = {
+      heading: { text: 'New Heading', level: 'h2', align: 'center' },
+      text: { text: 'Add your text here.', align: 'left' },
+      image: { src: '', alt: '', caption: '' },
+      button: { label: 'Learn More', href: '#', variant: 'gold', align: 'center' },
+      'image-text-split': { src: '', alt: '', heading: 'Heading', text: 'Description text.', buttonLabel: '', buttonHref: '', imagePosition: 'left' },
+      'feature-grid': { items: [{ icon: '', title: 'Feature One', text: 'Short description.' }] },
+      gallery: { images: [] },
+      video: { videoId: '', caption: '' },
+      spacer: { height: 40 },
+      divider: {}
+    };
+    return {
+      id: 'blk_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      type,
+      props: JSON.parse(JSON.stringify(table[type] || {})),
+      style: { spacing: 'normal', background: '' }
+    };
+  }
+
+  function cpReadBlocks() {
+    return [...document.getElementById('cpBlocksList').children].map(el => el.__pbBlock).filter(Boolean);
+  }
+
+  function cpRenderPreview() {
+    document.getElementById('cpPreviewHeading').textContent = document.getElementById('cp_title').value || 'Page Title';
+    document.getElementById('cpPreviewBlocks').innerHTML = window.renderPageBlocks ? window.renderPageBlocks(cpReadBlocks()) : '';
+  }
+
+  function cpBuildStyleRow(block) {
+    const wrap = document.createElement('div');
+    wrap.className = 'pb-editor-block-style';
+    wrap.innerHTML = `
+      <select class="pbf-spacing">
+        <option value="compact">Compact spacing</option>
+        <option value="normal">Normal spacing</option>
+        <option value="spacious">Spacious spacing</option>
+      </select>
+      <select class="pbf-bg">
+        <option value="">No background</option>
+        <option value="paper">Light background</option>
+        <option value="navy">Dark navy background</option>
+      </select>
+    `;
+    const spacingSel = wrap.querySelector('.pbf-spacing');
+    const bgSel = wrap.querySelector('.pbf-bg');
+    spacingSel.value = block.style.spacing || 'normal';
+    bgSel.value = block.style.background || '';
+    spacingSel.addEventListener('change', () => { block.style.spacing = spacingSel.value; cpRenderPreview(); });
+    bgSel.addEventListener('change', () => { block.style.background = bgSel.value; cpRenderPreview(); });
+    return wrap;
+  }
+
+  function cpBuildFields(block, formErrorId) {
+    const wrap = document.createElement('div');
+    wrap.className = 'pb-editor-block-fields';
+    const p = block.props;
+
+    function textInput(key, placeholder, opts) {
+      const input = document.createElement('input');
+      input.type = (opts && opts.type) || 'text';
+      input.placeholder = placeholder;
+      input.value = p[key] || '';
+      input.addEventListener('input', () => { p[key] = input.value; cpRenderPreview(); });
+      return input;
+    }
+    function textArea(key, placeholder, rows) {
+      const ta = document.createElement('textarea');
+      ta.rows = rows || 3;
+      ta.placeholder = placeholder;
+      ta.value = p[key] || '';
+      ta.addEventListener('input', () => { p[key] = ta.value; cpRenderPreview(); });
+      return ta;
+    }
+    function selectInput(key, options, defaultVal) {
+      const sel = document.createElement('select');
+      sel.innerHTML = options.map(o => `<option value="${o.value}">${o.label}</option>`).join('');
+      sel.value = p[key] || defaultVal;
+      sel.addEventListener('change', () => { p[key] = sel.value; cpRenderPreview(); });
+      return sel;
+    }
+    function row(...els) {
+      const r = document.createElement('div');
+      r.className = 'pb-editor-block-row';
+      els.forEach(el => r.appendChild(el));
+      return r;
+    }
+    function imageUploadField(key, altKey) {
+      const box = document.createElement('div');
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file'; fileInput.accept = 'image/*';
+      const preview = document.createElement('img');
+      preview.className = 'admin-preview';
+      if (p[key]) { preview.src = p[key]; preview.style.display = 'block'; } else { preview.style.display = 'none'; }
+      fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+          const url = await uploadImage(file);
+          p[key] = url;
+          preview.src = url; preview.style.display = 'block';
+          cpRenderPreview();
+        } catch (err) { document.getElementById(formErrorId).textContent = 'Image upload failed: ' + err.message; }
+      });
+      box.appendChild(fileInput);
+      box.appendChild(preview);
+      if (altKey) box.appendChild(textInput(altKey, 'Alt text (for accessibility)'));
+      return box;
+    }
+
+    switch (block.type) {
+      case 'heading':
+        wrap.appendChild(textInput('text', 'Heading text'));
+        wrap.appendChild(row(
+          selectInput('level', [{ value: 'h1', label: 'Large (H1)' }, { value: 'h2', label: 'Medium (H2)' }, { value: 'h3', label: 'Small (H3)' }], 'h2'),
+          selectInput('align', [{ value: 'left', label: 'Left' }, { value: 'center', label: 'Center' }, { value: 'right', label: 'Right' }], 'center')
+        ));
+        break;
+      case 'text':
+        wrap.appendChild(textArea('text', 'Paragraph text — leave a blank line between paragraphs', 4));
+        wrap.appendChild(selectInput('align', [{ value: 'left', label: 'Left' }, { value: 'center', label: 'Center' }], 'left'));
+        break;
+      case 'image':
+        wrap.appendChild(imageUploadField('src', 'alt'));
+        wrap.appendChild(textInput('caption', 'Caption (optional)'));
+        break;
+      case 'button':
+        wrap.appendChild(row(textInput('label', 'Button text'), textInput('href', 'Link URL')));
+        wrap.appendChild(row(
+          selectInput('variant', [{ value: 'gold', label: 'Gold' }, { value: 'navy', label: 'Navy' }, { value: 'outline', label: 'Outline' }], 'gold'),
+          selectInput('align', [{ value: 'left', label: 'Left' }, { value: 'center', label: 'Center' }, { value: 'right', label: 'Right' }], 'center')
+        ));
+        break;
+      case 'image-text-split':
+        wrap.appendChild(imageUploadField('src', 'alt'));
+        wrap.appendChild(textInput('heading', 'Heading'));
+        wrap.appendChild(textArea('text', 'Description text', 3));
+        wrap.appendChild(row(textInput('buttonLabel', 'Button text (optional)'), textInput('buttonHref', 'Button link')));
+        wrap.appendChild(selectInput('imagePosition', [{ value: 'left', label: 'Image on left' }, { value: 'right', label: 'Image on right' }], 'left'));
+        break;
+      case 'gallery': {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.multiple = true;
+        const thumbs = document.createElement('div');
+        thumbs.className = 'pb-editor-gallery-thumbs';
+        function renderThumbs() {
+          thumbs.innerHTML = '';
+          (p.images || []).forEach((img, idx) => {
+            const t = document.createElement('div');
+            t.className = 'pb-editor-gallery-thumb';
+            t.innerHTML = `<img src="${img.src}" alt=""><button type="button" class="remove-row">&times;</button>`;
+            t.querySelector('.remove-row').addEventListener('click', () => { p.images.splice(idx, 1); renderThumbs(); cpRenderPreview(); });
+            thumbs.appendChild(t);
+          });
+        }
+        fileInput.addEventListener('change', async (e) => {
+          const files = [...e.target.files];
+          for (const file of files) {
+            try {
+              const url = await uploadImage(file);
+              p.images = p.images || [];
+              p.images.push({ src: url, alt: '' });
+            } catch (err) { document.getElementById(formErrorId).textContent = 'Image upload failed: ' + err.message; }
+          }
+          renderThumbs(); cpRenderPreview();
+          fileInput.value = '';
+        });
+        renderThumbs();
+        wrap.appendChild(fileInput);
+        wrap.appendChild(thumbs);
+        break;
+      }
+      case 'video': {
+        const urlInput = textInput('videoUrl', 'YouTube URL, e.g. https://www.youtube.com/watch?v=...');
+        urlInput.value = p.videoId ? `https://www.youtube.com/watch?v=${p.videoId}` : '';
+        urlInput.addEventListener('input', () => {
+          p.videoId = extractYouTubeId(urlInput.value);
+          cpRenderPreview();
+        });
+        wrap.appendChild(urlInput);
+        wrap.appendChild(textInput('caption', 'Caption (optional)'));
+        break;
+      }
+      case 'feature-grid': {
+        const itemsBox = document.createElement('div');
+        p.items = p.items || [];
+        function renderItems() {
+          itemsBox.innerHTML = '';
+          p.items.forEach((item, idx) => {
+            const itemRow = document.createElement('div');
+            itemRow.className = 'pb-editor-repeat-item';
+            const iconInput = document.createElement('input');
+            iconInput.type = 'text'; iconInput.placeholder = 'Icon (emoji, optional) e.g. 🏠'; iconInput.value = item.icon || '';
+            iconInput.addEventListener('input', () => { item.icon = iconInput.value; cpRenderPreview(); });
+            const titleInput = document.createElement('input');
+            titleInput.type = 'text'; titleInput.placeholder = 'Title'; titleInput.value = item.title || '';
+            titleInput.addEventListener('input', () => { item.title = titleInput.value; cpRenderPreview(); });
+            const textInputEl = document.createElement('input');
+            textInputEl.type = 'text'; textInputEl.placeholder = 'Description'; textInputEl.value = item.text || '';
+            textInputEl.addEventListener('input', () => { item.text = textInputEl.value; cpRenderPreview(); });
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button'; removeBtn.className = 'admin-add-row'; removeBtn.style.marginTop = '4px';
+            removeBtn.textContent = '× Remove Item';
+            removeBtn.addEventListener('click', () => { p.items.splice(idx, 1); renderItems(); cpRenderPreview(); });
+            itemRow.appendChild(iconInput); itemRow.appendChild(titleInput); itemRow.appendChild(textInputEl); itemRow.appendChild(removeBtn);
+            itemsBox.appendChild(itemRow);
+          });
+        }
+        renderItems();
+        const addItemBtn = document.createElement('button');
+        addItemBtn.type = 'button'; addItemBtn.className = 'admin-add-row';
+        addItemBtn.textContent = '+ Add Feature Item';
+        addItemBtn.addEventListener('click', () => { p.items.push({ icon: '', title: '', text: '' }); renderItems(); cpRenderPreview(); });
+        wrap.appendChild(itemsBox);
+        wrap.appendChild(addItemBtn);
+        break;
+      }
+      case 'spacer': {
+        const heightInput = document.createElement('input');
+        heightInput.type = 'number'; heightInput.min = '0'; heightInput.placeholder = 'Height in pixels';
+        heightInput.value = p.height || 40;
+        heightInput.addEventListener('input', () => { p.height = Number(heightInput.value) || 0; cpRenderPreview(); });
+        wrap.appendChild(heightInput);
+        break;
+      }
+      case 'divider':
+        wrap.innerHTML = '<p style="font-size:0.78rem;color:var(--gray);margin:0;">A plain horizontal line separator — no settings needed.</p>';
+        break;
+    }
+    return wrap;
+  }
+
+  function cpCreateBlockCard(block) {
+    const card = document.createElement('div');
+    card.className = 'pb-editor-block';
+    card.__pbBlock = block;
+
+    const head = document.createElement('div');
+    head.className = 'pb-editor-block-head';
+    head.innerHTML = `
+      <span class="block-drag-handle" draggable="true" title="Drag to reorder">⠿</span>
+      <span class="pb-editor-block-type">${cpBlockTypeLabel(block.type)}</span>
+      <button type="button" class="remove-row" title="Remove block">&times;</button>
+    `;
+    head.querySelector('.remove-row').addEventListener('click', () => { card.remove(); cpRenderPreview(); });
+    card.appendChild(head);
+    card.appendChild(cpBuildFields(block, 'cpFormError'));
+    if (block.type !== 'spacer' && block.type !== 'divider') {
+      card.appendChild(cpBuildStyleRow(block));
+    }
+    return card;
+  }
+
+  function cpBlockTypeLabel(type) {
+    const found = (window.PAGE_BLOCK_TYPES || []).find(t => t.type === type);
+    return found ? found.label : type;
+  }
+
+  function cpAddBlock(type) {
+    const container = document.getElementById('cpBlocksList');
+    const card = cpCreateBlockCard(cpDefaultBlock(type));
+    container.appendChild(card);
+    makeSortable(container, '.pb-editor-block', '.block-drag-handle');
+    cpRenderPreview();
+  }
+
+  function cpRenderAddPalette() {
+    const palette = document.getElementById('cpAddPalette');
+    palette.innerHTML = (window.PAGE_BLOCK_TYPES || []).map(t => `<button type="button" class="admin-pb-add-btn" data-add-block="${t.type}">+ ${t.label}</button>`).join('');
+    palette.querySelectorAll('[data-add-block]').forEach(btn => {
+      btn.addEventListener('click', () => cpAddBlock(btn.dataset.addBlock));
+    });
+  }
+
+  function cpShowList() {
+    document.getElementById('cpListView').style.display = '';
+    document.getElementById('cpEditView').style.display = 'none';
+  }
+  function cpShowEditor() {
+    document.getElementById('cpListView').style.display = 'none';
+    document.getElementById('cpEditView').style.display = '';
+  }
+
+  function cpResetForm() {
+    cpEditingSlug = null;
+    document.getElementById('cp_title').value = '';
+    document.getElementById('cp_slug').value = '';
+    document.getElementById('cp_slug').disabled = false;
+    document.getElementById('cp_seoDescription').value = '';
+    document.getElementById('cp_status').value = 'draft';
+    document.getElementById('cpBlocksList').innerHTML = '';
+    document.getElementById('cpDeleteBtn').style.display = 'none';
+    document.getElementById('cpFormError').textContent = '';
+    document.getElementById('cpFormSuccess').textContent = '';
+    cpRenderAddPalette();
+    cpRenderPreview();
+  }
+
+  document.getElementById('addCustomPageBtn').addEventListener('click', () => {
+    cpResetForm();
+    cpShowEditor();
+  });
+  document.getElementById('cpBackToListBtn').addEventListener('click', () => { cpShowList(); loadCustomPagesList(); });
+
+  document.getElementById('cp_title').addEventListener('input', () => {
+    const slugField = document.getElementById('cp_slug');
+    if (!cpEditingSlug && !slugField.dataset.touched) {
+      slugField.value = document.getElementById('cp_title').value.toLowerCase().trim()
+        .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+    }
+    cpRenderPreview();
+  });
+  document.getElementById('cp_slug').addEventListener('input', (e) => { e.target.dataset.touched = '1'; });
+
+  async function loadCustomPagesList() {
+    const tbody = document.getElementById('customPagesTableBody');
+    const { data, error } = await supabase.from('custom_pages').select('*').order('updated_at', { ascending: false });
+    if (error) { console.error(error); return; }
+    tbody.innerHTML = (data || []).map(row => `
+      <tr>
+        <td>${row.title}</td>
+        <td><code>custom-page.html?slug=${row.slug}</code></td>
+        <td><span class="role-badge role-badge--${row.status === 'published' ? 'admin' : 'agent'}">${row.status === 'published' ? 'Published' : 'Draft'}</span></td>
+        <td>
+          <button type="button" class="btn btn-sm" data-edit-page="${row.slug}">Edit</button>
+          ${row.status === 'published' ? `<a href="custom-page.html?slug=${row.slug}" target="_blank" class="btn btn-sm">View</a>` : ''}
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan="4" style="color:var(--gray);">No custom pages yet.</td></tr>';
+
+    tbody.querySelectorAll('[data-edit-page]').forEach(btn => {
+      btn.addEventListener('click', () => openCustomPageEditor(btn.dataset.editPage, data));
+    });
+  }
+
+  function openCustomPageEditor(slug, rows) {
+    const row = rows.find(r => r.slug === slug);
+    if (!row) return;
+    cpResetForm();
+    cpEditingSlug = slug;
+    document.getElementById('cp_title').value = row.title;
+    document.getElementById('cp_slug').value = row.slug;
+    document.getElementById('cp_slug').disabled = true;
+    document.getElementById('cp_slug').dataset.touched = '1';
+    document.getElementById('cp_seoDescription').value = row.seo_description || '';
+    document.getElementById('cp_status').value = row.status || 'draft';
+    document.getElementById('cpDeleteBtn').style.display = '';
+
+    const container = document.getElementById('cpBlocksList');
+    (row.layout || []).forEach(block => container.appendChild(cpCreateBlockCard(block)));
+    makeSortable(container, '.pb-editor-block', '.block-drag-handle');
+    cpRenderPreview();
+    cpShowEditor();
+  }
+
+  document.getElementById('cpSaveBtn').addEventListener('click', async () => {
+    const errorEl = document.getElementById('cpFormError');
+    const successEl = document.getElementById('cpFormSuccess');
+    errorEl.textContent = ''; successEl.textContent = '';
+
+    const title = document.getElementById('cp_title').value.trim();
+    const slug = document.getElementById('cp_slug').value.trim();
+    if (!title || !slug) { errorEl.textContent = 'Title and URL slug are required.'; return; }
+    if (!/^[a-z0-9-]+$/.test(slug)) { errorEl.textContent = 'URL slug can only contain lowercase letters, numbers and hyphens.'; return; }
+
+    const record = {
+      slug,
+      title,
+      seo_description: document.getElementById('cp_seoDescription').value,
+      status: document.getElementById('cp_status').value,
+      layout: cpReadBlocks()
+    };
+
+    const { error } = await supabase.from('custom_pages').upsert(record);
+    if (error) { errorEl.textContent = error.message; return; }
+    cpEditingSlug = slug;
+    document.getElementById('cp_slug').disabled = true;
+    document.getElementById('cpDeleteBtn').style.display = '';
+    successEl.textContent = 'Saved.';
+    setTimeout(() => { successEl.textContent = ''; }, 3000);
+  });
+
+  document.getElementById('cpDeleteBtn').addEventListener('click', async () => {
+    if (!cpEditingSlug) return;
+    if (!confirm(`Delete "${document.getElementById('cp_title').value}"? This can't be undone.`)) return;
+    const { error } = await supabase.from('custom_pages').delete().eq('slug', cpEditingSlug);
+    if (error) { document.getElementById('cpFormError').textContent = error.message; return; }
+    cpShowList();
+    loadCustomPagesList();
   });
 
   // ===== USERS (super_admin / admin only) =====

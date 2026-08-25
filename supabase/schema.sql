@@ -546,6 +546,45 @@ drop policy if exists "Admins can insert page headers" on page_headers;
 create policy "Admins can insert page headers" on page_headers for insert with check (current_user_role() in ('admin', 'super_admin'));
 
 -- ============================================================
+-- CUSTOM PAGES (admin-built pages: neighborhood guides, blog
+-- posts, campaign landing pages). Each page is a title + an
+-- ordered JSON array of content blocks (heading, text, image,
+-- gallery, video, button, feature grid, image/text split, etc.),
+-- rendered by assets/page-blocks-render.js on custom-page.html.
+-- ============================================================
+create table if not exists custom_pages (
+  slug text primary key,
+  title text not null,
+  seo_description text not null default '',
+  status text not null default 'draft', -- 'draft' | 'published'
+  layout jsonb not null default '[]',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table custom_pages enable row level security;
+
+drop policy if exists "Public can view published custom pages" on custom_pages;
+create policy "Public can view published custom pages" on custom_pages for select
+  using (status = 'published' or current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can insert custom pages" on custom_pages;
+create policy "Admins can insert custom pages" on custom_pages for insert
+  with check (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can update custom pages" on custom_pages;
+create policy "Admins can update custom pages" on custom_pages for update
+  using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can delete custom pages" on custom_pages;
+create policy "Admins can delete custom pages" on custom_pages for delete
+  using (current_user_role() in ('admin', 'super_admin'));
+
+drop trigger if exists custom_pages_set_updated_at on custom_pages;
+create trigger custom_pages_set_updated_at before update on custom_pages
+  for each row execute function set_updated_at();
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.
