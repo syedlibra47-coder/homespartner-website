@@ -533,7 +533,8 @@ create table if not exists page_headers (
   overlay_opacity int not null default 70,
   banner_image text,
   banner_link text,
-  banner_height int not null default 400
+  banner_height int not null default 400,
+  banner_height_mobile int not null default 250
 );
 
 alter table page_headers add column if not exists overlay_color text not null default '#1F275C';
@@ -541,6 +542,7 @@ alter table page_headers add column if not exists overlay_opacity int not null d
 alter table page_headers add column if not exists banner_image text;
 alter table page_headers add column if not exists banner_link text;
 alter table page_headers add column if not exists banner_height int not null default 400;
+alter table page_headers add column if not exists banner_height_mobile int not null default 250;
 
 insert into page_headers (page_id) values
   ('listings'), ('offplan'), ('services'), ('agents'), ('careers'), ('contact')

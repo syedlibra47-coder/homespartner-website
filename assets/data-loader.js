@@ -302,7 +302,8 @@ window.dataReady = (async function () {
         map[row.page_id] = {
           bgType: row.bg_type, bgColor: row.bg_color, bgImage: row.bg_image, bgVideoId: row.bg_video_id,
           overlayColor: row.overlay_color, overlayOpacity: row.overlay_opacity,
-          bannerImage: row.banner_image, bannerLink: row.banner_link, bannerHeight: row.banner_height
+          bannerImage: row.banner_image, bannerLink: row.banner_link,
+          bannerHeight: row.banner_height, bannerHeightMobile: row.banner_height_mobile
         };
       });
       window.PAGE_HEADERS_DATA = map;

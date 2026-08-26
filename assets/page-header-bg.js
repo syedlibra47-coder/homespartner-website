@@ -56,7 +56,8 @@
     img.className = 'page-hero-banner-img';
     img.src = data.bannerImage;
     img.alt = '';
-    img.style.height = (data.bannerHeight || 400) + 'px';
+    img.style.setProperty('--banner-height', (data.bannerHeight || 400) + 'px');
+    img.style.setProperty('--banner-height-mobile', (data.bannerHeightMobile || 250) + 'px');
     link.appendChild(img);
     hero.appendChild(link);
   }

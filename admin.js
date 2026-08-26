@@ -1672,10 +1672,15 @@
           <label class="admin-form-full">Click-Through Link
             <input type="text" class="pagebg-banner-link" placeholder="e.g. custom-page.html?slug=dubai-roadshow-march">
           </label>
-          <label>Banner Height (px)
-            <input type="number" class="pagebg-banner-height" min="80" max="1200" step="10" value="400">
-          </label>
-          <p class="admin-typo-role-hint">Replaces the whole banner — title and description are hidden — with just this image, cropped to fill the height you set. Visitors who click it are sent to the link above, e.g. a Custom Page you've built for the event.</p>
+          <div class="admin-form-grid">
+            <label>Banner Height — Desktop (px)
+              <input type="number" class="pagebg-banner-height" min="80" max="1200" step="10" value="400">
+            </label>
+            <label>Banner Height — Mobile (px)
+              <input type="number" class="pagebg-banner-height-mobile" min="80" max="800" step="10" value="250">
+            </label>
+          </div>
+          <p class="admin-typo-role-hint">Replaces the whole banner — title and description are hidden — with just this image, cropped to fill the height you set. Set separate heights since mobile screens are much narrower. Visitors who click it are sent to the link above, e.g. a Custom Page you've built for the event.</p>
         </div>
       </div>
     `).join('');
@@ -1749,6 +1754,7 @@
       }
       block.querySelector('.pagebg-banner-link').value = row.banner_link || '';
       block.querySelector('.pagebg-banner-height').value = row.banner_height != null ? row.banner_height : 400;
+      block.querySelector('.pagebg-banner-height-mobile').value = row.banner_height_mobile != null ? row.banner_height_mobile : 250;
     });
   }
 
@@ -1771,7 +1777,8 @@
         overlay_opacity: overlay.opacity,
         banner_image: block.querySelector('.pagebg-banner-image').value,
         banner_link: block.querySelector('.pagebg-banner-link').value,
-        banner_height: Number(block.querySelector('.pagebg-banner-height').value) || 400
+        banner_height: Number(block.querySelector('.pagebg-banner-height').value) || 400,
+        banner_height_mobile: Number(block.querySelector('.pagebg-banner-height-mobile').value) || 250
       };
     });
 
