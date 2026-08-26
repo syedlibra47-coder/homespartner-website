@@ -790,7 +790,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .page-hero--banner .hero-bg,
 .page-hero--banner .page-hero-inner { display: none; }
 .page-hero-banner-link { display: block; }
-.page-hero-banner-img { display: block; width: 100%; height: auto; }
+.page-hero-banner-img { display: block; width: 100%; height: 400px; object-fit: cover; }
 
 /* ===== ALL LISTINGS PAGE ===== */
 .all-listings { padding: 90px 0 110px; background: var(--paper); }
