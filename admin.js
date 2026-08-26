@@ -1659,7 +1659,10 @@
         </div>
         <div class="pagebg-overlay-fields" style="display:none;">
           <label>Dark Overlay Tint <input type="color" class="pagebg-overlay" value="#1F275C"></label>
-          <p class="admin-typo-role-hint" style="margin-top:-4px;">Darkens the image/video so the title text stays readable — pick the tint color.</p>
+          <label>Overlay Opacity — <span class="pagebg-opacity-value">70</span>%
+            <input type="range" class="pagebg-opacity" min="0" max="100" value="70">
+          </label>
+          <p class="admin-typo-role-hint" style="margin-top:-4px;">Darkens the image/video so the title text stays readable. Lower opacity shows more of the photo through; 0% removes the tint entirely.</p>
         </div>
       </div>
     `).join('');
@@ -1678,6 +1681,9 @@
       });
       block.querySelector('.pagebg-video-url').addEventListener('input', (e) => {
         block.querySelector('.pagebg-video-id').value = extractYouTubeId(e.target.value);
+      });
+      block.querySelector('.pagebg-opacity').addEventListener('input', (e) => {
+        block.querySelector('.pagebg-opacity-value').textContent = e.target.value;
       });
       block.querySelector('.pagebg-image-file').addEventListener('change', async (e) => {
         const file = e.target.files[0];
@@ -1712,6 +1718,9 @@
       block.querySelector('.pagebg-video-id').value = row.bg_video_id || '';
       block.querySelector('.pagebg-video-url').value = row.bg_video_id ? `https://www.youtube.com/watch?v=${row.bg_video_id}` : '';
       block.querySelector('.pagebg-overlay').value = row.overlay_color || '#1F275C';
+      const opacityVal = row.overlay_opacity != null ? row.overlay_opacity : 70;
+      block.querySelector('.pagebg-opacity').value = opacityVal;
+      block.querySelector('.pagebg-opacity-value').textContent = opacityVal;
     });
   }
 
@@ -1728,7 +1737,8 @@
       bg_color: block.querySelector('.pagebg-color').value,
       bg_image: block.querySelector('.pagebg-image').value,
       bg_video_id: block.querySelector('.pagebg-video-id').value,
-      overlay_color: block.querySelector('.pagebg-overlay').value
+      overlay_color: block.querySelector('.pagebg-overlay').value,
+      overlay_opacity: Number(block.querySelector('.pagebg-opacity').value)
     }));
 
     const { error } = await supabase.from('page_headers').upsert(records);

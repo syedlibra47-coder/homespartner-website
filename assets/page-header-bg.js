@@ -13,7 +13,9 @@
 
   function applyOverlayTint() {
     if (!data.overlayColor) return;
-    hero.style.setProperty('--page-hero-overlay', `linear-gradient(160deg, ${data.overlayColor}ED 0%, ${data.overlayColor}E0 100%)`);
+    const opacityPct = data.overlayOpacity != null ? data.overlayOpacity : 70;
+    const alphaHex = Math.round(Math.max(0, Math.min(100, opacityPct)) / 100 * 255).toString(16).padStart(2, '0').toUpperCase();
+    hero.style.setProperty('--page-hero-overlay', `${data.overlayColor}${alphaHex}`);
   }
 
   if (data.bgType === 'color' && data.bgColor) {
