@@ -784,6 +784,14 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 /* Admin-chosen flat color: skip the built-in gradient/overlay/grid so the color shows clean. */
 .page-hero--solid .hero-bg { display: none; }
 
+/* Admin-chosen banner: replace the whole hero (title, description, decoration)
+   with a single clickable image — used for campaign/event banners. */
+.page-hero--banner { padding: 0; }
+.page-hero--banner .hero-bg,
+.page-hero--banner .page-hero-inner { display: none; }
+.page-hero-banner-link { display: block; }
+.page-hero-banner-img { display: block; width: 100%; height: auto; }
+
 /* ===== ALL LISTINGS PAGE ===== */
 .all-listings { padding: 90px 0 110px; background: var(--paper); }
 

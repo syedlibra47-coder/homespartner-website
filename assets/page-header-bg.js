@@ -47,5 +47,16 @@
       sizeVideo();
       window.addEventListener('resize', sizeVideo);
     }
+  } else if (data.bgType === 'banner' && data.bannerImage) {
+    hero.classList.add('page-hero--banner');
+    const link = document.createElement('a');
+    link.className = 'page-hero-banner-link';
+    link.href = data.bannerLink || '#';
+    const img = document.createElement('img');
+    img.className = 'page-hero-banner-img';
+    img.src = data.bannerImage;
+    img.alt = '';
+    link.appendChild(img);
+    hero.appendChild(link);
   }
 })();

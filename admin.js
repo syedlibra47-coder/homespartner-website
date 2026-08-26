@@ -1639,6 +1639,7 @@
           <button type="button" class="admin-herobg-option" data-bgtype="color">Color</button>
           <button type="button" class="admin-herobg-option" data-bgtype="image">Image</button>
           <button type="button" class="admin-herobg-option" data-bgtype="video">YouTube Video</button>
+          <button type="button" class="admin-herobg-option" data-bgtype="banner">Banner</button>
         </div>
         <input type="hidden" class="pagebg-type" value="default">
         <div class="pagebg-color-fields" style="display:none;">
@@ -1662,6 +1663,17 @@
           <div class="pagebg-overlay-picker"></div>
           <p class="admin-typo-role-hint" style="margin-top:8px;">Darkens the image/video so the title text stays readable. Lower opacity shows more of the photo through; 0% removes the tint entirely.</p>
         </div>
+        <div class="pagebg-banner-fields" style="display:none;">
+          <label class="admin-form-full">Banner Image
+            <input type="file" class="pagebg-banner-file" accept="image/*">
+            <input type="hidden" class="pagebg-banner-image">
+            <img class="admin-preview pagebg-banner-preview" style="display:none;">
+          </label>
+          <label class="admin-form-full">Click-Through Link
+            <input type="text" class="pagebg-banner-link" placeholder="e.g. custom-page.html?slug=dubai-roadshow-march">
+          </label>
+          <p class="admin-typo-role-hint">Replaces the whole banner — title and description are hidden — with just this image. Visitors who click it are sent to the link above, e.g. a Custom Page you've built for the event.</p>
+        </div>
       </div>
     `).join('');
 
@@ -1673,6 +1685,7 @@
         block.querySelector('.pagebg-image-fields').style.display = type === 'image' ? '' : 'none';
         block.querySelector('.pagebg-video-fields').style.display = type === 'video' ? '' : 'none';
         block.querySelector('.pagebg-overlay-fields').style.display = (type === 'image' || type === 'video') ? '' : 'none';
+        block.querySelector('.pagebg-banner-fields').style.display = type === 'banner' ? '' : 'none';
       }
       block.querySelectorAll('.admin-herobg-option').forEach(btn => {
         btn.addEventListener('click', () => setType(btn.dataset.bgtype));
@@ -1687,6 +1700,16 @@
           const url = await uploadImage(file);
           block.querySelector('.pagebg-image').value = url;
           const preview = block.querySelector('.pagebg-image-preview');
+          preview.src = url; preview.style.display = 'block';
+        } catch (err) { document.getElementById('pageHeadersFormError').textContent = 'Image upload failed: ' + err.message; }
+      });
+      block.querySelector('.pagebg-banner-file').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+          const url = await uploadImage(file);
+          block.querySelector('.pagebg-banner-image').value = url;
+          const preview = block.querySelector('.pagebg-banner-preview');
           preview.src = url; preview.style.display = 'block';
         } catch (err) { document.getElementById('pageHeadersFormError').textContent = 'Image upload failed: ' + err.message; }
       });
@@ -1716,6 +1739,12 @@
       block.querySelector('.pagebg-video-id').value = row.bg_video_id || '';
       block.querySelector('.pagebg-video-url').value = row.bg_video_id ? `https://www.youtube.com/watch?v=${row.bg_video_id}` : '';
       block.__overlayPicker.setValue(row.overlay_color || '#1F275C', row.overlay_opacity != null ? row.overlay_opacity : 70);
+      block.querySelector('.pagebg-banner-image').value = row.banner_image || '';
+      if (row.banner_image) {
+        const preview = block.querySelector('.pagebg-banner-preview');
+        preview.src = row.banner_image; preview.style.display = 'block';
+      }
+      block.querySelector('.pagebg-banner-link').value = row.banner_link || '';
     });
   }
 
@@ -1735,7 +1764,9 @@
         bg_image: block.querySelector('.pagebg-image').value,
         bg_video_id: block.querySelector('.pagebg-video-id').value,
         overlay_color: overlay.color,
-        overlay_opacity: overlay.opacity
+        overlay_opacity: overlay.opacity,
+        banner_image: block.querySelector('.pagebg-banner-image').value,
+        banner_link: block.querySelector('.pagebg-banner-link').value
       };
     });
 
