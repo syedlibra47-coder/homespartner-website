@@ -299,7 +299,7 @@ window.dataReady = (async function () {
     if (!pageHeadersRes.error && pageHeadersRes.data) {
       const map = {};
       pageHeadersRes.data.forEach(row => {
-        map[row.page_id] = { bgType: row.bg_type, bgColor: row.bg_color, bgImage: row.bg_image, bgVideoId: row.bg_video_id };
+        map[row.page_id] = { bgType: row.bg_type, bgColor: row.bg_color, bgImage: row.bg_image, bgVideoId: row.bg_video_id, overlayColor: row.overlay_color };
       });
       window.PAGE_HEADERS_DATA = map;
     }

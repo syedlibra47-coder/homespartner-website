@@ -528,8 +528,11 @@ create table if not exists page_headers (
   bg_type text not null default 'default',
   bg_color text not null default '#1F275C',
   bg_image text,
-  bg_video_id text
+  bg_video_id text,
+  overlay_color text not null default '#1F275C'
 );
+
+alter table page_headers add column if not exists overlay_color text not null default '#1F275C';
 
 insert into page_headers (page_id) values
   ('listings'), ('offplan'), ('services'), ('agents'), ('careers'), ('contact')

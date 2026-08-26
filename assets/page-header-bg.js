@@ -11,15 +11,22 @@
   const data = window.PAGE_HEADERS_DATA && window.PAGE_HEADERS_DATA[hero.dataset.page];
   if (!data) return;
 
+  function applyOverlayTint() {
+    if (!data.overlayColor) return;
+    hero.style.setProperty('--page-hero-overlay', `linear-gradient(160deg, ${data.overlayColor}ED 0%, ${data.overlayColor}E0 100%)`);
+  }
+
   if (data.bgType === 'color' && data.bgColor) {
     hero.classList.add('page-hero--solid');
     hero.style.background = data.bgColor;
   } else if (data.bgType === 'image' && data.bgImage) {
     hero.classList.add('page-hero--media');
+    applyOverlayTint();
     const mediaEl = hero.querySelector('.hero-bg-media');
     if (mediaEl) mediaEl.innerHTML = `<img src="${data.bgImage}" alt="" class="hero-photo">`;
   } else if (data.bgType === 'video' && data.bgVideoId) {
     hero.classList.add('page-hero--media');
+    applyOverlayTint();
     const mediaEl = hero.querySelector('.hero-bg-media');
     if (mediaEl) {
       mediaEl.innerHTML = `<iframe src="https://www.youtube.com/embed/${data.bgVideoId}?autoplay=1&mute=1&loop=1&playlist=${data.bgVideoId}&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1" allow="autoplay; encrypted-media" title="Background video"></iframe>`;

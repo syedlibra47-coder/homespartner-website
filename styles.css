@@ -773,7 +773,9 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 }
 .page-hero .grid-map { z-index: 0; }
 .page-hero .hero-bg::after {
-  background: linear-gradient(160deg, rgba(18,23,61,0.94) 0%, rgba(31,39,92,0.9) 100%);
+  /* Admin-chosen overlay tint (Image/Video backgrounds only) overrides this via
+     the --page-hero-overlay custom property; falls back to the built-in navy tint. */
+  background: var(--page-hero-overlay, linear-gradient(160deg, rgba(18,23,61,0.94) 0%, rgba(31,39,92,0.9) 100%));
 }
 .page-hero-inner { position: relative; z-index: 2; }
 .page-hero h1 { color: #fff; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 12px; }

@@ -1657,6 +1657,10 @@
           </label>
           <input type="hidden" class="pagebg-video-id">
         </div>
+        <div class="pagebg-overlay-fields" style="display:none;">
+          <label>Dark Overlay Tint <input type="color" class="pagebg-overlay" value="#1F275C"></label>
+          <p class="admin-typo-role-hint" style="margin-top:-4px;">Darkens the image/video so the title text stays readable — pick the tint color.</p>
+        </div>
       </div>
     `).join('');
 
@@ -1667,6 +1671,7 @@
         block.querySelector('.pagebg-color-fields').style.display = type === 'color' ? '' : 'none';
         block.querySelector('.pagebg-image-fields').style.display = type === 'image' ? '' : 'none';
         block.querySelector('.pagebg-video-fields').style.display = type === 'video' ? '' : 'none';
+        block.querySelector('.pagebg-overlay-fields').style.display = (type === 'image' || type === 'video') ? '' : 'none';
       }
       block.querySelectorAll('.admin-herobg-option').forEach(btn => {
         btn.addEventListener('click', () => setType(btn.dataset.bgtype));
@@ -1706,6 +1711,7 @@
       }
       block.querySelector('.pagebg-video-id').value = row.bg_video_id || '';
       block.querySelector('.pagebg-video-url').value = row.bg_video_id ? `https://www.youtube.com/watch?v=${row.bg_video_id}` : '';
+      block.querySelector('.pagebg-overlay').value = row.overlay_color || '#1F275C';
     });
   }
 
@@ -1721,7 +1727,8 @@
       bg_type: block.querySelector('.pagebg-type').value,
       bg_color: block.querySelector('.pagebg-color').value,
       bg_image: block.querySelector('.pagebg-image').value,
-      bg_video_id: block.querySelector('.pagebg-video-id').value
+      bg_video_id: block.querySelector('.pagebg-video-id').value,
+      overlay_color: block.querySelector('.pagebg-overlay').value
     }));
 
     const { error } = await supabase.from('page_headers').upsert(records);
