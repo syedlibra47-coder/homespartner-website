@@ -196,6 +196,39 @@
 .admin-btn-danger { color: #b3261e; border-color: #e8b4ae; }
 .admin-btn-danger:hover { background: #fbeae8; }
 
+/* ===== CUSTOM COLOR + OPACITY PICKER ===== */
+.cop-widget { position: relative; display: inline-block; }
+.cop-swatch-btn { border: 1px solid var(--line); border-radius: 8px; padding: 3px; background: #fff; cursor: pointer; }
+.cop-swatch-checker {
+  display: block; width: 60px; height: 34px; border-radius: 5px; overflow: hidden;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.cop-swatch-preview { display: block; width: 100%; height: 100%; }
+.cop-popover {
+  position: absolute; top: calc(100% + 8px); left: 0; z-index: 40;
+  background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18); width: 220px;
+}
+.cop-sv-square { position: relative; width: 100%; height: 140px; border-radius: 8px; cursor: crosshair; touch-action: none; margin-bottom: 12px; }
+.cop-hue-slider {
+  position: relative; width: 100%; height: 14px; border-radius: 7px; margin-bottom: 10px; cursor: pointer; touch-action: none;
+  background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+}
+.cop-alpha-slider { position: relative; width: 100%; height: 14px; border-radius: 7px; margin-bottom: 12px; cursor: pointer; touch-action: none; overflow: hidden; }
+.cop-alpha-checker { position: absolute; inset: 0; background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%); background-size: 10px 10px; background-position: 0 0, 0 5px, 5px -5px, -5px 0px; }
+.cop-alpha-gradient { position: absolute; inset: 0; }
+.cop-slider-cursor {
+  position: absolute; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.4);
+  transform: translate(-50%, -50%); pointer-events: none;
+}
+.cop-hue-cursor, .cop-alpha-cursor { top: 50%; }
+.cop-hex-row { display: flex; gap: 8px; }
+.cop-hex-row label { flex: 1; font-size: 0.72rem; font-weight: 600; color: var(--gray); }
+.cop-hex-row input { width: 100%; margin-top: 3px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; font-size: 0.8rem; font-family: var(--font-mono); }
+
 /* ===== PAGE BUILDER (Custom Pages tab) ===== */
 .admin-pb-editor { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 24px; margin-top: 24px; align-items: start; }
 @media (max-width: 1100px) { .admin-pb-editor { grid-template-columns: 1fr; } }

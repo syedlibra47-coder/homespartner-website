@@ -1658,11 +1658,9 @@
           <input type="hidden" class="pagebg-video-id">
         </div>
         <div class="pagebg-overlay-fields" style="display:none;">
-          <label>Dark Overlay Tint <input type="color" class="pagebg-overlay" value="#1F275C"></label>
-          <label>Overlay Opacity — <span class="pagebg-opacity-value">70</span>%
-            <input type="range" class="pagebg-opacity" min="0" max="100" value="70">
-          </label>
-          <p class="admin-typo-role-hint" style="margin-top:-4px;">Darkens the image/video so the title text stays readable. Lower opacity shows more of the photo through; 0% removes the tint entirely.</p>
+          <label>Dark Overlay Tint &amp; Opacity</label>
+          <div class="pagebg-overlay-picker"></div>
+          <p class="admin-typo-role-hint" style="margin-top:8px;">Darkens the image/video so the title text stays readable. Lower opacity shows more of the photo through; 0% removes the tint entirely.</p>
         </div>
       </div>
     `).join('');
@@ -1682,9 +1680,6 @@
       block.querySelector('.pagebg-video-url').addEventListener('input', (e) => {
         block.querySelector('.pagebg-video-id').value = extractYouTubeId(e.target.value);
       });
-      block.querySelector('.pagebg-opacity').addEventListener('input', (e) => {
-        block.querySelector('.pagebg-opacity-value').textContent = e.target.value;
-      });
       block.querySelector('.pagebg-image-file').addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -1695,6 +1690,9 @@
           preview.src = url; preview.style.display = 'block';
         } catch (err) { document.getElementById('pageHeadersFormError').textContent = 'Image upload failed: ' + err.message; }
       });
+      const overlayPicker = window.createColorOpacityPicker({ color: '#1F275C', opacity: 70 });
+      block.querySelector('.pagebg-overlay-picker').appendChild(overlayPicker.el);
+      block.__overlayPicker = overlayPicker;
       block.__setType = setType;
     });
   }
@@ -1717,10 +1715,7 @@
       }
       block.querySelector('.pagebg-video-id').value = row.bg_video_id || '';
       block.querySelector('.pagebg-video-url').value = row.bg_video_id ? `https://www.youtube.com/watch?v=${row.bg_video_id}` : '';
-      block.querySelector('.pagebg-overlay').value = row.overlay_color || '#1F275C';
-      const opacityVal = row.overlay_opacity != null ? row.overlay_opacity : 70;
-      block.querySelector('.pagebg-opacity').value = opacityVal;
-      block.querySelector('.pagebg-opacity-value').textContent = opacityVal;
+      block.__overlayPicker.setValue(row.overlay_color || '#1F275C', row.overlay_opacity != null ? row.overlay_opacity : 70);
     });
   }
 
@@ -1731,15 +1726,18 @@
     errorEl.textContent = '';
     successEl.textContent = '';
 
-    const records = [...document.querySelectorAll('#pageHeadersList .admin-typo-role')].map(block => ({
-      page_id: block.dataset.page,
-      bg_type: block.querySelector('.pagebg-type').value,
-      bg_color: block.querySelector('.pagebg-color').value,
-      bg_image: block.querySelector('.pagebg-image').value,
-      bg_video_id: block.querySelector('.pagebg-video-id').value,
-      overlay_color: block.querySelector('.pagebg-overlay').value,
-      overlay_opacity: Number(block.querySelector('.pagebg-opacity').value)
-    }));
+    const records = [...document.querySelectorAll('#pageHeadersList .admin-typo-role')].map(block => {
+      const overlay = block.__overlayPicker.getValue();
+      return {
+        page_id: block.dataset.page,
+        bg_type: block.querySelector('.pagebg-type').value,
+        bg_color: block.querySelector('.pagebg-color').value,
+        bg_image: block.querySelector('.pagebg-image').value,
+        bg_video_id: block.querySelector('.pagebg-video-id').value,
+        overlay_color: overlay.color,
+        overlay_opacity: overlay.opacity
+      };
+    });
 
     const { error } = await supabase.from('page_headers').upsert(records);
     if (error) { errorEl.textContent = error.message; return; }
