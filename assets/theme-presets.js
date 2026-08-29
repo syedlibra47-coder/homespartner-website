@@ -51,31 +51,40 @@ window.THEME_FONT_SUGGESTIONS = {
     "Fraunces", "Playfair Display", "DM Serif Display", "Merriweather", "Lora",
     "Cormorant Garamond", "Libre Baskerville", "Crimson Text", "Poppins", "Marcellus",
     "Bricolage Grotesque", "Instrument Serif", "Bodoni Moda", "Newsreader",
-    "Spectral", "Big Shoulders Display", "Prata", "Domine"
+    "Spectral", "Big Shoulders Display", "Prata", "Domine", "Young Serif",
+    "Faustina", "Gilda Display", "Abril Fatface", "Cardo", "EB Garamond",
+    "Petrona", "Zilla Slab", "Vollkorn", "Frank Ruhl Libre"
   ],
   body: [
     "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
     "Outfit", "Karla", "Mulish", "Poppins", "Plus Jakarta Sans", "Sora",
-    "Figtree", "Albert Sans", "Urbanist", "Instrument Sans", "Lexend", "Onest"
+    "Figtree", "Albert Sans", "Urbanist", "Instrument Sans", "Lexend", "Onest",
+    "Public Sans", "IBM Plex Sans", "Rubik", "Hanken Grotesk", "Space Grotesk",
+    "Epilogue", "Be Vietnam Pro", "Red Hat Text", "Schibsted Grotesk", "Geist"
   ],
   data: [
     "IBM Plex Mono", "JetBrains Mono", "Roboto Mono", "Space Mono",
     "Source Code Pro", "Fira Code", "Inconsolata", "DM Mono", "Red Hat Mono",
-    "Martian Mono", "Overpass Mono"
+    "Martian Mono", "Overpass Mono", "Azeret Mono", "Spline Sans Mono",
+    "Ubuntu Mono", "PT Mono", "Cousine", "Anonymous Pro", "Courier Prime",
+    "Fragment Mono", "Geist Mono", "Chivo Mono"
   ],
   card: [
     "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
     "Outfit", "Karla", "Poppins", "Fraunces", "Plus Jakarta Sans", "Sora",
-    "Figtree", "Albert Sans", "Urbanist", "Instrument Sans"
+    "Figtree", "Albert Sans", "Urbanist", "Instrument Sans", "Public Sans",
+    "Rubik", "Space Grotesk", "Epilogue", "Be Vietnam Pro", "Schibsted Grotesk"
   ],
   blog: [
     "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
     "Outfit", "Karla", "Poppins", "Fraunces", "Plus Jakarta Sans", "Sora",
-    "Figtree", "Albert Sans", "Urbanist", "Instrument Sans"
+    "Figtree", "Albert Sans", "Urbanist", "Instrument Sans", "Public Sans",
+    "Rubik", "Space Grotesk", "Epilogue", "Be Vietnam Pro", "Schibsted Grotesk"
   ],
   form: [
     "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
     "Outfit", "Karla", "Poppins", "Plus Jakarta Sans", "Sora", "Figtree",
-    "Albert Sans", "Urbanist", "Instrument Sans"
+    "Albert Sans", "Urbanist", "Instrument Sans", "Public Sans", "Rubik",
+    "Space Grotesk", "Epilogue", "Be Vietnam Pro", "Schibsted Grotesk"
   ]
 };
