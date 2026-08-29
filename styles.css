@@ -1241,6 +1241,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   .cta-form { grid-template-columns: 1fr; }
   .cta-form button { grid-column: span 1; }
   .footer-inner { grid-template-columns: 1fr; }
+  .footer-bottom { text-align: left; }
   .listing-grid-full { grid-template-columns: 1fr; }
   .filters-bar { flex-direction: column; align-items: stretch; }
   .filter-search { flex-basis: auto; width: 100%; }
