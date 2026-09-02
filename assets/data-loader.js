@@ -197,6 +197,14 @@ window.dataReady = (async function () {
     };
   }
 
+  function testimonialFromRow(row) {
+    return {
+      id: row.id, authorName: row.author_name, authorContext: row.author_context,
+      rating: row.rating, reviewText: row.review_text, source: row.source,
+      agentId: row.agent_id, featured: row.featured, sortOrder: row.sort_order
+    };
+  }
+
   function jobListingFromRow(row) {
     return {
       id: row.id, title: row.title, location: row.location, department: row.department || null,
@@ -249,7 +257,7 @@ window.dataReady = (async function () {
   }
 
   try {
-    const [listingsRes, offplanRes, servicesRes, officesRes, faqsRes, contactContentRes, agentsRes, jobListingsRes, careersContentRes, siteSettingsRes, homepageContentRes, siteChromeRes, pageHeadersRes] = await Promise.all([
+    const [listingsRes, offplanRes, servicesRes, officesRes, faqsRes, contactContentRes, agentsRes, jobListingsRes, careersContentRes, siteSettingsRes, homepageContentRes, siteChromeRes, pageHeadersRes, testimonialsRes] = await Promise.all([
       client.from('listings').select('*').order('created_at', { ascending: false }),
       client.from('offplan_projects').select('*').order('created_at', { ascending: false }),
       client.from('services').select('*').order('sort_order', { ascending: true }),
@@ -262,7 +270,8 @@ window.dataReady = (async function () {
       client.from('site_settings').select('*').eq('id', 'main').maybeSingle(),
       client.from('homepage_content').select('*').eq('id', 'main').maybeSingle(),
       client.from('site_chrome').select('*').eq('id', 'main').maybeSingle(),
-      client.from('page_headers').select('*')
+      client.from('page_headers').select('*'),
+      client.from('testimonials').select('*').order('sort_order', { ascending: true })
     ]);
 
     if (!listingsRes.error && listingsRes.data) {
@@ -313,6 +322,9 @@ window.dataReady = (async function () {
         };
       });
       window.PAGE_HEADERS_DATA = map;
+    }
+    if (!testimonialsRes.error && testimonialsRes.data) {
+      window.TESTIMONIALS_DATA = testimonialsRes.data.map(testimonialFromRow);
     }
     if (!siteSettingsRes.error && siteSettingsRes.data) {
       const s = siteSettingsRes.data;

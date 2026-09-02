@@ -88,4 +88,33 @@
       });
     });
   }
+
+  // ----- Reviews for this agent -----
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function starString(rating) {
+    const r = Math.max(0, Math.min(5, Math.round(rating)));
+    return '★'.repeat(r) + '☆'.repeat(5 - r);
+  }
+  const agentReviews = (window.TESTIMONIALS_DATA || []).filter(t => t.agentId === agent.id);
+  const reviewsSection = document.getElementById('agentReviewsSection');
+  if (agentReviews.length && reviewsSection) {
+    reviewsSection.style.display = '';
+    document.getElementById('agentReviewsHeading').textContent = `What Clients Say About ${agent.name.split(' ')[0]}`;
+    const avg = agentReviews.reduce((sum, t) => sum + (t.rating || 0), 0) / agentReviews.length;
+    document.getElementById('agentReviewsSummary').innerHTML = `
+      <span class="reviews-summary-score">${avg.toFixed(1)}</span>
+      <span class="reviews-summary-stars">${starString(avg)}</span>
+      <span class="reviews-summary-count">${agentReviews.length} review${agentReviews.length === 1 ? '' : 's'}</span>
+    `;
+    document.getElementById('agentReviewsGrid').innerHTML = agentReviews.map(t => `
+      <div class="review-card reveal">
+        <div class="review-card-stars">${starString(t.rating)}</div>
+        <p class="review-card-text">"${esc(t.reviewText)}"</p>
+        <div class="review-card-author">${esc(t.authorName)}</div>
+        ${t.authorContext ? `<div class="review-card-context">${esc(t.authorContext)}</div>` : ''}
+        ${t.source ? `<div class="review-card-source">via ${esc(t.source)}</div>` : ''}
+      </div>`).join('');
+  }
 })();

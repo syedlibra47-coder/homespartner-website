@@ -672,6 +672,42 @@ alter table leads alter column name set default '';
 alter table leads add column if not exists search_criteria jsonb;
 
 -- ============================================================
+-- TESTIMONIALS (client reviews shown on the homepage and agent pages)
+-- Admin-managed since we don't have Google Places API credentials to
+-- pull live Google Reviews. "source" records where a review actually
+-- came from (e.g. copied in from Google) for honesty/attribution.
+-- ============================================================
+create table if not exists testimonials (
+  id bigint generated always as identity primary key,
+  author_name text not null,
+  author_context text not null default '', -- e.g. "Buyer, Dubai Marina"
+  rating int not null default 5,
+  review_text text not null,
+  source text not null default 'Google', -- Google | Direct | ...
+  agent_id text references agents(id) on delete set null,
+  featured boolean not null default false, -- show on homepage
+  sort_order int not null default 0,
+  created_at timestamptz not null default now()
+);
+
+alter table testimonials enable row level security;
+
+drop policy if exists "Public can view testimonials" on testimonials;
+create policy "Public can view testimonials" on testimonials for select using (true);
+
+drop policy if exists "Admins can insert testimonials" on testimonials;
+create policy "Admins can insert testimonials" on testimonials for insert
+  with check (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can update testimonials" on testimonials;
+create policy "Admins can update testimonials" on testimonials for update
+  using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can delete testimonials" on testimonials;
+create policy "Admins can delete testimonials" on testimonials for delete
+  using (current_user_role() in ('admin', 'super_admin'));
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.

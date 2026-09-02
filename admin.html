@@ -69,6 +69,7 @@
         <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">People</p>
           <button type="button" class="admin-tab" data-tab="agents" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6l14 5v11c0 9-6 15-14 18-8-3-14-9-14-18V11l14-5Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M18 24l4 4 8-8" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Agents</span></button>
+          <button type="button" class="admin-tab" data-tab="testimonials" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 4 29.5 18 44 20l-11 10.5L36 45 24 37 12 45l3-14.5L4 20l14.5-2z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></span><span>Reviews</span></button>
         </div>
         <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">Site Settings</p>
@@ -244,6 +245,21 @@
       <table class="admin-table" id="agentsTable">
         <thead><tr><th>Order</th><th>Name</th><th>Title</th><th>Phone</th><th></th></tr></thead>
         <tbody id="agentsTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS / REVIEWS TAB -->
+  <section class="admin-panel" id="panel-testimonials">
+    <div class="admin-panel-head">
+      <h2>Reviews</h2>
+      <button type="button" class="btn btn-gold btn-sm" id="addTestimonialBtn">+ Add Review</button>
+    </div>
+    <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px;">Shown on the homepage (featured only) and on an agent's page if linked to that agent. These are entered manually rather than pulled live from Google — mark the real source so it stays honest.</p>
+    <div class="admin-table-wrap">
+      <table class="admin-table" id="testimonialsTable">
+        <thead><tr><th>Order</th><th>Author</th><th>Rating</th><th>Agent</th><th>Featured</th><th></th></tr></thead>
+        <tbody id="testimonialsTableBody"></tbody>
       </table>
     </div>
   </section>
@@ -977,6 +993,45 @@
         <button type="submit" class="btn btn-navy" id="agentSaveBtn">Save Agent</button>
       </div>
       <p class="admin-form-error" id="agentFormError"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ===== TESTIMONIAL FORM MODAL ===== -->
+<div class="admin-modal" id="testimonialModal">
+  <div class="admin-modal-card">
+    <div class="admin-modal-head">
+      <h3 id="testimonialModalTitle">Add Review</h3>
+      <button type="button" class="admin-modal-close" data-close-modal="testimonialModal">&times;</button>
+    </div>
+    <form id="testimonialForm" class="admin-form">
+      <input type="hidden" id="ts_id">
+      <div class="admin-form-grid">
+        <label>Author Name <input type="text" id="ts_authorName" required></label>
+        <label>Author Context <input type="text" id="ts_authorContext" placeholder="e.g. Buyer, Dubai Marina"></label>
+        <label>Rating
+          <select id="ts_rating" required>
+            <option value="5">★★★★★ (5)</option>
+            <option value="4">★★★★☆ (4)</option>
+            <option value="3">★★★☆☆ (3)</option>
+            <option value="2">★★☆☆☆ (2)</option>
+            <option value="1">★☆☆☆☆ (1)</option>
+          </select>
+        </label>
+        <label>Source <input type="text" id="ts_source" placeholder="Google" value="Google" required></label>
+        <label>Linked Agent (optional)
+          <select id="ts_agentId"><option value="">— None —</option></select>
+        </label>
+        <label>Display Order (lower shows first) <input type="number" id="ts_sortOrder" value="0" required></label>
+      </div>
+      <label class="admin-form-full">Review Text <textarea id="ts_reviewText" rows="4" required></textarea></label>
+      <label class="admin-checkbox"><input type="checkbox" id="ts_featured"> Feature on homepage</label>
+
+      <div class="admin-form-actions">
+        <button type="button" class="btn btn-sm" data-close-modal="testimonialModal">Cancel</button>
+        <button type="submit" class="btn btn-navy" id="testimonialSaveBtn">Save Review</button>
+      </div>
+      <p class="admin-form-error" id="testimonialFormError"></p>
     </form>
   </div>
 </div>

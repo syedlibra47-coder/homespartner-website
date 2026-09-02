@@ -80,6 +80,7 @@
       loadOffices();
       loadFaqs();
       loadAgents();
+      loadTestimonials();
       loadCareersContent();
       loadJobs();
       loadHomepageContent();
@@ -1122,6 +1123,105 @@
     const { error } = await supabase.from('agents').delete().eq('id', id);
     if (error) { alert(error.message); return; }
     loadAgents();
+  }
+
+  // ===== TESTIMONIALS / REVIEWS =====
+  let currentTestimonials = [];
+
+  function populateTestimonialAgentSelect() {
+    const select = document.getElementById('ts_agentId');
+    const options = (currentAgents || []).map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+    select.innerHTML = `<option value="">— None —</option>${options}`;
+  }
+
+  async function loadTestimonials() {
+    const { data, error } = await supabase.from('testimonials').select('*').order('sort_order', { ascending: true });
+    if (error) { console.error(error); return; }
+    currentTestimonials = data;
+    const tbody = document.getElementById('testimonialsTableBody');
+    if (!data.length) {
+      tbody.innerHTML = `<tr class="admin-empty-row"><td colspan="6">No reviews yet — click "Add Review" to create one.</td></tr>`;
+      return;
+    }
+    const agentNameById = {};
+    (currentAgents || []).forEach(a => { agentNameById[a.id] = a.name; });
+    tbody.innerHTML = data.map(t => `
+      <tr>
+        <td>${t.sort_order}</td>
+        <td>${t.author_name}</td>
+        <td>${'★'.repeat(t.rating)}${'☆'.repeat(5 - t.rating)}</td>
+        <td>${t.agent_id ? (agentNameById[t.agent_id] || t.agent_id) : '—'}</td>
+        <td>${t.featured ? '<span class="featured-dot"></span>' : ''}</td>
+        <td class="admin-row-actions">
+          <button class="edit-btn" data-edit="${t.id}">Edit</button>
+          <button class="delete-btn" data-delete="${t.id}">Delete</button>
+        </td>
+      </tr>`).join('');
+    tbody.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openTestimonialForm(Number(b.dataset.edit))));
+    tbody.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => deleteTestimonial(Number(b.dataset.delete))));
+  }
+
+  function resetTestimonialForm() {
+    document.getElementById('testimonialForm').reset();
+    document.getElementById('ts_id').value = '';
+    document.getElementById('ts_source').value = 'Google';
+    document.getElementById('testimonialFormError').textContent = '';
+  }
+
+  function openTestimonialForm(id) {
+    populateTestimonialAgentSelect();
+    resetTestimonialForm();
+    document.getElementById('testimonialModalTitle').textContent = id ? 'Edit Review' : 'Add Review';
+    if (id) {
+      const t = currentTestimonials.find(x => x.id === id);
+      document.getElementById('ts_id').value = t.id;
+      document.getElementById('ts_authorName').value = t.author_name;
+      document.getElementById('ts_authorContext').value = t.author_context || '';
+      document.getElementById('ts_rating').value = t.rating;
+      document.getElementById('ts_source').value = t.source;
+      document.getElementById('ts_agentId').value = t.agent_id || '';
+      document.getElementById('ts_sortOrder').value = t.sort_order;
+      document.getElementById('ts_reviewText').value = t.review_text;
+      document.getElementById('ts_featured').checked = t.featured;
+    }
+    openModal('testimonialModal');
+  }
+
+  document.getElementById('addTestimonialBtn').addEventListener('click', () => openTestimonialForm(null));
+
+  document.getElementById('testimonialForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('testimonialFormError');
+    errorEl.textContent = '';
+    const id = document.getElementById('ts_id').value;
+
+    const record = {
+      author_name: document.getElementById('ts_authorName').value,
+      author_context: document.getElementById('ts_authorContext').value,
+      rating: Number(document.getElementById('ts_rating').value),
+      source: document.getElementById('ts_source').value,
+      agent_id: document.getElementById('ts_agentId').value || null,
+      sort_order: Number(document.getElementById('ts_sortOrder').value),
+      review_text: document.getElementById('ts_reviewText').value,
+      featured: document.getElementById('ts_featured').checked
+    };
+
+    let error;
+    if (id) {
+      ({ error } = await supabase.from('testimonials').update(record).eq('id', Number(id)));
+    } else {
+      ({ error } = await supabase.from('testimonials').insert(record));
+    }
+    if (error) { errorEl.textContent = error.message; return; }
+    closeModal('testimonialModal');
+    loadTestimonials();
+  });
+
+  async function deleteTestimonial(id) {
+    if (!confirm('Delete this review? This cannot be undone.')) return;
+    const { error } = await supabase.from('testimonials').delete().eq('id', id);
+    if (error) { alert(error.message); return; }
+    loadTestimonials();
   }
 
   // ===== CAREERS PAGE TEXT (single row + 3 repeatable lists) =====
