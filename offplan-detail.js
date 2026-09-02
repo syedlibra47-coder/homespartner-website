@@ -16,6 +16,35 @@
   document.getElementById('offplanLocation').textContent = `${project.community}, ${project.city}`;
   document.getElementById('offplanPrice').textContent = `from ${project.priceLabel}`;
 
+  // ----- RealEstateListing structured data (schema.org) -----
+  try {
+    const projectSchema = {
+      "@context": "https://schema.org",
+      "@type": "RealEstateListing",
+      "name": project.title,
+      "description": project.description,
+      "url": window.location.href,
+      "image": project.gallery && project.gallery.length ? project.gallery : [project.hero],
+      "about": {
+        "@type": "Residence",
+        "name": project.title,
+        "address": { "@type": "PostalAddress", "addressLocality": project.community, "addressRegion": project.city, "addressCountry": "AE" }
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": project.price,
+        "priceCurrency": "AED",
+        "availability": "https://schema.org/PreOrder",
+        "businessFunction": "https://schema.org/Sell",
+        "seller": { "@type": "Organization", "name": project.developer }
+      }
+    };
+    const schemaScript = document.createElement('script');
+    schemaScript.type = 'application/ld+json';
+    schemaScript.textContent = JSON.stringify(projectSchema);
+    document.head.appendChild(schemaScript);
+  } catch (err) { console.warn('Off-plan schema injection failed', err); }
+
   document.getElementById('offplanBreadcrumb').innerHTML = `
     <a href="index.html#top">Home</a><span class="sep">/</span>
     <a href="offplan-listings.html">Off-Plan</a><span class="sep">/</span>

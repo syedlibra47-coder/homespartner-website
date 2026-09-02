@@ -24,6 +24,42 @@
   const priceEl = document.getElementById('detailPrice');
   priceEl.innerHTML = listing.priceLabel + (listing.priceSuffix ? ` <span>${listing.priceSuffix}</span>` : '');
 
+  // ----- RealEstateListing structured data (schema.org) -----
+  try {
+    const address = { "@type": "PostalAddress", "addressLocality": listing.community, "addressRegion": listing.city, "addressCountry": "AE" };
+    const about = {
+      "@type": "Residence",
+      "name": listing.title,
+      "address": address,
+      "numberOfRooms": listing.beds === 'Studio' ? 0 : Number(listing.beds) || undefined,
+      "numberOfBathroomsTotal": Number(listing.baths) || undefined,
+      "floorSize": { "@type": "QuantitativeValue", "value": Number(String(listing.sqft).replace(/,/g, '')) || undefined, "unitCode": "FTK" }
+    };
+    if (listing.latitude != null && listing.longitude != null) {
+      about.geo = { "@type": "GeoCoordinates", "latitude": listing.latitude, "longitude": listing.longitude };
+    }
+    const listingSchema = {
+      "@context": "https://schema.org",
+      "@type": "RealEstateListing",
+      "name": listing.title,
+      "description": listing.description,
+      "url": window.location.href,
+      "image": listing.gallery && listing.gallery.length ? listing.gallery : [listing.hero],
+      "about": about,
+      "offers": {
+        "@type": "Offer",
+        "price": listing.price,
+        "priceCurrency": "AED",
+        "availability": "https://schema.org/InStock",
+        "businessFunction": listing.type === 'sale' ? "https://schema.org/Sell" : "https://schema.org/LeaseOut"
+      }
+    };
+    const schemaScript = document.createElement('script');
+    schemaScript.type = 'application/ld+json';
+    schemaScript.textContent = JSON.stringify(listingSchema);
+    document.head.appendChild(schemaScript);
+  } catch (err) { console.warn('Listing schema injection failed', err); }
+
   // ----- Breadcrumb -----
   const breadcrumb = document.getElementById('breadcrumb');
   breadcrumb.innerHTML = `

@@ -85,4 +85,36 @@
     footerCompliance.textContent = parts.join(' · ');
     footerCompliance.style.display = parts.length ? '' : 'none';
   }
+
+  // ----- Organization / RealEstateAgent structured data (schema.org), every page -----
+  // Helps Google understand HomesPartner as a business entity for rich results —
+  // separate from the per-listing RealEstateListing schema on detail pages.
+  try {
+    const hub = (window.OFFICES_DATA || []).find(o => o.isHub) || (window.OFFICES_DATA || [])[0];
+    const contact = window.CONTACT_CONTENT_DATA || {};
+    const org = {
+      "@context": "https://schema.org",
+      "@type": "RealEstateAgent",
+      "name": "HomesPartner Real Estate",
+      "url": window.location.origin + '/',
+      "logo": window.location.origin + '/assets/logo.png',
+      "image": window.location.origin + '/assets/logo.png'
+    };
+    if (contact.generalEmail || c.footerEmail) org.email = contact.generalEmail || c.footerEmail;
+    if (contact.generalPhone) org.telephone = contact.generalPhone;
+    if (hub && hub.address) {
+      org.address = { "@type": "PostalAddress", "streetAddress": hub.address, "addressCountry": "AE" };
+    }
+    if (hub && hub.latitude != null && hub.longitude != null) {
+      org.geo = { "@type": "GeoCoordinates", "latitude": hub.latitude, "longitude": hub.longitude };
+    }
+    let orgScript = document.getElementById('schema-org-ld');
+    if (!orgScript) {
+      orgScript = document.createElement('script');
+      orgScript.type = 'application/ld+json';
+      orgScript.id = 'schema-org-ld';
+      document.head.appendChild(orgScript);
+    }
+    orgScript.textContent = JSON.stringify(org);
+  } catch (err) { console.warn('Organization schema injection failed', err); }
 })();
