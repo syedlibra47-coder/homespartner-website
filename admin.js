@@ -324,6 +324,8 @@
       document.getElementById('l_sqft').value = l.sqft;
       document.getElementById('l_tags').value = (l.tags || []).join(', ');
       document.getElementById('l_permitNumber').value = l.permit_number || '';
+      document.getElementById('l_latitude').value = l.latitude != null ? l.latitude : '';
+      document.getElementById('l_longitude').value = l.longitude != null ? l.longitude : '';
       document.getElementById('l_hero').value = l.hero;
       if (l.hero) { document.getElementById('l_heroPreview').src = l.hero; document.getElementById('l_heroPreview').style.display = 'block'; }
       const gp = document.getElementById('l_galleryPreview');
@@ -390,6 +392,8 @@
       sqft: document.getElementById('l_sqft').value,
       tags: document.getElementById('l_tags').value.split(',').map(s => s.trim()).filter(Boolean),
       permit_number: document.getElementById('l_permitNumber').value,
+      latitude: document.getElementById('l_latitude').value ? Number(document.getElementById('l_latitude').value) : null,
+      longitude: document.getElementById('l_longitude').value ? Number(document.getElementById('l_longitude').value) : null,
       hero: document.getElementById('l_hero').value,
       gallery: gallery,
       description: document.getElementById('l_description').value,

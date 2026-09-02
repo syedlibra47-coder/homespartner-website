@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 
@@ -83,7 +84,38 @@
       <span class="filter-results" id="filterResultsCount">8 properties</span>
     </div>
 
+    <div class="filters-bar filters-bar--secondary reveal">
+      <select class="filter-select" id="filterBaths">
+        <option value="all">Any Bathrooms</option>
+        <option value="1">1 Bath</option>
+        <option value="2">2 Baths</option>
+        <option value="3">3 Baths</option>
+        <option value="4">4+ Baths</option>
+      </select>
+      <div class="filter-price-range">
+        <input type="number" id="filterPriceMin" placeholder="Min Price (AED)" min="0" step="1000">
+        <span>&ndash;</span>
+        <input type="number" id="filterPriceMax" placeholder="Max Price (AED)" min="0" step="1000">
+      </div>
+      <select class="filter-select" id="filterSort">
+        <option value="newest">Sort: Newest</option>
+        <option value="price-asc">Sort: Price (Low to High)</option>
+        <option value="price-desc">Sort: Price (High to Low)</option>
+      </select>
+      <div class="filter-view-toggle" id="filterViewToggle">
+        <button type="button" class="filter-view-btn active" data-view="list">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          List
+        </button>
+        <button type="button" class="filter-view-btn" data-view="map">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 20 3 17V4l6 3m0 13 6-3m-6 3V7m6 10 6 3V7l-6-3m0 13V4m0 3-6-3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          Map
+        </button>
+      </div>
+    </div>
+
     <div class="listing-grid-full" id="allListingsGrid"></div>
+    <div class="listings-map" id="allListingsMap" style="display:none;"></div>
 
     <div class="filter-empty" id="filterEmptyState">
       <h3 class="display">No listings match your filters</h3>
@@ -118,6 +150,8 @@
 <script src="assets/supabase-config.js"></script>
 <script src="assets/data-loader.js"></script>
 <script src="assets/page-header-bg.js"></script>
+<script src="assets/dubai-community-coords.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="site-chrome.js"></script>
 <script src="script.js"></script>
 <script src="listings-page.js"></script>

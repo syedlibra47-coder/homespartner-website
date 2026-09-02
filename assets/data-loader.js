@@ -100,6 +100,8 @@ window.dataReady = (async function () {
       amenities: row.amenities || [],
       featured: row.featured,
       permitNumber: row.permit_number || '',
+      latitude: row.latitude != null ? Number(row.latitude) : null,
+      longitude: row.longitude != null ? Number(row.longitude) : null,
       agent: {
         name: row.agent_name,
         phone: row.agent_phone,

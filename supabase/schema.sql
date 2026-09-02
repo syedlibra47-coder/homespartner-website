@@ -610,6 +610,14 @@ alter table listings add column if not exists permit_number text not null defaul
 alter table offplan_projects add column if not exists permit_number text not null default '';
 
 -- ============================================================
+-- LISTING MAP COORDINATES (optional per-listing override)
+-- If left blank, the search-results map falls back to the listing's
+-- community center via assets/dubai-community-coords.js.
+-- ============================================================
+alter table listings add column if not exists latitude numeric;
+alter table listings add column if not exists longitude numeric;
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.

@@ -10,11 +10,21 @@
   const statusBtns = document.querySelectorAll('#allListingsStatus .filter-btn');
   const typeSelect = document.getElementById('filterType');
   const bedsSelect = document.getElementById('filterBeds');
+  const bathsSelect = document.getElementById('filterBaths');
+  const priceMinInput = document.getElementById('filterPriceMin');
+  const priceMaxInput = document.getElementById('filterPriceMax');
+  const sortSelect = document.getElementById('filterSort');
   const keywordInput = document.getElementById('filterKeyword');
   const resultsCount = document.getElementById('filterResultsCount');
   const emptyState = document.getElementById('filterEmptyState');
   const resetBtn = document.getElementById('filterReset');
+  const viewToggleBtns = document.querySelectorAll('#filterViewToggle .filter-view-btn');
+  const mapEl = document.getElementById('allListingsMap');
   let activeStatus = 'all';
+  let activeView = 'list';
+  let currentFiltered = [];
+  let leafletMap = null;
+  let mapMarkers = [];
 
   // ----- Apply filters handed off from the homepage search (?status=&category=&beds=&q=) -----
   function normalizeWord(s) { return s.trim().toLowerCase().replace(/s$/, ''); }
@@ -46,6 +56,34 @@
     return n >= 4 ? '4' : String(n);
   }
 
+  function bathsFilterValue(baths) {
+    const n = parseInt(baths, 10) || 0;
+    return n >= 4 ? '4' : String(n);
+  }
+
+  function parseSqft(sqft) {
+    return Number(String(sqft).replace(/,/g, '')) || 0;
+  }
+
+  // Deterministic small offset per listing id, so markers for listings
+  // sharing a community fallback coordinate don't stack exactly and
+  // don't jump around between re-renders.
+  function hashJitter(id) {
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) { hash = (hash * 31 + id.charCodeAt(i)) | 0; }
+    const angle = (Math.abs(hash) % 360) * (Math.PI / 180);
+    const dist = 0.003 + (Math.abs(hash) % 100) / 100000;
+    return [Math.cos(angle) * dist, Math.sin(angle) * dist];
+  }
+
+  function resolveCoords(l) {
+    if (l.latitude != null && l.longitude != null) return [l.latitude, l.longitude];
+    const base = window.getCommunityCoords ? window.getCommunityCoords(l.community) : null;
+    if (!base) return null;
+    const [dLat, dLon] = hashJitter(l.id);
+    return [base[0] + dLat, base[1] + dLon];
+  }
+
   function cardHtml(l) {
     const waMessage = `Hi, I'm interested in ${l.title} (${l.community}, ${l.city}). Could you share more details?`;
     const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
@@ -75,15 +113,25 @@
   function applyFilters() {
     const type = typeSelect.value;
     const beds = bedsSelect.value;
+    const baths = bathsSelect.value;
+    const priceMin = Number(priceMinInput.value) || 0;
+    const priceMax = Number(priceMaxInput.value) || Infinity;
     const keyword = keywordInput.value.trim().toLowerCase();
 
-    const filtered = listings.filter(l => {
+    let filtered = listings.filter(l => {
       const matchesStatus = activeStatus === 'all' || l.type === activeStatus;
       const matchesType = type === 'all' || l.category.toLowerCase() === type;
       const matchesBeds = beds === 'all' || bedsFilterValue(l.beds) === beds;
+      const matchesBaths = baths === 'all' || bathsFilterValue(l.baths) === baths;
+      const matchesPrice = l.price >= priceMin && l.price <= priceMax;
       const matchesKeyword = !keyword || (l.title + ' ' + l.community + ' ' + l.city + ' ' + l.category).toLowerCase().includes(keyword);
-      return matchesStatus && matchesType && matchesBeds && matchesKeyword;
+      return matchesStatus && matchesType && matchesBeds && matchesBaths && matchesPrice && matchesKeyword;
     });
+
+    if (sortSelect.value === 'price-asc') filtered = filtered.slice().sort((a, b) => a.price - b.price);
+    else if (sortSelect.value === 'price-desc') filtered = filtered.slice().sort((a, b) => b.price - a.price);
+
+    currentFiltered = filtered;
 
     grid.innerHTML = filtered.map(cardHtml).join('');
     resultsCount.textContent = `${filtered.length} ${filtered.length === 1 ? 'property' : 'properties'}`;
@@ -96,7 +144,57 @@
         window.location.href = `listing-detail.html?id=${card.dataset.listingId}`;
       });
     });
+
+    if (activeView === 'map') renderMap(filtered);
   }
+
+  // ----- Map view (Leaflet + OpenStreetMap, no API key required) -----
+  function ensureMap() {
+    if (leafletMap || !window.L) return;
+    leafletMap = window.L.map(mapEl).setView([25.15, 55.25], 11); // Dubai
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(leafletMap);
+  }
+
+  function renderMap(items) {
+    if (!window.L) return;
+    ensureMap();
+    mapMarkers.forEach(m => leafletMap.removeLayer(m));
+    mapMarkers = [];
+
+    const bounds = [];
+    items.forEach(l => {
+      const coords = resolveCoords(l);
+      if (!coords) return;
+      bounds.push(coords);
+      const marker = window.L.marker(coords).addTo(leafletMap);
+      marker.bindPopup(`
+        <div class="listings-map-popup">
+          <img src="${l.hero}" alt="${l.title}">
+          <div class="lmp-price">${l.priceLabel}${l.priceSuffix ? ` ${l.priceSuffix}` : ''}</div>
+          <div class="lmp-title">${l.title}</div>
+          <div class="lmp-location">${l.community}, ${l.city}</div>
+          <a href="listing-detail.html?id=${l.id}">View Details &rarr;</a>
+        </div>`);
+      mapMarkers.push(marker);
+    });
+
+    if (bounds.length) leafletMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
+
+    // Leaflet needs a nudge after becoming visible/resized to size its tiles correctly.
+    setTimeout(() => leafletMap.invalidateSize(), 50);
+  }
+
+  function setView(view) {
+    activeView = view;
+    viewToggleBtns.forEach(b => b.classList.toggle('active', b.dataset.view === view));
+    grid.style.display = view === 'list' ? '' : 'none';
+    mapEl.style.display = view === 'map' ? '' : 'none';
+    if (view === 'map') renderMap(currentFiltered);
+  }
+  viewToggleBtns.forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.view)));
 
   statusBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -108,6 +206,10 @@
   });
   typeSelect.addEventListener('change', applyFilters);
   bedsSelect.addEventListener('change', applyFilters);
+  bathsSelect.addEventListener('change', applyFilters);
+  priceMinInput.addEventListener('input', applyFilters);
+  priceMaxInput.addEventListener('input', applyFilters);
+  sortSelect.addEventListener('change', applyFilters);
   keywordInput.addEventListener('input', applyFilters);
 
   function resetAll() {
@@ -116,6 +218,10 @@
     activeStatus = 'all';
     typeSelect.value = 'all';
     bedsSelect.value = 'all';
+    bathsSelect.value = 'all';
+    priceMinInput.value = '';
+    priceMaxInput.value = '';
+    sortSelect.value = 'newest';
     keywordInput.value = '';
     applyFilters();
   }
