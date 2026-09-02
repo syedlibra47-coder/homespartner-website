@@ -2287,11 +2287,14 @@
             const textInputEl = document.createElement('input');
             textInputEl.type = 'text'; textInputEl.placeholder = 'Description'; textInputEl.value = item.text || '';
             textInputEl.addEventListener('input', () => { item.text = textInputEl.value; cpRenderPreview(); });
+            const hrefInput = document.createElement('input');
+            hrefInput.type = 'text'; hrefInput.placeholder = 'Link URL (optional — makes the whole card clickable)'; hrefInput.value = item.href || '';
+            hrefInput.addEventListener('input', () => { item.href = hrefInput.value; cpRenderPreview(); });
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button'; removeBtn.className = 'admin-add-row'; removeBtn.style.marginTop = '4px';
             removeBtn.textContent = '× Remove Item';
             removeBtn.addEventListener('click', () => { p.items.splice(idx, 1); renderItems(); cpRenderPreview(); });
-            itemRow.appendChild(iconInput); itemRow.appendChild(titleInput); itemRow.appendChild(textInputEl); itemRow.appendChild(removeBtn);
+            itemRow.appendChild(iconInput); itemRow.appendChild(titleInput); itemRow.appendChild(textInputEl); itemRow.appendChild(hrefInput); itemRow.appendChild(removeBtn);
             itemsBox.appendChild(itemRow);
           });
         }

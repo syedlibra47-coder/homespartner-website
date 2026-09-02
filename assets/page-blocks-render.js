@@ -144,12 +144,16 @@ function pbRenderBlock(block) {
       </div></section>`;
     }
     case 'feature-grid': {
-      const items = (p.items || []).map(it => `
-        <div class="pb-feature">
+      const items = (p.items || []).map(it => {
+        const tag = it.href ? 'a' : 'div';
+        const hrefAttr = it.href ? ` href="${pbEscapeHtml(it.href)}"` : '';
+        return `
+        <${tag} class="pb-feature${it.href ? ' pb-feature--link' : ''}"${hrefAttr}>
           ${it.icon ? `<div class="pb-feature-icon">${pbEscapeHtml(it.icon)}</div>` : ''}
           <h3>${pbEscapeHtml(it.title)}</h3>
           <p>${pbEscapeHtml(it.text)}</p>
-        </div>`).join('');
+        </${tag}>`;
+      }).join('');
       return `<section class="${cls}"><div class="container"><div class="pb-feature-grid-inner">${items}</div></div></section>`;
     }
     case 'gallery': {
