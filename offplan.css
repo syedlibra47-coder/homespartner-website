@@ -101,6 +101,7 @@
 .offplan-section-block { margin-bottom: 44px; }
 .offplan-section-block h2 { font-size: 1.35rem; margin-bottom: 16px; }
 .offplan-section-block > p { color: var(--gray); line-height: 1.75; }
+.detail-ref { margin-top: 16px; font-size: 0.85rem; color: var(--gray); }
 
 .unit-type-table { width: 100%; border-collapse: collapse; }
 .unit-type-table th { text-align: left; font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray); padding: 10px 14px; border-bottom: 2px solid var(--line); }

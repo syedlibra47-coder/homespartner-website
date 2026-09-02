@@ -55,6 +55,8 @@
     </div>`).join('');
 
   document.getElementById('offplanDescription').textContent = project.description;
+  document.getElementById('offplanRef').textContent = project.permitNumber || '';
+  document.getElementById('offplanRefRow').style.display = project.permitNumber ? '' : 'none';
 
   document.getElementById('offplanUnitTypes').innerHTML = project.unitTypes.map(u => `
     <tr><td>${u.type}</td><td>${u.size}</td><td>${u.price}</td></tr>`).join('');

@@ -74,4 +74,15 @@
   // ----- Footer copyright -----
   const footerCopyright = document.getElementById('footerCopyright');
   if (footerCopyright) footerCopyright.textContent = c.footerCopyright;
+
+  // ----- Footer legal/compliance line (RERA broker no. / trade license / registered office) -----
+  const footerCompliance = document.getElementById('footerCompliance');
+  if (footerCompliance) {
+    const parts = [];
+    if (c.reraBrokerNumber) parts.push(`RERA Broker No. ${c.reraBrokerNumber}`);
+    if (c.tradeLicenseNumber) parts.push(`Trade License No. ${c.tradeLicenseNumber}`);
+    if (c.registeredOfficeAddress) parts.push(c.registeredOfficeAddress);
+    footerCompliance.textContent = parts.join(' · ');
+    footerCompliance.style.display = parts.length ? '' : 'none';
+  }
 })();

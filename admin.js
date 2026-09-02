@@ -323,6 +323,7 @@
       document.getElementById('l_baths').value = l.baths;
       document.getElementById('l_sqft').value = l.sqft;
       document.getElementById('l_tags').value = (l.tags || []).join(', ');
+      document.getElementById('l_permitNumber').value = l.permit_number || '';
       document.getElementById('l_hero').value = l.hero;
       if (l.hero) { document.getElementById('l_heroPreview').src = l.hero; document.getElementById('l_heroPreview').style.display = 'block'; }
       const gp = document.getElementById('l_galleryPreview');
@@ -388,6 +389,7 @@
       baths: document.getElementById('l_baths').value,
       sqft: document.getElementById('l_sqft').value,
       tags: document.getElementById('l_tags').value.split(',').map(s => s.trim()).filter(Boolean),
+      permit_number: document.getElementById('l_permitNumber').value,
       hero: document.getElementById('l_hero').value,
       gallery: gallery,
       description: document.getElementById('l_description').value,
@@ -480,6 +482,7 @@
       document.getElementById('o_priceLabel').value = p.price_label;
       document.getElementById('o_handover').value = p.handover;
       document.getElementById('o_roi').value = p.roi || '';
+      document.getElementById('o_permitNumber').value = p.permit_number || '';
       document.getElementById('o_hero').value = p.hero;
       if (p.hero) { document.getElementById('o_heroPreview').src = p.hero; document.getElementById('o_heroPreview').style.display = 'block'; }
       const gp = document.getElementById('o_galleryPreview');
@@ -547,6 +550,7 @@
       price_label: document.getElementById('o_priceLabel').value,
       handover: document.getElementById('o_handover').value,
       roi: document.getElementById('o_roi').value,
+      permit_number: document.getElementById('o_permitNumber').value,
       hero: document.getElementById('o_hero').value,
       gallery: gallery,
       description: document.getElementById('o_description').value,
@@ -1400,7 +1404,9 @@
     ch_whyusLabel: 'whyus_label', ch_whyusHref: 'whyus_href',
     ch_contactLabel: 'contact_label', ch_contactHref: 'contact_href',
     ch_ctaText: 'cta_text', ch_ctaHref: 'cta_href',
-    ch_footerBlurb: 'footer_blurb', ch_footerEmail: 'footer_email', ch_footerCopyright: 'footer_copyright'
+    ch_footerBlurb: 'footer_blurb', ch_footerEmail: 'footer_email', ch_footerCopyright: 'footer_copyright',
+    ch_reraBrokerNumber: 'rera_broker_number', ch_tradeLicenseNumber: 'trade_license_number',
+    ch_registeredOfficeAddress: 'registered_office_address'
   };
 
   function addFooterColumnBlock(column) {

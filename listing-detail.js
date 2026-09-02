@@ -18,7 +18,8 @@
   document.getElementById('pageTitle').textContent = `${listing.title} — ${listing.community} | HomesPartner Real Estate`;
   document.getElementById('detailTitle').textContent = listing.title;
   document.getElementById('detailLocation').textContent = `${listing.community}, ${listing.city}`;
-  document.getElementById('detailRef').textContent = listing.propertyRef;
+  document.getElementById('detailRef').textContent = listing.permitNumber || '';
+  document.getElementById('detailRefRow').style.display = listing.permitNumber ? '' : 'none';
 
   const priceEl = document.getElementById('detailPrice');
   priceEl.innerHTML = listing.priceLabel + (listing.priceSuffix ? ` <span>${listing.priceSuffix}</span>` : '');

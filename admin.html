@@ -519,6 +519,14 @@
       <div id="ch_footerColumnsList"></div>
       <button type="button" class="admin-add-row" id="ch_addFooterColumnRow">+ Add Column</button>
 
+      <h4 class="admin-form-subhead">Legal &amp; Compliance</h4>
+      <p style="font-size:0.82rem;color:var(--gray);margin:-8px 0 14px;">Shown in the footer of every page. Required for Dubai real estate advertising — leave blank to hide the line entirely until you have these.</p>
+      <div class="admin-form-grid">
+        <label>RERA Broker Registration No. <input type="text" id="ch_reraBrokerNumber" placeholder="e.g. 12345"></label>
+        <label>Trade License No. <input type="text" id="ch_tradeLicenseNumber" placeholder="e.g. 987654"></label>
+      </div>
+      <label class="admin-form-full">Registered Office Address <input type="text" id="ch_registeredOfficeAddress" placeholder="Matching your trade license"></label>
+
       <div class="admin-form-actions">
         <button type="submit" class="btn btn-navy" id="chromeSaveBtn">Save Header &amp; Footer</button>
       </div>
@@ -676,6 +684,7 @@
         <label>Baths <input type="text" id="l_baths" required></label>
         <label>Size (sqft) <input type="text" id="l_sqft" required></label>
         <label>Tags (comma-separated) <input type="text" id="l_tags" placeholder="Villa, Sea View, Private Pool"></label>
+        <label>Permit No. (Trakheesi/DLD) <input type="text" id="l_permitNumber" placeholder="Required for Dubai advertising compliance"></label>
       </div>
 
       <label class="admin-form-full">Hero Image
@@ -734,6 +743,7 @@
         <label>Price Label <input type="text" id="o_priceLabel" placeholder="AED 666,000" required></label>
         <label>Handover <input type="text" id="o_handover" placeholder="Q3 2028" required></label>
         <label>Estimated ROI <input type="text" id="o_roi" placeholder="5%"></label>
+        <label>Permit No. (Trakheesi/DLD) <input type="text" id="o_permitNumber" placeholder="Required for Dubai advertising compliance"></label>
       </div>
 
       <label class="admin-form-full">Hero Image

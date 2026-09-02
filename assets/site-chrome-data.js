@@ -48,5 +48,8 @@ window.SITE_CHROME_DATA = {
       ]
     }
   ],
-  footerCopyright: "HomesPartner Real Estate. All rights reserved."
+  footerCopyright: "HomesPartner Real Estate. All rights reserved.",
+  reraBrokerNumber: "",
+  tradeLicenseNumber: "",
+  registeredOfficeAddress: ""
 };

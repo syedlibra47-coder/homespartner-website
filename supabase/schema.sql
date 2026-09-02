@@ -598,6 +598,18 @@ create trigger custom_pages_set_updated_at before update on custom_pages
   for each row execute function set_updated_at();
 
 -- ============================================================
+-- LEGAL / COMPLIANCE (Dubai RERA advertising requirements)
+-- Site-wide broker/license details shown in the footer, plus a
+-- per-listing Trakheesi/DLD advertising permit number.
+-- ============================================================
+alter table site_chrome add column if not exists rera_broker_number text not null default '';
+alter table site_chrome add column if not exists trade_license_number text not null default '';
+alter table site_chrome add column if not exists registered_office_address text not null default '';
+
+alter table listings add column if not exists permit_number text not null default '';
+alter table offplan_projects add column if not exists permit_number text not null default '';
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.

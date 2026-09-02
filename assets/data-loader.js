@@ -99,6 +99,7 @@ window.dataReady = (async function () {
       description: row.description,
       amenities: row.amenities || [],
       featured: row.featured,
+      permitNumber: row.permit_number || '',
       agent: {
         name: row.agent_name,
         phone: row.agent_phone,
@@ -131,7 +132,8 @@ window.dataReady = (async function () {
       amenities: row.amenities || [],
       locationHighlights: row.location_highlights || [],
       developerBlurb: row.developer_blurb,
-      featured: row.featured
+      featured: row.featured,
+      permitNumber: row.permit_number || ''
     };
   }
 
@@ -220,7 +222,9 @@ window.dataReady = (async function () {
       contactLabel: row.contact_label, contactHref: row.contact_href,
       ctaText: row.cta_text, ctaHref: row.cta_href,
       footerBlurb: row.footer_blurb, footerEmail: row.footer_email,
-      footerColumns: row.footer_columns || [], footerCopyright: row.footer_copyright
+      footerColumns: row.footer_columns || [], footerCopyright: row.footer_copyright,
+      reraBrokerNumber: row.rera_broker_number || '', tradeLicenseNumber: row.trade_license_number || '',
+      registeredOfficeAddress: row.registered_office_address || ''
     };
   }
 
