@@ -56,6 +56,10 @@
           <button type="button" class="admin-tab" data-tab="services" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M33 8a9 9 0 0 0-11.8 11.8L9 32l7 7 12.2-12.2A9 9 0 0 0 40 15l-6.5 6.5-5-5L34.5 10" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Services</span></button>
         </div>
         <div class="admin-nav-group" data-roles="admin,super_admin">
+          <p class="admin-nav-group-label">Leads</p>
+          <button type="button" class="admin-tab" data-tab="leads" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M6 10h36v28H6z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M6 14l18 13 18-13" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></span><span id="leadsTabLabel">Leads</span></button>
+        </div>
+        <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">Pages</p>
           <button type="button" class="admin-tab" data-tab="homepage" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M6 40h36" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="10" y="28" width="6" height="12" stroke="currentColor" stroke-width="3"/><rect x="21" y="20" width="6" height="20" stroke="currentColor" stroke-width="3"/><rect x="32" y="12" width="6" height="28" stroke="currentColor" stroke-width="3"/></svg></span><span>Homepage</span></button>
           <button type="button" class="admin-tab" data-tab="contact" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 42s12-11 12-20a12 12 0 1 0-24 0c0 9 12 20 12 20Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="24" cy="22" r="4" stroke="currentColor" stroke-width="3"/></svg></span><span>Contact Page</span></button>
@@ -127,6 +131,25 @@
       <table class="admin-table" id="servicesTable">
         <thead><tr><th>Order</th><th>Title</th><th>CTA</th><th>Links To</th><th></th></tr></thead>
         <tbody id="servicesTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- LEADS TAB (admin/super_admin only) -->
+  <section class="admin-panel" id="panel-leads">
+    <div class="admin-panel-head">
+      <h2>Leads</h2>
+    </div>
+    <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px;">Property enquiries ("Request a Viewing") and valuation requests, newest first. Update status as you work each one.</p>
+    <div class="admin-leads-filter" id="leadsFilter">
+      <button type="button" class="filter-btn active" data-lead-filter="all">All</button>
+      <button type="button" class="filter-btn" data-lead-filter="enquiry">Enquiries</button>
+      <button type="button" class="filter-btn" data-lead-filter="valuation">Valuations</button>
+    </div>
+    <div class="admin-table-wrap">
+      <table class="admin-table" id="leadsTable">
+        <thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Contact</th><th>Details</th><th>Status</th></tr></thead>
+        <tbody id="leadsTableBody"></tbody>
       </table>
     </div>
   </section>

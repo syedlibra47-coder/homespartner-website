@@ -75,6 +75,7 @@
     if (currentRole === 'admin' || currentRole === 'super_admin') {
       loadOffplan();
       loadServices();
+      loadLeads();
       loadContactContent();
       loadOffices();
       loadFaqs();
@@ -631,6 +632,70 @@
     tbody.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openServiceForm(b.dataset.edit)));
     tbody.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => deleteService(b.dataset.delete)));
   }
+
+  // ===== LEADS (enquiries + valuation requests) =====
+  let currentLeads = [];
+  let activeLeadFilter = 'all';
+
+  async function loadLeads() {
+    const { data, error } = await supabase.from('leads').select('*').order('created_at', { ascending: false });
+    if (error) { console.error(error); return; }
+    currentLeads = data || [];
+    renderLeadsTable();
+  }
+
+  function renderLeadsTable() {
+    const tbody = document.getElementById('leadsTableBody');
+    const filtered = activeLeadFilter === 'all' ? currentLeads : currentLeads.filter(l => l.lead_type === activeLeadFilter);
+    const newCount = currentLeads.filter(l => l.status === 'new').length;
+    document.getElementById('leadsTabLabel').textContent = newCount ? `Leads (${newCount})` : 'Leads';
+
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr class="admin-empty-row"><td colspan="6">No leads yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = filtered.map(l => {
+      const details = l.lead_type === 'valuation'
+        ? [l.address, l.property_type, l.bedrooms ? l.bedrooms + ' bed' : '', l.size_sqft ? l.size_sqft + ' sqft' : ''].filter(Boolean).join(' · ')
+        : [l.listing_title, l.message].filter(Boolean).join(' — ');
+      return `
+      <tr>
+        <td>${new Date(l.created_at).toLocaleDateString()}</td>
+        <td><span class="role-badge role-badge--${l.lead_type === 'valuation' ? 'admin' : 'agent'}">${l.lead_type === 'valuation' ? 'Valuation' : 'Enquiry'}</span></td>
+        <td>${l.name}</td>
+        <td>${l.phone}<br>${l.email}</td>
+        <td class="admin-leads-details">${details}</td>
+        <td>
+          <select class="admin-leads-status-select" data-lead-id="${l.id}">
+            <option value="new"${l.status === 'new' ? ' selected' : ''}>New</option>
+            <option value="contacted"${l.status === 'contacted' ? ' selected' : ''}>Contacted</option>
+            <option value="closed"${l.status === 'closed' ? ' selected' : ''}>Closed</option>
+          </select>
+        </td>
+      </tr>`;
+    }).join('');
+
+    tbody.querySelectorAll('.admin-leads-status-select').forEach(sel => {
+      sel.addEventListener('change', async () => {
+        const leadId = Number(sel.dataset.leadId);
+        const { error } = await supabase.from('leads').update({ status: sel.value }).eq('id', leadId);
+        if (!error) {
+          const lead = currentLeads.find(l => l.id === leadId);
+          if (lead) lead.status = sel.value;
+          renderLeadsTable();
+        }
+      });
+    });
+  }
+
+  document.querySelectorAll('#leadsFilter [data-lead-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#leadsFilter [data-lead-filter]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeLeadFilter = btn.dataset.leadFilter;
+      renderLeadsTable();
+    });
+  });
 
   function resetServiceForm() {
     document.getElementById('serviceForm').reset();

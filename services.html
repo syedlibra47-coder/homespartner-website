@@ -60,6 +60,48 @@
 
 <div id="serviceSectionsContainer"></div>
 
+<!-- ===== PROPERTY VALUATION ===== -->
+<section class="valuation-section" id="valuation">
+  <div class="container valuation-inner">
+    <div class="valuation-copy">
+      <p class="eyebrow">Free Valuation</p>
+      <h2 class="display">What's Your Property Worth?</h2>
+      <p>Tell us a few details and a HomesPartner advisor will follow up with an honest, data-backed estimate — no obligation, no automated guesswork.</p>
+    </div>
+    <form class="valuation-form" id="valuationForm">
+      <h3>Request a Free Valuation</h3>
+      <input type="text" id="val_address" placeholder="Property address / community" required>
+      <div class="valuation-form-row">
+        <select id="val_propertyType" required>
+          <option value="">Property Type</option>
+          <option value="Apartment">Apartment</option>
+          <option value="Villa">Villa</option>
+          <option value="Townhouse">Townhouse</option>
+          <option value="Loft">Loft</option>
+          <option value="Studio">Studio</option>
+        </select>
+        <select id="val_bedrooms" required>
+          <option value="">Bedrooms</option>
+          <option value="Studio">Studio</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5+">5+</option>
+        </select>
+      </div>
+      <input type="text" id="val_sizeSqft" placeholder="Size (sqft, approx.)">
+      <div class="valuation-form-row">
+        <input type="text" id="val_name" placeholder="Your name" required>
+        <input type="tel" id="val_phone" placeholder="Phone number" required>
+      </div>
+      <input type="email" id="val_email" placeholder="Email address" required>
+      <button type="submit" class="btn btn-gold" id="valuationSubmitBtn">Get My Free Valuation</button>
+      <p class="form-note" id="valuationNote"></p>
+    </form>
+  </div>
+</section>
+
 <!-- ===== CTA BANNER ===== -->
 <section class="cta-banner">
   <div class="container cta-inner">

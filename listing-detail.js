@@ -94,10 +94,33 @@
   // ----- Enquiry form -----
   const enquiryForm = document.getElementById('enquiryForm');
   const enquiryNote = document.getElementById('enquiryNote');
-  enquiryForm.addEventListener('submit', (e) => {
+  const enquirySubmitBtn = document.getElementById('enquirySubmitBtn');
+  enquiryForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    enquiryNote.textContent = `Thanks — ${listing.agent.name} will reach out shortly.`;
-    enquiryForm.reset();
+    enquiryNote.textContent = '';
+    enquirySubmitBtn.disabled = true;
+    enquirySubmitBtn.textContent = 'Sending…';
+    try {
+      if (!window.SUPABASE_URL || !window.supabase) throw new Error('not configured');
+      const client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+      const { error } = await client.from('leads').insert({
+        lead_type: 'enquiry',
+        name: document.getElementById('enq_name').value,
+        phone: document.getElementById('enq_phone').value,
+        email: document.getElementById('enq_email').value,
+        message: document.getElementById('enq_message').value,
+        listing_id: listing.id,
+        listing_title: listing.title
+      });
+      if (error) throw error;
+      enquiryNote.textContent = `Thanks — ${listing.agent.name} will reach out shortly.`;
+      enquiryForm.reset();
+    } catch (err) {
+      enquiryNote.textContent = 'Something went wrong sending your enquiry — please WhatsApp or call us directly instead.';
+    } finally {
+      enquirySubmitBtn.disabled = false;
+      enquirySubmitBtn.textContent = 'Send Enquiry';
+    }
   });
 
   // ----- Affordability calculator -----

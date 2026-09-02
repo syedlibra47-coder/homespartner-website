@@ -196,6 +196,13 @@
 .admin-btn-danger { color: #b3261e; border-color: #e8b4ae; }
 .admin-btn-danger:hover { background: #fbeae8; }
 
+.admin-leads-filter { display: flex; gap: 8px; margin-bottom: 16px; }
+.admin-leads-details { font-size: 0.82rem; color: var(--gray); max-width: 280px; }
+.admin-leads-status-select {
+  padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: #fff;
+  font-family: var(--font-body); font-size: 0.8rem; color: var(--ink); cursor: pointer;
+}
+
 /* ===== CUSTOM COLOR + OPACITY PICKER ===== */
 .cop-widget { position: relative; display: inline-block; }
 .cop-swatch-btn { border: 1px solid var(--line); border-radius: 8px; padding: 3px; background: #fff; cursor: pointer; }

@@ -618,6 +618,49 @@ alter table listings add column if not exists latitude numeric;
 alter table listings add column if not exists longitude numeric;
 
 -- ============================================================
+-- LEADS (property enquiries + valuation requests)
+-- One table, discriminated by lead_type, so admin has a single place
+-- to work every inbound lead rather than forms disappearing into
+-- nothing (the "Request a Viewing" form previously didn't save
+-- anywhere at all — this fixes that) or being scattered across tables.
+-- ============================================================
+create table if not exists leads (
+  id bigint generated always as identity primary key,
+  lead_type text not null default 'enquiry', -- enquiry | valuation
+  name text not null,
+  phone text not null default '',
+  email text not null default '',
+  message text not null default '',
+  listing_id text,                     -- set for property enquiries
+  listing_title text not null default '',
+  address text not null default '',    -- set for valuation requests
+  property_type text not null default '',
+  bedrooms text not null default '',
+  size_sqft text not null default '',
+  status text not null default 'new',  -- new | contacted | closed
+  created_at timestamptz not null default now()
+);
+
+alter table leads enable row level security;
+
+drop policy if exists "Anyone can submit a lead" on leads;
+create policy "Anyone can submit a lead" on leads for insert with check (true);
+
+drop policy if exists "Admins can view leads" on leads;
+create policy "Admins can view leads" on leads for select using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can update leads" on leads;
+create policy "Admins can update leads" on leads for update using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can delete leads" on leads;
+create policy "Admins can delete leads" on leads for delete using (current_user_role() in ('admin', 'super_admin'));
+
+-- Point the "Sell" service's CTA at the new dedicated valuation form
+-- instead of the generic contact section (also used by the homepage
+-- services strip, so this needs the full path, not a bare anchor).
+update services set cta_href = 'services.html#valuation' where id = 'sell';
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.
