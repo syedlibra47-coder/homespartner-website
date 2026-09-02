@@ -14,6 +14,7 @@ window.PAGE_BLOCK_TYPES = [
   { type: 'image', label: 'Image' },
   { type: 'button', label: 'Button' },
   { type: 'columns', label: 'Columns (2 or 3 side-by-side)' },
+  { type: 'community-listings', label: 'Live Listings (by community)' },
   { type: 'image-text-split', label: 'Image + Text Split' },
   { type: 'feature-grid', label: 'Feature Grid' },
   { type: 'gallery', label: 'Photo Gallery' },
@@ -109,6 +110,27 @@ function pbRenderBlock(block) {
       const columns = p.columns && p.columns.length ? p.columns : [[], []];
       const colsHtml = columns.map(colBlocks => `<div class="pb-column">${(colBlocks || []).map(pbRenderNestedBlock).join('')}</div>`).join('');
       return `<section class="${cls}"><div class="container"><div class="pb-columns pb-columns-${columns.length}">${colsHtml}</div></div></section>`;
+    }
+    case 'community-listings': {
+      const community = (p.community || '').trim();
+      if (!community) return '';
+      const max = Number(p.maxItems) > 0 ? Number(p.maxItems) : 3;
+      const all = (window.LISTINGS_DATA && Object.values(window.LISTINGS_DATA)) || [];
+      const matches = all.filter(l => (l.community || '').toLowerCase() === community.toLowerCase()).slice(0, max);
+      if (!matches.length) return '';
+      const cards = matches.map(l => `
+        <a href="listing-detail.html?id=${pbEscapeHtml(l.id)}" class="pb-cl-card">
+          <img src="${pbEscapeHtml(l.hero)}" alt="${pbEscapeHtml(l.title)}">
+          <div class="pb-cl-card-body">
+            <div class="pb-cl-price">${pbEscapeHtml(l.priceLabel)}${l.priceSuffix ? ' ' + pbEscapeHtml(l.priceSuffix) : ''}</div>
+            <h4>${pbEscapeHtml(l.title)}</h4>
+            <p>${l.beds === 'Studio' ? 'Studio' : pbEscapeHtml(l.beds) + ' Bed'} &middot; ${pbEscapeHtml(l.baths)} Bath &middot; ${pbEscapeHtml(l.sqft)} sqft</p>
+          </div>
+        </a>`).join('');
+      return `<section class="${cls}"><div class="container">
+        <div class="pb-cl-grid">${cards}</div>
+        <div class="pb-cl-viewall"><a href="listings.html?q=${encodeURIComponent(community)}" class="btn btn-outline-navy">View All Listings in ${pbEscapeHtml(community)} &rarr;</a></div>
+      </div></section>`;
     }
     case 'image-text-split': {
       const reverseClass = p.imagePosition === 'right' ? 'pb-split-reverse' : '';

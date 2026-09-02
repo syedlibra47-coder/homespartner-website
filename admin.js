@@ -1894,6 +1894,7 @@
       image: { src: '', alt: '', caption: '' },
       button: { label: 'Learn More', href: '#', variant: 'gold', align: 'center' },
       columns: { columnCount: 2, columns: [[], []] },
+      'community-listings': { community: '', maxItems: 3 },
       'image-text-split': { src: '', alt: '', heading: 'Heading', text: 'Description text.', buttonLabel: '', buttonHref: '', imagePosition: 'left' },
       'feature-grid': { items: [{ icon: '', title: 'Feature One', text: 'Short description.' }] },
       gallery: { images: [] },
@@ -2205,6 +2206,18 @@
 
         wrap.appendChild(countSelect);
         wrap.appendChild(columnsWrap);
+        break;
+      }
+      case 'community-listings': {
+        wrap.appendChild(textInput('community', 'Community name, must match exactly e.g. Dubai Marina'));
+        wrap.appendChild(row(
+          (() => { const el = document.createElement('input'); el.type = 'number'; el.min = '1'; el.max = '9'; el.placeholder = 'Max listings shown'; el.value = p.maxItems || 3; el.addEventListener('input', () => { p.maxItems = Number(el.value) || 3; cpRenderPreview(); }); return el; })()
+        ));
+        const hint = document.createElement('p');
+        hint.className = 'admin-typo-role-hint';
+        hint.style.marginTop = '4px';
+        hint.textContent = "Pulls live listings automatically — shows nothing here in this editor's preview, but populates correctly once published.";
+        wrap.appendChild(hint);
         break;
       }
       case 'image-text-split':
