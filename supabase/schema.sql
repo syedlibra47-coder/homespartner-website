@@ -661,6 +661,17 @@ create policy "Admins can delete leads" on leads for delete using (current_user_
 update services set cta_href = 'services.html#valuation' where id = 'sell';
 
 -- ============================================================
+-- SAVED SEARCHES (email alert requests from the listings search page)
+-- Reuses the leads table (lead_type = 'saved_search') so admin has one
+-- place to see every inbound request. No automated "new listing"
+-- emails go out yet — that needs an email-sending service (Resend,
+-- SendGrid, etc.) wired up separately; for now these land as leads
+-- for the team to action manually.
+-- ============================================================
+alter table leads alter column name set default '';
+alter table leads add column if not exists search_criteria jsonb;
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.

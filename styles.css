@@ -862,6 +862,66 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   white-space: nowrap;
 }
 
+.filter-save-search { position: relative; }
+.filter-save-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--navy);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.filter-save-btn svg { width: 16px; height: 16px; color: var(--gold-dark); flex-shrink: 0; }
+.filter-save-btn:hover { border-color: var(--gold-dark); }
+.filter-save-btn.is-active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.filter-save-btn.is-active svg { color: var(--gold-light); }
+
+.filter-save-form {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 30;
+  display: flex;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  width: 280px;
+}
+.filter-save-form input {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+.filter-save-note {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 30;
+  width: 240px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  text-align: right;
+}
+
 .filters-bar--secondary { margin-top: -30px; margin-bottom: 30px; padding: 16px 24px; }
 
 .filter-price-range {
@@ -1256,7 +1316,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 
 .footer-inner {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  grid-template-columns: 1.3fr repeat(4, 1fr);
   gap: 40px;
   padding-bottom: 50px;
   border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -1309,6 +1369,10 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   .filters-bar { flex-direction: column; align-items: stretch; }
   .filter-search { flex-basis: auto; width: 100%; }
   .filter-results { margin-left: 0; text-align: left; }
+  .filter-save-search { width: 100%; }
+  .filter-save-btn { width: 100%; justify-content: center; }
+  .filter-save-form { position: static; width: 100%; margin-top: 8px; box-shadow: none; }
+  .filter-save-note { position: static; width: 100%; text-align: left; margin-top: 8px; }
   .filters-bar--secondary { margin-top: 0; }
   .filter-price-range { flex-basis: auto; width: 100%; }
   .filter-view-toggle { margin-left: 0; width: 100%; }

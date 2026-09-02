@@ -228,5 +228,56 @@
   resetBtn.addEventListener('click', resetAll);
   document.querySelectorAll('[data-mirror-reset]').forEach(btn => btn.addEventListener('click', resetAll));
 
+  // ----- Save this search (captured as a lead; no automated "new listing"
+  // emails go out yet — that needs an email-sending service wired up
+  // separately, so these land in admin for the team to action manually) -----
+  const saveSearchBtn = document.getElementById('saveSearchBtn');
+  const saveSearchForm = document.getElementById('filterSaveForm');
+  const saveSearchNote = document.getElementById('filterSaveNote');
+  const saveSearchEmail = document.getElementById('saveSearchEmail');
+
+  saveSearchBtn.addEventListener('click', () => {
+    const isOpen = saveSearchForm.style.display !== 'none';
+    saveSearchForm.style.display = isOpen ? 'none' : 'flex';
+    saveSearchBtn.classList.toggle('is-active', !isOpen);
+    saveSearchNote.textContent = '';
+  });
+
+  saveSearchForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    saveSearchNote.textContent = '';
+    const submitBtn = document.getElementById('saveSearchSubmit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving…';
+    try {
+      if (!window.SUPABASE_URL || !window.supabase) throw new Error('not configured');
+      const client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+      const criteria = {
+        status: activeStatus,
+        type: typeSelect.value,
+        beds: bedsSelect.value,
+        baths: bathsSelect.value,
+        priceMin: priceMinInput.value || null,
+        priceMax: priceMaxInput.value || null,
+        keyword: keywordInput.value || null
+      };
+      const { error } = await client.from('leads').insert({
+        lead_type: 'saved_search',
+        email: saveSearchEmail.value,
+        search_criteria: criteria
+      });
+      if (error) throw error;
+      saveSearchForm.style.display = 'none';
+      saveSearchBtn.classList.remove('is-active');
+      saveSearchNote.textContent = "Saved — we'll follow up when matching homes come in.";
+      saveSearchForm.reset();
+    } catch (err) {
+      saveSearchNote.textContent = 'Something went wrong — please try again.';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Notify Me';
+    }
+  });
+
   applyFilters();
 })();

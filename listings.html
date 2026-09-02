@@ -82,6 +82,17 @@
       </div>
       <button type="button" class="filter-reset" id="filterReset">Reset</button>
       <span class="filter-results" id="filterResultsCount">8 properties</span>
+      <div class="filter-save-search" id="filterSaveSearch">
+        <button type="button" class="filter-save-btn" id="saveSearchBtn">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3a5 5 0 0 0-5 5v3.2c0 .6-.2 1.2-.6 1.7L5 15h14l-1.4-2.1a2.8 2.8 0 0 1-.6-1.7V8a5 5 0 0 0-5-5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 18a2.5 2.5 0 0 0 5 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Save This Search
+        </button>
+        <form class="filter-save-form" id="filterSaveForm" style="display:none;">
+          <input type="email" id="saveSearchEmail" placeholder="Your email address" required>
+          <button type="submit" class="btn btn-gold btn-sm" id="saveSearchSubmit">Notify Me</button>
+        </form>
+        <p class="filter-save-note" id="filterSaveNote"></p>
+      </div>
     </div>
 
     <div class="filters-bar filters-bar--secondary reveal">

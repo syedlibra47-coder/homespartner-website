@@ -654,16 +654,37 @@
       tbody.innerHTML = `<tr class="admin-empty-row"><td colspan="6">No leads yet.</td></tr>`;
       return;
     }
+    const typeLabels = { valuation: 'Valuation', saved_search: 'Saved Search', enquiry: 'Enquiry' };
+    const typeBadgeClass = { valuation: 'admin', saved_search: 'super_admin', enquiry: 'agent' };
+
+    function criteriaSummary(c) {
+      if (!c) return '';
+      const parts = [];
+      if (c.status && c.status !== 'all') parts.push(c.status === 'sale' ? 'For Sale' : 'For Rent');
+      if (c.type && c.type !== 'all') parts.push(c.type);
+      if (c.beds && c.beds !== 'all') parts.push(c.beds + ' bed');
+      if (c.baths && c.baths !== 'all') parts.push(c.baths + ' bath');
+      if (c.priceMin || c.priceMax) parts.push(`AED ${c.priceMin || '0'}–${c.priceMax || '∞'}`);
+      if (c.keyword) parts.push(`"${c.keyword}"`);
+      return parts.length ? parts.join(' · ') : 'Any listing';
+    }
+
     tbody.innerHTML = filtered.map(l => {
-      const details = l.lead_type === 'valuation'
-        ? [l.address, l.property_type, l.bedrooms ? l.bedrooms + ' bed' : '', l.size_sqft ? l.size_sqft + ' sqft' : ''].filter(Boolean).join(' · ')
-        : [l.listing_title, l.message].filter(Boolean).join(' — ');
+      let details;
+      if (l.lead_type === 'valuation') {
+        details = [l.address, l.property_type, l.bedrooms ? l.bedrooms + ' bed' : '', l.size_sqft ? l.size_sqft + ' sqft' : ''].filter(Boolean).join(' · ');
+      } else if (l.lead_type === 'saved_search') {
+        details = criteriaSummary(l.search_criteria);
+      } else {
+        details = [l.listing_title, l.message].filter(Boolean).join(' — ');
+      }
+      const contact = [l.phone, l.email].filter(Boolean).join('<br>');
       return `
       <tr>
         <td>${new Date(l.created_at).toLocaleDateString()}</td>
-        <td><span class="role-badge role-badge--${l.lead_type === 'valuation' ? 'admin' : 'agent'}">${l.lead_type === 'valuation' ? 'Valuation' : 'Enquiry'}</span></td>
-        <td>${l.name}</td>
-        <td>${l.phone}<br>${l.email}</td>
+        <td><span class="role-badge role-badge--${typeBadgeClass[l.lead_type] || 'agent'}">${typeLabels[l.lead_type] || l.lead_type}</span></td>
+        <td>${l.name || '—'}</td>
+        <td>${contact}</td>
         <td class="admin-leads-details">${details}</td>
         <td>
           <select class="admin-leads-status-select" data-lead-id="${l.id}">
