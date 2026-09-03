@@ -2423,6 +2423,21 @@
         break;
       }
       case 'feature-grid': {
+        const colsLabel = document.createElement('label');
+        colsLabel.style.cssText = 'display:block;font-size:0.78rem;font-weight:600;color:var(--gray);margin-bottom:10px;';
+        colsLabel.textContent = 'Columns per row (desktop)';
+        const colsSelect = document.createElement('select');
+        colsSelect.innerHTML = `
+          <option value="">Auto (fit as many as space allows)</option>
+          <option value="2">2 per row</option>
+          <option value="3">3 per row</option>
+          <option value="4">4 per row</option>
+        `;
+        colsSelect.value = p.columns || '';
+        colsSelect.addEventListener('change', () => { p.columns = colsSelect.value; cpRenderPreview(); });
+        colsLabel.appendChild(colsSelect);
+        wrap.appendChild(colsLabel);
+
         const itemsBox = document.createElement('div');
         p.items = p.items || [];
         function renderItems() {

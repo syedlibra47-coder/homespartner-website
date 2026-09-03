@@ -35,6 +35,15 @@
 .pb-feature-grid-inner {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px;
 }
+.pb-feature-grid-inner--cols-2 { grid-template-columns: repeat(2, 1fr); }
+.pb-feature-grid-inner--cols-3 { grid-template-columns: repeat(3, 1fr); }
+.pb-feature-grid-inner--cols-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px) {
+  .pb-feature-grid-inner--cols-3, .pb-feature-grid-inner--cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .pb-feature-grid-inner--cols-2, .pb-feature-grid-inner--cols-3, .pb-feature-grid-inner--cols-4 { grid-template-columns: 1fr; }
+}
 .pb-feature { text-align: center; }
 .pb-feature-icon { font-size: 2rem; margin-bottom: 10px; }
 .pb-feature h3 { font-size: 1.05rem; margin-bottom: 8px; }

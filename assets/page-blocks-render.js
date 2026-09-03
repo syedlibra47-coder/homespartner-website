@@ -159,7 +159,8 @@ function pbRenderBlock(block) {
           </div>
         </${tag}>`;
       }).join('');
-      return `<section class="${cls}"><div class="container"><div class="pb-feature-grid-inner">${items}</div></div></section>`;
+      const colsClass = p.columns ? ` pb-feature-grid-inner--cols-${pbEscapeHtml(p.columns)}` : '';
+      return `<section class="${cls}"><div class="container"><div class="pb-feature-grid-inner${colsClass}">${items}</div></div></section>`;
     }
     case 'gallery': {
       const imgs = (p.images || []).map(img => `<div class="pb-gallery-item"><img src="${pbEscapeHtml(img.src)}" alt="${pbEscapeHtml(img.alt)}"></div>`).join('');
