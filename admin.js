@@ -2457,14 +2457,45 @@
             const hrefInput = document.createElement('input');
             hrefInput.type = 'text'; hrefInput.placeholder = 'Link URL (optional — makes the whole card clickable)'; hrefInput.value = item.href || '';
             hrefInput.addEventListener('input', () => { item.href = hrefInput.value; cpRenderPreview(); });
-            const imageInput = document.createElement('input');
-            imageInput.type = 'text'; imageInput.placeholder = 'Photo URL (optional — replaces the icon with a photo, e.g. for area/community cards)'; imageInput.value = item.image || '';
-            imageInput.addEventListener('input', () => { item.image = imageInput.value; cpRenderPreview(); });
+
+            const imageBox = document.createElement('div');
+            imageBox.className = 'pb-editor-repeat-item-image';
+            const imageLabel = document.createElement('p');
+            imageLabel.style.cssText = 'font-size:0.78rem;color:var(--gray);margin:8px 0 4px;';
+            imageLabel.textContent = 'Photo (optional — replaces the icon with a photo, e.g. for area/community cards)';
+            const imagePreview = document.createElement('img');
+            imagePreview.className = 'admin-preview';
+            if (item.image) { imagePreview.src = item.image; imagePreview.style.display = 'block'; } else { imagePreview.style.display = 'none'; }
+            const imageFileInput = document.createElement('input');
+            imageFileInput.type = 'file'; imageFileInput.accept = 'image/*';
+            const removeImageBtn = document.createElement('button');
+            removeImageBtn.type = 'button'; removeImageBtn.className = 'admin-add-row'; removeImageBtn.style.cssText = 'margin-top:4px;display:' + (item.image ? '' : 'none') + ';';
+            removeImageBtn.textContent = '× Remove Photo';
+            removeImageBtn.addEventListener('click', () => {
+              item.image = ''; imagePreview.style.display = 'none'; removeImageBtn.style.display = 'none'; imageFileInput.value = '';
+              cpRenderPreview();
+            });
+            imageFileInput.addEventListener('change', async (e) => {
+              const file = e.target.files[0];
+              if (!file) return;
+              try {
+                const url = await uploadImage(file);
+                item.image = url;
+                imagePreview.src = url; imagePreview.style.display = 'block';
+                removeImageBtn.style.display = '';
+                cpRenderPreview();
+              } catch (err) { document.getElementById(formErrorId).textContent = 'Image upload failed: ' + err.message; }
+            });
+            imageBox.appendChild(imageLabel);
+            imageBox.appendChild(imageFileInput);
+            imageBox.appendChild(imagePreview);
+            imageBox.appendChild(removeImageBtn);
+
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button'; removeBtn.className = 'admin-add-row'; removeBtn.style.marginTop = '4px';
             removeBtn.textContent = '× Remove Item';
             removeBtn.addEventListener('click', () => { p.items.splice(idx, 1); renderItems(); cpRenderPreview(); });
-            itemRow.appendChild(iconInput); itemRow.appendChild(titleInput); itemRow.appendChild(textInputEl); itemRow.appendChild(hrefInput); itemRow.appendChild(imageInput); itemRow.appendChild(removeBtn);
+            itemRow.appendChild(iconInput); itemRow.appendChild(titleInput); itemRow.appendChild(textInputEl); itemRow.appendChild(hrefInput); itemRow.appendChild(imageBox); itemRow.appendChild(removeBtn);
             itemsBox.appendChild(itemRow);
           });
         }
