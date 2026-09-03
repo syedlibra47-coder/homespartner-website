@@ -58,6 +58,7 @@
         <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">Leads</p>
           <button type="button" class="admin-tab" data-tab="leads" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M6 10h36v28H6z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M6 14l18 13 18-13" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></span><span id="leadsTabLabel">Leads</span></button>
+          <button type="button" class="admin-tab" data-tab="newsletter" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="6" y="12" width="36" height="26" rx="2" stroke="currentColor" stroke-width="3"/><path d="M8 14l16 13 16-13" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span id="newsletterTabLabel">Newsletter</span></button>
         </div>
         <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">Pages</p>
@@ -152,6 +153,21 @@
       <table class="admin-table" id="leadsTable">
         <thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Contact</th><th>Details</th><th>Status</th></tr></thead>
         <tbody id="leadsTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER TAB (admin/super_admin only) -->
+  <section class="admin-panel" id="panel-newsletter">
+    <div class="admin-panel-head">
+      <h2>Newsletter Subscribers</h2>
+      <button type="button" class="btn btn-sm btn-navy" id="exportSubscribersBtn">Export CSV</button>
+    </div>
+    <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px;">Captured from the homepage footer signup. No automated sending sequence is wired up yet — export this list into whatever email tool gets connected (Mailchimp, Resend, etc.).</p>
+    <div class="admin-table-wrap">
+      <table class="admin-table" id="subscribersTable">
+        <thead><tr><th>Email</th><th>Subscribed</th><th></th></tr></thead>
+        <tbody id="subscribersTableBody"></tbody>
       </table>
     </div>
   </section>

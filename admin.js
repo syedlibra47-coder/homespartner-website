@@ -76,6 +76,7 @@
       loadOffplan();
       loadServices();
       loadLeads();
+      loadSubscribers();
       loadContactContent();
       loadOffices();
       loadFaqs();
@@ -717,6 +718,57 @@
       activeLeadFilter = btn.dataset.leadFilter;
       renderLeadsTable();
     });
+  });
+
+  // ===== NEWSLETTER SUBSCRIBERS =====
+  let currentSubscribers = [];
+
+  function escSub(str) {
+    return String(str || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  async function loadSubscribers() {
+    const { data, error } = await supabase.from('newsletter_subscribers').select('*').order('created_at', { ascending: false });
+    if (error) { console.error(error); return; }
+    currentSubscribers = data || [];
+    renderSubscribersTable();
+  }
+
+  function renderSubscribersTable() {
+    const tbody = document.getElementById('subscribersTableBody');
+    document.getElementById('newsletterTabLabel').textContent = currentSubscribers.length ? `Newsletter (${currentSubscribers.length})` : 'Newsletter';
+    if (!currentSubscribers.length) {
+      tbody.innerHTML = `<tr class="admin-empty-row"><td colspan="3">No subscribers yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = currentSubscribers.map(s => `
+      <tr>
+        <td>${escSub(s.email)}</td>
+        <td>${new Date(s.created_at).toLocaleDateString()}</td>
+        <td><button class="delete-btn" data-delete="${s.id}">Delete</button></td>
+      </tr>`).join('');
+    tbody.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => deleteSubscriber(Number(b.dataset.delete))));
+  }
+
+  async function deleteSubscriber(id) {
+    if (!confirm('Remove this subscriber?')) return;
+    const { error } = await supabase.from('newsletter_subscribers').delete().eq('id', id);
+    if (!error) {
+      currentSubscribers = currentSubscribers.filter(s => s.id !== id);
+      renderSubscribersTable();
+    }
+  }
+
+  document.getElementById('exportSubscribersBtn').addEventListener('click', () => {
+    if (!currentSubscribers.length) return;
+    const rows = ['email,subscribed_at', ...currentSubscribers.map(s => `${s.email},${s.created_at}`)];
+    const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'newsletter-subscribers.csv';
+    a.click();
+    URL.revokeObjectURL(url);
   });
 
   function resetServiceForm() {
