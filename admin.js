@@ -2442,11 +2442,14 @@
             const hrefInput = document.createElement('input');
             hrefInput.type = 'text'; hrefInput.placeholder = 'Link URL (optional — makes the whole card clickable)'; hrefInput.value = item.href || '';
             hrefInput.addEventListener('input', () => { item.href = hrefInput.value; cpRenderPreview(); });
+            const imageInput = document.createElement('input');
+            imageInput.type = 'text'; imageInput.placeholder = 'Photo URL (optional — replaces the icon with a photo, e.g. for area/community cards)'; imageInput.value = item.image || '';
+            imageInput.addEventListener('input', () => { item.image = imageInput.value; cpRenderPreview(); });
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button'; removeBtn.className = 'admin-add-row'; removeBtn.style.marginTop = '4px';
             removeBtn.textContent = '× Remove Item';
             removeBtn.addEventListener('click', () => { p.items.splice(idx, 1); renderItems(); cpRenderPreview(); });
-            itemRow.appendChild(iconInput); itemRow.appendChild(titleInput); itemRow.appendChild(textInputEl); itemRow.appendChild(hrefInput); itemRow.appendChild(removeBtn);
+            itemRow.appendChild(iconInput); itemRow.appendChild(titleInput); itemRow.appendChild(textInputEl); itemRow.appendChild(hrefInput); itemRow.appendChild(imageInput); itemRow.appendChild(removeBtn);
             itemsBox.appendChild(itemRow);
           });
         }

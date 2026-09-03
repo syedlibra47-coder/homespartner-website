@@ -147,11 +147,16 @@ function pbRenderBlock(block) {
       const items = (p.items || []).map(it => {
         const tag = it.href ? 'a' : 'div';
         const hrefAttr = it.href ? ` href="${pbEscapeHtml(it.href)}"` : '';
+        const media = it.image
+          ? `<div class="pb-feature-image"><img src="${pbEscapeHtml(it.image)}" alt="${pbEscapeHtml(it.title)}" loading="lazy"></div>`
+          : (it.icon ? `<div class="pb-feature-icon">${pbEscapeHtml(it.icon)}</div>` : '');
         return `
-        <${tag} class="pb-feature${it.href ? ' pb-feature--link' : ''}"${hrefAttr}>
-          ${it.icon ? `<div class="pb-feature-icon">${pbEscapeHtml(it.icon)}</div>` : ''}
-          <h3>${pbEscapeHtml(it.title)}</h3>
-          <p>${pbEscapeHtml(it.text)}</p>
+        <${tag} class="pb-feature${it.href ? ' pb-feature--link' : ''}${it.image ? ' pb-feature--photo' : ''}"${hrefAttr}>
+          ${media}
+          <div class="pb-feature-body">
+            <h3>${pbEscapeHtml(it.title)}</h3>
+            <p>${pbEscapeHtml(it.text)}</p>
+          </div>
         </${tag}>`;
       }).join('');
       return `<section class="${cls}"><div class="container"><div class="pb-feature-grid-inner">${items}</div></div></section>`;

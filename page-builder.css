@@ -49,6 +49,17 @@
 .pb-bg-navy .pb-feature--link { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); }
 .pb-bg-paper .pb-feature--link { background: #fff; }
 
+.pb-feature--photo.pb-feature--link { padding: 0; overflow: hidden; }
+.pb-feature--photo:hover { transform: translateY(-3px); }
+.pb-feature--photo .pb-feature-image {
+  aspect-ratio: 4 / 3; overflow: hidden;
+}
+.pb-feature--photo .pb-feature-image img {
+  width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s ease;
+}
+.pb-feature--photo:hover .pb-feature-image img { transform: scale(1.06); }
+.pb-feature--photo .pb-feature-body { padding: 20px; }
+
 .pb-gallery-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;
 }
