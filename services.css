@@ -2,6 +2,51 @@
 
 .main-nav a.is-active { color: var(--gold-dark); }
 
+/* ===== CALCULATORS (rental yield, buy vs rent) ===== */
+.calc-section { padding: 90px 0; background: var(--paper); }
+.calc-section:nth-of-type(even) { background: var(--paper-flat); }
+.calc-block {
+  background: linear-gradient(160deg, var(--navy), var(--navy-soft));
+  border-radius: var(--radius);
+  padding: 40px 36px;
+  color: #fff;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.calc-block h2 { color: #fff; text-align: center; }
+.calc-block .section-sub { color: rgba(255,255,255,0.65); margin: 12px auto 32px; text-align: center; }
+
+.calc-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; align-items: center; }
+.calc-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+.calc-field span:first-child { font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+.calc-input-row { display: flex; align-items: center; gap: 14px; }
+.calc-input-row input[type="range"] { flex: 1; accent-color: var(--gold-light); height: 4px; }
+.calc-value { font-size: 0.9rem; min-width: 56px; text-align: right; color: var(--gold-light); }
+.calc-number-input {
+  width: 100%; padding: 12px 14px; border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08);
+  color: #fff; font-family: var(--font-body); font-size: 0.95rem;
+}
+.calc-number-input:focus { outline: none; border-color: var(--gold-light); background: rgba(255,255,255,0.12); }
+
+.calc-result {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 14px;
+  padding: 26px;
+  text-align: center;
+}
+.calc-result-label { display: block; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+.calc-result-value { display: block; font-size: 2rem; font-weight: 600; color: var(--gold-light); margin-bottom: 20px; }
+.calc-result-rows { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 16px; }
+.calc-result-rows div { display: flex; justify-content: space-between; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.75); }
+.calc-note { font-size: 0.78rem; color: rgba(255,255,255,0.55); text-align: center; margin-top: 20px; }
+
+@media (max-width: 720px) {
+  .calc-grid { grid-template-columns: 1fr; }
+  .calc-block { padding: 28px 22px; }
+}
+
 .service-jump {
   position: sticky;
   top: 84px;

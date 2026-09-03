@@ -102,6 +102,90 @@
   </div>
 </section>
 
+<!-- ===== RENTAL YIELD CALCULATOR ===== -->
+<section class="calc-section" id="rental-yield-calculator">
+  <div class="container">
+    <div class="calc-block">
+      <p class="eyebrow" style="color:rgba(255,255,255,0.6);text-align:center;">Investment Tools</p>
+      <h2 class="display">Rental Yield Calculator</h2>
+      <p class="section-sub">Estimate the gross and net rental yield on a Dubai investment property.</p>
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <label class="calc-field">
+            <span>Property Price (AED)</span>
+            <div class="calc-input-row"><input type="number" class="calc-number-input" id="ry_price" value="1000000" min="0" step="10000"></div>
+          </label>
+          <label class="calc-field">
+            <span>Annual Rental Income (AED)</span>
+            <div class="calc-input-row"><input type="number" class="calc-number-input" id="ry_rent" value="70000" min="0" step="1000"></div>
+          </label>
+          <label class="calc-field">
+            <span>Annual Expenses (AED) — service charges, maintenance, management fees</span>
+            <div class="calc-input-row"><input type="number" class="calc-number-input" id="ry_expenses" value="0" min="0" step="500"></div>
+          </label>
+        </div>
+        <div class="calc-result">
+          <span class="calc-result-label">Gross Rental Yield</span>
+          <span class="calc-result-value mono" id="ry_grossYield">0.0%</span>
+          <div class="calc-result-rows">
+            <div><span>Net Rental Yield</span><span class="mono" id="ry_netYield">0.0%</span></div>
+            <div><span>Net Annual Income</span><span class="mono" id="ry_netIncome">AED 0</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="calc-note">For guidance only. Speak to a HomesPartner advisor for a full investment assessment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BUY VS RENT CALCULATOR ===== -->
+<section class="calc-section" id="buy-vs-rent-calculator">
+  <div class="container">
+    <div class="calc-block">
+      <p class="eyebrow" style="color:rgba(255,255,255,0.6);text-align:center;">Investment Tools</p>
+      <h2 class="display">Buy vs. Rent Calculator</h2>
+      <p class="section-sub">A simple side-by-side estimate of the cost of buying versus renting over time.</p>
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <label class="calc-field">
+            <span>Property Price (AED)</span>
+            <div class="calc-input-row"><input type="number" class="calc-number-input" id="bvr_price" value="1500000" min="0" step="10000"></div>
+          </label>
+          <label class="calc-field">
+            <span>Down Payment</span>
+            <div class="calc-input-row"><input type="range" id="bvr_downPct" min="10" max="80" value="20" step="5"><span class="calc-value mono" id="bvr_downPctLabel">20%</span></div>
+          </label>
+          <label class="calc-field">
+            <span>Interest Rate (per year)</span>
+            <div class="calc-input-row"><input type="range" id="bvr_rate" min="2" max="8" value="4" step="0.25"><span class="calc-value mono" id="bvr_rateLabel">4.0%</span></div>
+          </label>
+          <label class="calc-field">
+            <span>Loan Term</span>
+            <div class="calc-input-row"><input type="range" id="bvr_term" min="5" max="25" value="20" step="1"><span class="calc-value mono" id="bvr_termLabel">20 yrs</span></div>
+          </label>
+          <label class="calc-field">
+            <span>Equivalent Monthly Rent (AED)</span>
+            <div class="calc-input-row"><input type="number" class="calc-number-input" id="bvr_rent" value="7000" min="0" step="500"></div>
+          </label>
+          <label class="calc-field">
+            <span>Years You Plan to Stay</span>
+            <div class="calc-input-row"><input type="range" id="bvr_years" min="1" max="20" value="5" step="1"><span class="calc-value mono" id="bvr_yearsLabel">5 yrs</span></div>
+          </label>
+        </div>
+        <div class="calc-result">
+          <span class="calc-result-label">Est. Total Cost Over Period</span>
+          <div class="calc-result-rows">
+            <div><span>Buying (deposit + fees + payments)</span><span class="mono" id="bvr_buyTotal">AED 0</span></div>
+            <div><span>Renting (same period)</span><span class="mono" id="bvr_rentTotal">AED 0</span></div>
+            <div><span>Est. equity built by buying</span><span class="mono" id="bvr_equity">AED 0</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="calc-note">A simplified estimate — excludes property appreciation, opportunity cost and tax. For guidance only; speak to a HomesPartner advisor for full advice.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ===== CTA BANNER ===== -->
 <section class="cta-banner">
   <div class="container cta-inner">
@@ -139,6 +223,7 @@
 <script src="assets/icon-library.js"></script>
 <script src="script.js"></script>
 <script src="services-page.js"></script>
+<script src="services-calculators.js"></script>
 
 </body>
 </html>
