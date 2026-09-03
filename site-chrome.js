@@ -86,6 +86,55 @@
     footerCompliance.style.display = parts.length ? '' : 'none';
   }
 
+  // ----- Footer legal links (Privacy / Terms / Cookies / Complaints) -----
+  const footerLegalLinks = document.getElementById('footerLegalLinks');
+  if (footerLegalLinks) {
+    const legalLinks = [
+      { slug: 'privacy-policy', label: 'Privacy Policy' },
+      { slug: 'terms-and-conditions', label: 'Terms & Conditions' },
+      { slug: 'cookie-policy', label: 'Cookie Policy' },
+      { slug: 'complaints-procedure', label: 'Complaints Procedure' }
+    ];
+    footerLegalLinks.innerHTML = legalLinks
+      .map(l => `<a href="${resolveHref('custom-page.html?slug=' + l.slug)}">${l.label}</a>`)
+      .join('<span aria-hidden="true"> · </span>');
+  }
+
+  // ----- Global floating WhatsApp click-to-chat, every page -----
+  try {
+    const contact = window.CONTACT_CONTENT_DATA || {};
+    const waNumber = (contact.whatsappNumber || '').replace(/[^0-9]/g, '');
+    if (waNumber && !document.getElementById('globalWhatsappFloat')) {
+      const wa = document.createElement('a');
+      wa.id = 'globalWhatsappFloat';
+      wa.className = 'whatsapp-float';
+      wa.href = `https://wa.me/${waNumber}?text=${encodeURIComponent('Hi, I have a question about a property.')}`;
+      wa.target = '_blank';
+      wa.rel = 'noopener';
+      wa.setAttribute('aria-label', 'Chat with us on WhatsApp');
+      wa.innerHTML = '<img src="assets/WhatsApp.svg.webp" alt="">';
+      document.body.appendChild(wa);
+    }
+  } catch (err) { console.warn('WhatsApp float injection failed', err); }
+
+  // ----- Cookie consent banner, every page -----
+  try {
+    if (!localStorage.getItem('hp_cookie_consent') && !document.getElementById('cookieConsentBanner')) {
+      const banner = document.createElement('div');
+      banner.id = 'cookieConsentBanner';
+      banner.className = 'cookie-consent';
+      banner.innerHTML = `
+        <p>We use cookies to improve your experience and analyse site traffic. By continuing to browse, you agree to our
+        <a href="${resolveHref('custom-page.html?slug=cookie-policy')}">Cookie Policy</a>.</p>
+        <button type="button" class="btn btn-gold btn-sm" id="cookieConsentAccept">Accept</button>`;
+      document.body.appendChild(banner);
+      document.getElementById('cookieConsentAccept').addEventListener('click', () => {
+        localStorage.setItem('hp_cookie_consent', '1');
+        banner.remove();
+      });
+    }
+  } catch (err) { console.warn('Cookie consent banner injection failed', err); }
+
   // ----- Organization / RealEstateAgent structured data (schema.org), every page -----
   // Helps Google understand HomesPartner as a business entity for rich results —
   // separate from the per-listing RealEstateListing schema on detail pages.

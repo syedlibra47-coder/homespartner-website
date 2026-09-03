@@ -1378,6 +1378,9 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .footer-col a:hover { color: var(--gold-light); }
 
 .footer-bottom { padding: 26px 0; text-align: center; font-size: 0.82rem; }
+.footer-legal-links { margin-top: 6px; font-size: 0.78rem; opacity: 0.8; }
+.footer-legal-links a { color: inherit; text-decoration: underline; }
+.footer-legal-links a:hover { color: var(--gold-light); }
 .footer-compliance { margin-top: 6px; font-size: 0.76rem; color: rgba(255,255,255,0.5); }
 
 /* ===== RESPONSIVE ===== */
@@ -1451,5 +1454,52 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   padding: 10px 0 0 16px;
   margin-top: 10px;
   border-left: 2px solid var(--line);
+}
+
+/* ===== Global floating WhatsApp click-to-chat ===== */
+.whatsapp-float {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  z-index: 900;
+  transition: transform 0.2s ease;
+}
+.whatsapp-float:hover { transform: scale(1.08); }
+.whatsapp-float img { width: 30px; height: 30px; }
+
+/* ===== Cookie consent banner ===== */
+.cookie-consent {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 950;
+  background: var(--navy);
+  color: #fff;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+}
+.cookie-consent p { margin: 0; font-size: 0.85rem; max-width: 640px; }
+.cookie-consent a { color: var(--gold-light); text-decoration: underline; }
+.cookie-consent .btn { flex-shrink: 0; }
+
+@media (max-width: 640px) {
+  .whatsapp-float { right: 14px; bottom: 14px; width: 50px; height: 50px; }
+  .whatsapp-float img { width: 26px; height: 26px; }
+  .cookie-consent { padding: 14px 16px; gap: 12px; }
+  .cookie-consent p { font-size: 0.78rem; }
 }
 .main-nav.open .nav-dropdown-menu a { padding: 6px 0; font-weight: 500; }
