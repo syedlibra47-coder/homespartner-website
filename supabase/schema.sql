@@ -708,6 +708,32 @@ create policy "Admins can delete testimonials" on testimonials for delete
   using (current_user_role() in ('admin', 'super_admin'));
 
 -- ============================================================
+-- NEWSLETTER SUBSCRIBERS (footer signup)
+-- No automated sending sequence is wired up yet - that needs an
+-- email-sending service (Resend, Mailchimp, etc.) - so this table is
+-- just a reliable capture point for the team to export/import into
+-- whatever email tool gets connected later.
+-- ============================================================
+create table if not exists newsletter_subscribers (
+  id bigint generated always as identity primary key,
+  email text not null unique,
+  created_at timestamptz not null default now()
+);
+
+alter table newsletter_subscribers enable row level security;
+
+drop policy if exists "Anyone can subscribe" on newsletter_subscribers;
+create policy "Anyone can subscribe" on newsletter_subscribers for insert with check (true);
+
+drop policy if exists "Admins can view subscribers" on newsletter_subscribers;
+create policy "Admins can view subscribers" on newsletter_subscribers for select
+  using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can delete subscribers" on newsletter_subscribers;
+create policy "Admins can delete subscribers" on newsletter_subscribers for delete
+  using (current_user_role() in ('admin', 'super_admin'));
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.

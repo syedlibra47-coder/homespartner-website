@@ -1354,6 +1354,23 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .footer-email { color: var(--gold-light); font-family: var(--font-mono); font-size: 0.85rem; text-decoration: none; }
 .footer-email:hover { color: #fff; }
 
+.footer-newsletter { margin-top: 22px; max-width: 280px; }
+.footer-newsletter-label { display: block; font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 8px; }
+.footer-newsletter-row { display: flex; gap: 8px; }
+.footer-newsletter-row input {
+  flex: 1; min-width: 0; height: 42px; padding: 0 12px;
+  border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08);
+  color: #fff; font-family: var(--font-body); font-size: 0.85rem;
+}
+.footer-newsletter-row input::placeholder { color: rgba(255,255,255,0.45); }
+.footer-newsletter-row input:focus { outline: none; border-color: var(--gold-light); background: rgba(255,255,255,0.12); }
+.footer-newsletter-row button {
+  flex-shrink: 0; height: 42px; padding: 0 16px; border-radius: 8px; border: none;
+  background: var(--gold); color: var(--navy-deep); font-weight: 700; font-size: 0.82rem; cursor: pointer;
+}
+.footer-newsletter-row button:hover { background: var(--gold-light); }
+.footer-newsletter-note { font-size: 0.78rem; color: var(--gold-light); margin-top: 8px; min-height: 16px; }
+
 #footerColumns { display: contents; }
 .footer-col h5 { color: #fff; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
 .footer-col { display: flex; flex-direction: column; gap: 10px; }
