@@ -60,7 +60,8 @@ window.THEME_FONT_SUGGESTIONS = {
     "Outfit", "Karla", "Mulish", "Poppins", "Plus Jakarta Sans", "Sora",
     "Figtree", "Albert Sans", "Urbanist", "Instrument Sans", "Lexend", "Onest",
     "Public Sans", "IBM Plex Sans", "Rubik", "Hanken Grotesk", "Space Grotesk",
-    "Epilogue", "Be Vietnam Pro", "Red Hat Text", "Schibsted Grotesk", "Geist"
+    "Epilogue", "Be Vietnam Pro", "Red Hat Text", "Schibsted Grotesk", "Geist",
+    "Open Sans", "Roboto"
   ],
   data: [
     "IBM Plex Mono", "JetBrains Mono", "Roboto Mono", "Space Mono",
@@ -73,18 +74,21 @@ window.THEME_FONT_SUGGESTIONS = {
     "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
     "Outfit", "Karla", "Poppins", "Fraunces", "Plus Jakarta Sans", "Sora",
     "Figtree", "Albert Sans", "Urbanist", "Instrument Sans", "Public Sans",
-    "Rubik", "Space Grotesk", "Epilogue", "Be Vietnam Pro", "Schibsted Grotesk"
+    "Rubik", "Space Grotesk", "Epilogue", "Be Vietnam Pro", "Schibsted Grotesk",
+    "Open Sans", "Roboto"
   ],
   blog: [
     "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
     "Outfit", "Karla", "Poppins", "Fraunces", "Plus Jakarta Sans", "Sora",
     "Figtree", "Albert Sans", "Urbanist", "Instrument Sans", "Public Sans",
-    "Rubik", "Space Grotesk", "Epilogue", "Be Vietnam Pro", "Schibsted Grotesk"
+    "Rubik", "Space Grotesk", "Epilogue", "Be Vietnam Pro", "Schibsted Grotesk",
+    "Open Sans", "Roboto"
   ],
   form: [
     "Manrope", "Inter", "DM Sans", "Work Sans", "Nunito Sans", "Source Sans 3",
     "Outfit", "Karla", "Poppins", "Plus Jakarta Sans", "Sora", "Figtree",
     "Albert Sans", "Urbanist", "Instrument Sans", "Public Sans", "Rubik",
-    "Space Grotesk", "Epilogue", "Be Vietnam Pro", "Schibsted Grotesk"
+    "Space Grotesk", "Epilogue", "Be Vietnam Pro", "Schibsted Grotesk",
+    "Open Sans", "Roboto"
   ]
 };
