@@ -57,6 +57,16 @@
 <!-- ===== AGENTS GRID ===== -->
 <section class="agents-section">
   <div class="container">
+    <div class="agents-filter-bar" id="agentsFilterBar">
+      <input type="text" id="agentsSearchInput" class="agents-filter-input" placeholder="Search by name&hellip;">
+      <select id="agentsLanguageFilter" class="agents-filter-select">
+        <option value="all">All Languages</option>
+      </select>
+      <select id="agentsSpecialtyFilter" class="agents-filter-select">
+        <option value="all">All Specialties</option>
+      </select>
+    </div>
+    <p class="agents-filter-empty" id="agentsFilterEmpty" style="display:none;">No agents match your filters. Try clearing a filter above.</p>
     <div class="agents-grid" id="agentsGrid"></div>
   </div>
 </section>
