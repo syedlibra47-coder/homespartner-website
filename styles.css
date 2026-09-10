@@ -1,18 +1,18 @@
 /* ===== HomesPartner Real Estate — Landing Page ===== */
 
 :root {
-  --navy: #1F275C;
-  --navy-deep: #12173D;
-  --navy-soft: #2E3878;
-  --gold: #C9AF6C;
-  --gold-light: #E4CE93;
-  --gold-dark: #A98A45;
-  --gray: #787879;
-  --ink: #1B1D28;
-  --paper: #F3EDE3;
-  --paper-flat: #FBF8F2;
-  --line: #E4DBC9;
-  --hairline: rgba(31, 39, 92, 0.14);
+  --navy: #1B1915;
+  --navy-deep: #100F0C;
+  --navy-soft: #332B1F;
+  --gold: #B8935A;
+  --gold-light: #D9BD8D;
+  --gold-dark: #8C6B3D;
+  --gray: #6E6A60;
+  --ink: #211D17;
+  --paper: #FAF7F1;
+  --paper-flat: #FFFFFF;
+  --line: #E7DECC;
+  --hairline: rgba(27, 25, 21, 0.12);
 
   --font-head: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -33,8 +33,8 @@
   --font-form: var(--font-head);
   --form-color: var(--navy);
 
-  --shadow-soft: 0 10px 30px rgba(18, 23, 61, 0.08);
-  --shadow-card: 0 16px 40px rgba(18, 23, 61, 0.10);
+  --shadow-soft: 0 10px 30px rgba(20, 18, 14, 0.07);
+  --shadow-card: 0 16px 40px rgba(20, 18, 14, 0.09);
   --radius: 16px;
 }
 
@@ -118,7 +118,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .btn-navy {
   background: var(--navy);
   color: #fff;
-  box-shadow: 0 10px 24px rgba(31, 39, 92, 0.3);
+  box-shadow: 0 10px 24px rgba(27, 25, 21, 0.22);
 }
 .btn-navy:hover { background: var(--navy-soft); }
 
@@ -134,7 +134,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   border-bottom: 1px solid transparent;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-.site-header.scrolled { border-color: var(--line); box-shadow: 0 4px 20px rgba(18,23,61,0.05); }
+.site-header.scrolled { border-color: var(--line); box-shadow: 0 4px 20px rgba(20,18,14,0.05); }
 
 .header-inner {
   display: flex;
@@ -254,7 +254,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .hero-bg::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(160deg, rgba(18,23,61,0.92) 0%, rgba(31,39,92,0.88) 45%, rgba(46,56,120,0.82) 100%);
+  background: linear-gradient(180deg, rgba(16,15,12,0.35) 0%, rgba(16,15,12,0.55) 45%, rgba(16,15,12,0.82) 100%);
 }
 
 .grid-map { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
@@ -465,7 +465,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   box-shadow: var(--shadow-card);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.quick-card:hover { transform: translateY(-6px); box-shadow: 0 22px 46px rgba(18,23,61,0.16); }
+.quick-card:hover { transform: translateY(-6px); box-shadow: 0 22px 46px rgba(20,18,14,0.14); }
 .quick-card:hover .quick-arrow { transform: translate(2px, -2px); opacity: 1; }
 
 .quick-arrow {
@@ -499,7 +499,9 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .hero-stats--strip .stat-label { color: var(--gray); }
 
 .eyebrow {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -508,7 +510,14 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   color: var(--gold-light);
   margin-bottom: 18px;
 }
-.eyebrow::before { content: '— '; }
+.eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
 .eyebrow--dark { color: var(--gold-dark); }
 
 .hero h1 {
@@ -688,7 +697,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .listing-image::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(18,23,61,0) 55%, rgba(18,23,61,0.55) 100%);
+  background: linear-gradient(180deg, rgba(16,15,12,0) 55%, rgba(16,15,12,0.5) 100%);
 }
 
 .listing-tag { position: absolute; top: 16px; left: 16px; z-index: 2; }
@@ -775,7 +784,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .page-hero .hero-bg::after {
   /* Admin-chosen overlay tint (Image/Video backgrounds only) overrides this via
      the --page-hero-overlay custom property; falls back to the built-in navy tint. */
-  background: var(--page-hero-overlay, linear-gradient(160deg, rgba(18,23,61,0.94) 0%, rgba(31,39,92,0.9) 100%));
+  background: var(--page-hero-overlay, linear-gradient(180deg, rgba(16,15,12,0.4) 0%, rgba(16,15,12,0.78) 100%));
 }
 .page-hero-inner { position: relative; z-index: 2; }
 .page-hero h1 { color: #fff; font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 12px; }
@@ -1046,7 +1055,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .offplan-image::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(18,23,61,0.15) 0%, rgba(18,23,61,0.75) 100%);
+  background: linear-gradient(180deg, rgba(16,15,12,0.12) 0%, rgba(16,15,12,0.72) 100%);
 }
 .offplan-image .badge { position: relative; z-index: 2; }
 
@@ -1196,7 +1205,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   transform: translate(-50%, -50%);
   width: 56px; height: 56px;
   border-radius: 50%;
-  background: rgba(18,23,61,0.85);
+  background: rgba(16,15,12,0.85);
   color: var(--gold-light);
   display: flex;
   align-items: center;

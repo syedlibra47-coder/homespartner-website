@@ -27,7 +27,7 @@
 .offplan-card-image::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(18,23,61,0.35) 0%, rgba(18,23,61,0) 40%);
+  background: linear-gradient(180deg, rgba(16,15,12,0.32) 0%, rgba(16,15,12,0) 40%);
 }
 
 .offplan-card-body { padding: 22px; }
@@ -132,7 +132,7 @@
 .payment-plan-tab.active { background: var(--gold-light); border-color: var(--gold-light); color: var(--navy-deep); }
 
 .payment-plan-timeline { display: flex; height: 46px; border-radius: 10px; overflow: hidden; margin-bottom: 18px; }
-.payment-plan-segment { display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 700; font-size: 0.85rem; color: var(--navy-deep); border-right: 2px solid rgba(18,23,61,0.25); }
+.payment-plan-segment { display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 700; font-size: 0.85rem; color: var(--navy-deep); border-right: 2px solid rgba(16,15,12,0.25); }
 .payment-plan-segment:last-child { border-right: none; }
 .payment-plan-segment:nth-child(1) { background: var(--gold-light); }
 .payment-plan-segment:nth-child(2) { background: var(--gold); }
@@ -192,5 +192,5 @@
   .offplan-titlebar-inner { flex-direction: column; align-items: flex-start; }
   .offplan-titlebar-price { text-align: left; }
   .payment-plan-timeline { flex-direction: column; height: auto; }
-  .payment-plan-segment { padding: 10px; border-right: none; border-bottom: 2px solid rgba(18,23,61,0.25); }
+  .payment-plan-segment { padding: 10px; border-right: none; border-bottom: 2px solid rgba(16,15,12,0.25); }
 }

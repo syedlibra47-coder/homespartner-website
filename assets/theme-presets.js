@@ -7,12 +7,12 @@
 
 window.THEME_PALETTES = {
   "navy-gold": {
-    label: "Navy & Gold",
+    label: "Ivory & Brass",
     tokens: {
-      "--navy": "#1F275C", "--navy-deep": "#12173D", "--navy-soft": "#2E3878",
-      "--gold": "#C9AF6C", "--gold-light": "#E4CE93", "--gold-dark": "#A98A45",
-      "--gray": "#787879", "--ink": "#1B1D28",
-      "--paper": "#F3EDE3", "--paper-flat": "#FBF8F2", "--line": "#E4DBC9"
+      "--navy": "#1B1915", "--navy-deep": "#100F0C", "--navy-soft": "#332B1F",
+      "--gold": "#B8935A", "--gold-light": "#D9BD8D", "--gold-dark": "#8C6B3D",
+      "--gray": "#6E6A60", "--ink": "#211D17",
+      "--paper": "#FAF7F1", "--paper-flat": "#FFFFFF", "--line": "#E7DECC"
     }
   },
   "charcoal-emerald": {
