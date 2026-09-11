@@ -242,6 +242,7 @@ window.dataReady = (async function () {
     return {
       heroBadgeText: row.hero_badge_text, heroHeading: row.hero_heading, heroSubtitle: row.hero_subtitle,
       heroBgType: row.hero_bg_type, heroBgImage: row.hero_bg_image, heroBgVideoId: row.hero_bg_video_id,
+      heroOverlayColor: row.hero_overlay_color, heroOverlayOpacity: row.hero_overlay_opacity,
       heroSearchPlaceholder: row.hero_search_placeholder, heroFilters: row.hero_filters || [],
       stats: row.stats || [], quickActions: row.quick_actions || [],
       servicesEyebrow: row.services_eyebrow, servicesHeading: row.services_heading, servicesSubtitle: row.services_subtitle,

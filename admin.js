@@ -1529,6 +1529,9 @@
     document.getElementById('hp_heroBgVideoId').value = extractYouTubeId(e.target.value);
   });
 
+  const hp_heroOverlayPicker = window.createColorOpacityPicker({ color: '#1F275C', opacity: 80 });
+  document.getElementById('hp_heroOverlayPicker').appendChild(hp_heroOverlayPicker.el);
+
   document.getElementById('hp_heroBgImageFile').addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -1596,6 +1599,7 @@
     }
     document.getElementById('hp_heroBgVideoId').value = data.hero_bg_video_id || '';
     document.getElementById('hp_heroBgVideoUrl').value = data.hero_bg_video_id ? `https://www.youtube.com/watch?v=${data.hero_bg_video_id}` : '';
+    hp_heroOverlayPicker.setValue(data.hero_overlay_color || '#1F275C', data.hero_overlay_opacity != null ? data.hero_overlay_opacity : 80);
 
     const filtersList = document.getElementById('hp_heroFiltersList');
     filtersList.innerHTML = '';
@@ -1629,6 +1633,9 @@
     record.hero_bg_type = document.getElementById('hp_heroBgType').value;
     record.hero_bg_image = document.getElementById('hp_heroBgImage').value;
     record.hero_bg_video_id = document.getElementById('hp_heroBgVideoId').value;
+    const heroOverlay = hp_heroOverlayPicker.getValue();
+    record.hero_overlay_color = heroOverlay.color;
+    record.hero_overlay_opacity = heroOverlay.opacity;
     record.hero_filters = readHeroFilters();
     record.stats = readSimpleRows(document.getElementById('hp_statsList'), [{ key: 'number', numeric: true }, { key: 'suffix' }, { key: 'label' }]);
     record.quick_actions = readQuickActions(document.getElementById('hp_quickActionsList'));

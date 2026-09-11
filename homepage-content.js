@@ -20,6 +20,14 @@
     }
   }
 
+  // ----- Hero overlay tint/opacity (admin-adjustable, over the background photo/video) -----
+  const heroEl = document.querySelector('.hero');
+  if (heroEl && c.heroOverlayColor) {
+    const opacityPct = c.heroOverlayOpacity != null ? c.heroOverlayOpacity : 80;
+    const alphaHex = Math.round(Math.max(0, Math.min(100, opacityPct)) / 100 * 255).toString(16).padStart(2, '0').toUpperCase();
+    heroEl.style.setProperty('--hero-overlay', `${c.heroOverlayColor}${alphaHex}`);
+  }
+
   // ----- Hero background (uploaded image, or a YouTube video) -----
   const heroBgMedia = document.getElementById('heroBgMedia');
   if (heroBgMedia) {

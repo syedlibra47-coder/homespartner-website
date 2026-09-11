@@ -351,6 +351,8 @@ alter table homepage_content add column if not exists hero_bg_image text not nul
 alter table homepage_content add column if not exists hero_bg_video_id text not null default '';
 alter table homepage_content add column if not exists hero_search_placeholder text not null default 'Dubai Marina, Palm Jumeirah, Downtown…';
 alter table homepage_content add column if not exists hero_filters jsonb not null default '[]';
+alter table homepage_content add column if not exists hero_overlay_color text not null default '#1F275C';
+alter table homepage_content add column if not exists hero_overlay_opacity int not null default 80;
 
 -- ===== SITE CHROME (header nav + footer, shared across every page) =====
 create table if not exists site_chrome (
