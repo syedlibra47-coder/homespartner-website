@@ -34,7 +34,7 @@
       const iconSvg = (window.ICON_LIBRARY && window.ICON_LIBRARY[v.icon]) || (window.ICON_LIBRARY && window.ICON_LIBRARY.star) || '';
       return `
       <div class="careers-value-card">
-        <div class="service-icon"><svg viewBox="0 0 48 48" fill="none">${iconSvg}</svg></div>
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none">${iconSvg}</svg></div>
         <h4>${v.title}</h4>
         <p>${v.description}</p>
       </div>`;

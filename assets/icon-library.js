@@ -1,23 +1,29 @@
 // Shared icon set for Services — used by admin.js (icon picker) and by
 // services.html / homepage service cards to render the chosen icon.
-// All icons share a 0 0 48 48 viewBox, stroke-width 2.5, round caps/joins.
+// Icons are Lucide (ISC license, https://lucide.dev), 0 0 24 24 viewBox,
+// stroke-width 2, round caps/joins — kept exactly as published so they
+// stay crisp and consistent with each other.
 window.ICON_LIBRARY = {
-  home: '<path d="M8 22 24 8l16 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 20v18h24V20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 38v-10h8v10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>',
-  calendar: '<rect x="9" y="12" width="30" height="26" rx="2" stroke="currentColor" stroke-width="2.5"/><path d="M9 20h30" stroke="currentColor" stroke-width="2.5"/><path d="M17 12V8M31 12V8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="17" cy="29" r="2" fill="currentColor"/><circle cx="24" cy="29" r="2" fill="currentColor"/><circle cx="31" cy="29" r="2" fill="currentColor"/>',
-  sign: '<path d="M24 44V20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="10" y="8" width="28" height="14" rx="2" stroke="currentColor" stroke-width="2.5"/><path d="M16 15h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>',
-  blueprint: '<path d="M24 6 6 16v6h36v-6L24 6Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M10 22v16M18 22v16M30 22v16M38 22v16" stroke="currentColor" stroke-width="2.5"/><path d="M6 42h36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>',
-  clock: '<circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2.5"/><path d="M24 15v9l6 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>',
-  wrench: '<path d="M33 8a9 9 0 0 0-11.8 11.8L9 32l7 7 12.2-12.2A9 9 0 0 0 40 15l-6.5 6.5-5-5L34.5 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>',
-  key: '<circle cx="16" cy="24" r="8" stroke="currentColor" stroke-width="2.5"/><path d="M24 24h16M34 24v6M40 24v4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>',
-  shield: '<path d="M24 6l14 5v11c0 9-6 15-14 18-8-3-14-9-14-18V11l14-5Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M18 24l4 4 8-8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>',
-  chart: '<path d="M6 40h36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><rect x="10" y="28" width="6" height="12" stroke="currentColor" stroke-width="2.5"/><rect x="21" y="20" width="6" height="20" stroke="currentColor" stroke-width="2.5"/><rect x="32" y="12" width="6" height="28" stroke="currentColor" stroke-width="2.5"/>',
-  document: '<path d="M14 6h14l8 8v28H14V6Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M28 6v8h8" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M18 26h12M18 32h12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>',
-  pin: '<path d="M24 42s12-11 12-20a12 12 0 1 0-24 0c0 9 12 20 12 20Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="24" cy="22" r="4" stroke="currentColor" stroke-width="2.5"/>',
-  star: '<path d="M24 6l5.5 11.5L42 19l-9 8.8 2.1 12.2L24 34l-11.1 6 2.1-12.2L6 19l12.5-1.5L24 6Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>'
+  home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  calendar: '<path d="M8 2v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 2v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01M16 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  sign: '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor" stroke="currentColor" stroke-width="2"/>',
+  blueprint: '<path d="M10 12h4M10 8h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 21v-3a2 2 0 0 0-4 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  clock: '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  wrench: '<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  key: '<path d="m2 21 9.6-9.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m7.5 15.5 2.3 2.3a1 1 0 0 1 0 1.4l-2.1 2.1a1 1 0 0 1-1.4 0L4 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15.5" cy="7.5" r="5.5" stroke="currentColor" stroke-width="2"/>',
+  shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  chart: '<path d="M16 7h6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="m22 7-8.5 8.5-5-5L2 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  document: '<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v5a1 1 0 0 0 1 1h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 9H8M16 13H8M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  pin: '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>',
+  star: '<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
 };
 
 window.ICON_LIBRARY_LABELS = {
-  home: 'House', calendar: 'Calendar', sign: 'For-Sale Sign', blueprint: 'Blueprint',
-  clock: 'Clock', wrench: 'Wrench', key: 'Key', shield: 'Shield', chart: 'Growth Chart',
+  home: 'House', calendar: 'Calendar', sign: 'Tag', blueprint: 'Building',
+  clock: 'Clock', wrench: 'Wrench', key: 'Key', shield: 'Shield', chart: 'Trending Up',
   document: 'Document', pin: 'Location Pin', star: 'Star'
 };
+
+// Rendered at viewBox "0 0 24 24" — see homepage-content.js, homepage-services.js,
+// services-page.js, careers-page.js.
+window.ICON_LIBRARY_VIEWBOX = '0 0 24 24';

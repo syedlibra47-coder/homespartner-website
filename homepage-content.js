@@ -120,7 +120,7 @@
       return `
       <a href="${q.href}" class="quick-card reveal in-view">
         <span class="quick-arrow">&#8599;</span>
-        <span class="quick-icon"><svg viewBox="0 0 48 48" fill="none">${iconSvg}</svg></span>
+        <span class="quick-icon"><svg viewBox="0 0 24 24" fill="none">${iconSvg}</svg></span>
         <h4>${q.title}</h4>
         <p>${q.description}</p>
       </a>`;

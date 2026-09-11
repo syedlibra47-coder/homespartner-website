@@ -15,7 +15,7 @@
     <section class="service-detail${i % 2 === 1 ? ' service-detail--alt' : ''}" id="${s.id}">
       <div class="container service-detail-inner">
         <div class="service-detail-icon">
-          <svg viewBox="0 0 48 48" fill="none">${iconSvg}</svg>
+          <svg viewBox="0 0 24 24" fill="none">${iconSvg}</svg>
         </div>
         <div class="service-detail-body">
           <p class="eyebrow eyebrow--dark">${s.title}</p>

@@ -12,7 +12,7 @@
     return `
     <div class="service-card reveal in-view" data-href="${href}">
       <div class="service-icon">
-        <svg viewBox="0 0 48 48" fill="none">${iconSvg}</svg>
+        <svg viewBox="0 0 24 24" fill="none">${iconSvg}</svg>
       </div>
       <h3>${s.title}</h3>
       <p>${s.cardSummary}</p>
