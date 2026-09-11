@@ -9,7 +9,16 @@
   // ----- Hero -----
   setText('heroBadgeText', c.heroBadgeText);
   setText('heroHeading', c.heroHeading);
-  setText('heroSubtitle', c.heroSubtitle);
+  const heroSubtitleEl = document.getElementById('heroSubtitle');
+  if (heroSubtitleEl) {
+    const subtitle = (c.heroSubtitle || '').trim();
+    if (subtitle) {
+      heroSubtitleEl.textContent = subtitle;
+      heroSubtitleEl.style.display = '';
+    } else {
+      heroSubtitleEl.style.display = 'none';
+    }
+  }
 
   // ----- Hero background (uploaded image, or a YouTube video) -----
   const heroBgMedia = document.getElementById('heroBgMedia');
