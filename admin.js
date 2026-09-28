@@ -1341,6 +1341,7 @@
     document.getElementById('pu_height').value = 600;
     document.getElementById('pu_autoDismissSeconds').value = 0;
     document.getElementById('pu_sortOrder').value = 0;
+    document.getElementById('pu_nextPopupDelaySeconds').value = 0;
     document.getElementById('pu_reshowValue').value = 0;
     document.getElementById('pu_reshowUnit').value = '60';
     document.getElementById('pu_active').checked = true;
@@ -1370,6 +1371,7 @@
       document.querySelectorAll('#pu_targetPagesList input').forEach(cb => { cb.checked = pages.includes(cb.value); });
       document.getElementById('pu_autoDismissSeconds').value = p.auto_dismiss_seconds;
       document.getElementById('pu_sortOrder').value = p.sort_order;
+      document.getElementById('pu_nextPopupDelaySeconds').value = p.next_popup_delay_seconds || 0;
       const friendly = secondsToFriendly(p.reshow_after_seconds || 0);
       document.getElementById('pu_reshowValue').value = friendly.value;
       document.getElementById('pu_reshowUnit').value = String(friendly.unit);
@@ -1419,6 +1421,7 @@
       target_scope: targetScope,
       target_pages: targetPages,
       auto_dismiss_seconds: Number(document.getElementById('pu_autoDismissSeconds').value),
+      next_popup_delay_seconds: Number(document.getElementById('pu_nextPopupDelaySeconds').value),
       reshow_after_seconds: Number(document.getElementById('pu_reshowValue').value) * Number(document.getElementById('pu_reshowUnit').value),
       sort_order: Number(document.getElementById('pu_sortOrder').value),
       active: document.getElementById('pu_active').checked

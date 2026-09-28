@@ -433,7 +433,7 @@
       <h2>Popup Banners</h2>
       <button type="button" class="btn btn-gold btn-sm" id="addPopupBtn">+ Add Popup Banner</button>
     </div>
-    <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px;">Image popups that appear over the site, either everywhere or on pages you choose. Only one shows on screen at a time — if more than one is active and eligible for the same page, they queue up in Display Order and each appears right after the previous one closes (either the visitor closes it, or its own "Show For" timer runs out).</p>
+    <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px;">Image popups that appear over the site, either everywhere or on pages you choose. Only one shows on screen at a time — if more than one is active and eligible for the same page, they queue up in Display Order. Each one closes (the visitor closes it, or its own "Show For" timer runs out), then — after that banner's own "Delay Before Next Popup" — the next one in the queue appears.</p>
     <div class="admin-table-wrap">
       <table class="admin-table" id="popupsTable">
         <thead><tr><th>Order</th><th>Preview</th><th>Title</th><th>Shows On</th><th>Active</th><th></th></tr></thead>
@@ -1128,6 +1128,10 @@
         <label>Show For (seconds, 0 = stays until closed) <input type="number" id="pu_autoDismissSeconds" value="0" min="0" required></label>
         <label>Display Order (queue position — lower shows first) <input type="number" id="pu_sortOrder" value="0" required></label>
       </div>
+      <label class="admin-form-full">Delay Before Next Popup (seconds, 0 = appears right away)
+        <input type="number" id="pu_nextPopupDelaySeconds" value="0" min="0" required>
+      </label>
+      <p style="font-size:0.78rem;color:var(--gray);margin:-10px 0 14px;">If another popup is queued behind this one, this is how long to wait after this one closes before the next one appears.</p>
       <label class="admin-form-full">Show Again After (0 = every eligible page visit)
         <div class="admin-input-with-unit">
           <input type="number" id="pu_reshowValue" value="0" min="0">

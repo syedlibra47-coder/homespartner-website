@@ -99,9 +99,13 @@
     }
 
     function advance() {
+      const justClosed = queue[index];
       teardownOverlay();
       index++;
-      if (index < queue.length) setTimeout(showCurrent, TRANSITION_MS);
+      if (index < queue.length) {
+        const delayMs = Math.max(TRANSITION_MS, (Number(justClosed.nextPopupDelaySeconds) || 0) * 1000);
+        setTimeout(showCurrent, delayMs);
+      }
     }
 
     // Escape / clicking outside the box means "let me out" — closes the

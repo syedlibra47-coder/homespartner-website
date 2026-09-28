@@ -750,6 +750,7 @@ create table if not exists popup_banners (
   target_pages jsonb not null default '[]',       -- e.g. ['index.html','listings.html']
   auto_dismiss_seconds int not null default 0,    -- 0 = stays until closed manually
   reshow_after_seconds int not null default 0,    -- how long after closing before it's eligible again; 0 = every visit
+  next_popup_delay_seconds int not null default 0, -- wait after this one closes before the next queued popup appears
   active boolean not null default true,
   sort_order int not null default 0,
   created_at timestamptz not null default now(),
@@ -757,6 +758,7 @@ create table if not exists popup_banners (
 );
 
 alter table popup_banners add column if not exists reshow_after_seconds int not null default 0;
+alter table popup_banners add column if not exists next_popup_delay_seconds int not null default 0;
 
 alter table popup_banners enable row level security;
 

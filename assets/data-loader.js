@@ -211,6 +211,7 @@ window.dataReady = (async function () {
       linkUrl: row.link_url, width: row.width, height: row.height,
       targetScope: row.target_scope, targetPages: row.target_pages || [],
       autoDismissSeconds: row.auto_dismiss_seconds, reshowAfterSeconds: row.reshow_after_seconds,
+      nextPopupDelaySeconds: row.next_popup_delay_seconds,
       active: row.active, sortOrder: row.sort_order
     };
   }
