@@ -17,6 +17,21 @@
     return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
+  // Admins may type a link either as a full URL (https://...), a relative
+  // page on this site (listings.html, custom-page.html?slug=..., #anchor),
+  // or just a bare domain (www.homespartner.ae) without thinking about the
+  // protocol. Without a protocol or leading /, #, ? the browser treats it
+  // as relative to the CURRENT page's folder, not as an external site — so
+  // a bare domain needs https:// added, but a real relative page must not.
+  function normalizeLinkUrl(url) {
+    const trimmed = String(url || '').trim();
+    if (!trimmed) return '';
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) return trimmed; // already has a scheme (http:, mailto:, tel:...)
+    if (/^[/#?]/.test(trimmed)) return trimmed; // root-relative, same-page anchor, or query-only
+    if (/\.html?(#.*)?(\?.*)?$/i.test(trimmed)) return trimmed; // a relative page on this site
+    return 'https://' + trimmed;
+  }
+
   function dismissedAt(id) {
     try {
       const raw = localStorage.getItem('hp_popup_dismissed_' + id);
@@ -114,7 +129,7 @@
     box.innerHTML = `
       <button type="button" class="popup-banner-close" aria-label="Close">&times;</button>
       ${banner.linkUrl
-        ? `<a href="${esc(banner.linkUrl)}" class="popup-banner-link" target="_blank" rel="noopener">${mediaHtml}</a>`
+        ? `<a href="${esc(normalizeLinkUrl(banner.linkUrl))}" class="popup-banner-link" target="_blank" rel="noopener">${mediaHtml}</a>`
         : mediaHtml}`;
     stack.appendChild(box);
 
