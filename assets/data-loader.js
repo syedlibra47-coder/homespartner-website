@@ -210,7 +210,8 @@ window.dataReady = (async function () {
       id: row.id, title: row.title, imageUrl: row.image_url, imageAlt: row.image_alt,
       linkUrl: row.link_url, width: row.width, height: row.height,
       targetScope: row.target_scope, targetPages: row.target_pages || [],
-      autoDismissSeconds: row.auto_dismiss_seconds, active: row.active, sortOrder: row.sort_order
+      autoDismissSeconds: row.auto_dismiss_seconds, reshowAfterSeconds: row.reshow_after_seconds,
+      active: row.active, sortOrder: row.sort_order
     };
   }
 

@@ -433,7 +433,7 @@
       <h2>Popup Banners</h2>
       <button type="button" class="btn btn-gold btn-sm" id="addPopupBtn">+ Add Popup Banner</button>
     </div>
-    <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px;">An image popup that appears over the site, either everywhere or on pages you choose. If more than one is active and eligible for the same page at once, only the top one (by Display Order) is shown — they never stack. Visitors who close one won't see it again until they open a new browser session.</p>
+    <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px;">Image popups that appear over the site, either everywhere or on pages you choose. If more than one is active and eligible for the same page at once, they show together side by side (Display Order controls their left-to-right order). Each one has its own "show again after" cooldown, so closing one doesn't affect the others.</p>
     <div class="admin-table-wrap">
       <table class="admin-table" id="popupsTable">
         <thead><tr><th>Order</th><th>Preview</th><th>Title</th><th>Shows On</th><th>Active</th><th></th></tr></thead>
@@ -1126,8 +1126,20 @@
 
       <div class="admin-form-grid">
         <label>Show For (seconds, 0 = stays until closed) <input type="number" id="pu_autoDismissSeconds" value="0" min="0" required></label>
-        <label>Display Order (lower wins if more than one applies) <input type="number" id="pu_sortOrder" value="0" required></label>
+        <label>Display Order (left-to-right when more than one shows) <input type="number" id="pu_sortOrder" value="0" required></label>
       </div>
+      <label class="admin-form-full">Show Again After (0 = every eligible page visit)
+        <div class="admin-input-with-unit">
+          <input type="number" id="pu_reshowValue" value="0" min="0">
+          <select id="pu_reshowUnit">
+            <option value="1">Seconds</option>
+            <option value="60" selected>Minutes</option>
+            <option value="3600">Hours</option>
+            <option value="86400">Days</option>
+          </select>
+        </div>
+      </label>
+      <p style="font-size:0.78rem;color:var(--gray);margin:-10px 0 14px;">Once a visitor closes this banner, how long before it's allowed to show them again. Each banner tracks this on its own — closing one doesn't affect the cooldown on the others.</p>
       <label class="admin-checkbox"><input type="checkbox" id="pu_active" checked> Active</label>
 
       <div class="admin-form-actions">

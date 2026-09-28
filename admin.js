@@ -1322,6 +1322,16 @@
   }
   document.getElementById('pu_targetScope').addEventListener('change', (e) => setPopupTargetScope(e.target.value));
 
+  // Popup "show again after" is stored in seconds; the admin picks a
+  // number + unit (seconds/minutes/hours/days) instead of typing raw seconds.
+  function secondsToFriendly(totalSeconds) {
+    const units = [86400, 3600, 60, 1];
+    for (const u of units) {
+      if (totalSeconds > 0 && totalSeconds % u === 0) return { value: totalSeconds / u, unit: u };
+    }
+    return { value: totalSeconds, unit: 60 };
+  }
+
   function resetPopupForm() {
     document.getElementById('popupForm').reset();
     document.getElementById('pu_id').value = '';
@@ -1331,6 +1341,8 @@
     document.getElementById('pu_height').value = 600;
     document.getElementById('pu_autoDismissSeconds').value = 0;
     document.getElementById('pu_sortOrder').value = 0;
+    document.getElementById('pu_reshowValue').value = 0;
+    document.getElementById('pu_reshowUnit').value = '60';
     document.getElementById('pu_active').checked = true;
     document.querySelectorAll('#pu_targetPagesList input').forEach(cb => { cb.checked = false; });
     setPopupTargetScope('all');
@@ -1358,6 +1370,9 @@
       document.querySelectorAll('#pu_targetPagesList input').forEach(cb => { cb.checked = pages.includes(cb.value); });
       document.getElementById('pu_autoDismissSeconds').value = p.auto_dismiss_seconds;
       document.getElementById('pu_sortOrder').value = p.sort_order;
+      const friendly = secondsToFriendly(p.reshow_after_seconds || 0);
+      document.getElementById('pu_reshowValue').value = friendly.value;
+      document.getElementById('pu_reshowUnit').value = String(friendly.unit);
       document.getElementById('pu_active').checked = p.active;
     }
     openModal('popupModal');
@@ -1404,6 +1419,7 @@
       target_scope: targetScope,
       target_pages: targetPages,
       auto_dismiss_seconds: Number(document.getElementById('pu_autoDismissSeconds').value),
+      reshow_after_seconds: Number(document.getElementById('pu_reshowValue').value) * Number(document.getElementById('pu_reshowUnit').value),
       sort_order: Number(document.getElementById('pu_sortOrder').value),
       active: document.getElementById('pu_active').checked
     };

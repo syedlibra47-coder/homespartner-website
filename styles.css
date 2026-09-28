@@ -1513,7 +1513,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 }
 .main-nav.open .nav-dropdown-menu a { padding: 6px 0; font-weight: 500; }
 
-/* ===== Promotional popup banner (admin-managed) ===== */
+/* ===== Promotional popup banner(s) (admin-managed) ===== */
 .popup-banner-overlay {
   position: fixed;
   inset: 0;
@@ -1528,6 +1528,20 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 .popup-banner-overlay.is-visible { opacity: 1; visibility: visible; }
+
+/* Holds one box per eligible banner — wraps to multiple rows on small
+   screens or when several banners are shown at once, instead of stacking
+   them on top of each other. */
+.popup-banner-stack {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+}
 
 .popup-banner-box {
   position: relative;
@@ -1568,6 +1582,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 
 @media (max-width: 640px) {
   .popup-banner-overlay { padding: 16px; }
-  .popup-banner-box { max-width: 100%; max-height: 82vh; border-radius: 10px; }
+  .popup-banner-stack { gap: 14px; }
+  .popup-banner-box { max-width: 100%; max-height: 78vh; border-radius: 10px; }
   .popup-banner-close { width: 30px; height: 30px; font-size: 1.1rem; }
 }

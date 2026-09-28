@@ -155,6 +155,10 @@
 .admin-checkbox-grid .admin-checkbox { margin-bottom: 0; }
 @media (max-width: 640px) { .admin-checkbox-grid { grid-template-columns: 1fr; } }
 
+.admin-input-with-unit { display: flex; gap: 8px; }
+.admin-input-with-unit input { flex: 1 1 0; min-width: 0; }
+.admin-input-with-unit select { flex: 0 0 120px; }
+
 .admin-repeat-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
 .admin-repeat-row input { flex: 1; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.85rem; }
 .admin-repeat-row .remove-row { background: none; border: none; color: #D32F2F; font-size: 1.2rem; cursor: pointer; flex-shrink: 0; }
