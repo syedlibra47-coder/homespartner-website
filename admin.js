@@ -82,6 +82,7 @@
       loadFaqs();
       loadAgents();
       loadTestimonials();
+      loadPopups();
       loadCareersContent();
       loadJobs();
       loadHomepageContent();
@@ -1274,6 +1275,155 @@
     const { error } = await supabase.from('testimonials').delete().eq('id', id);
     if (error) { alert(error.message); return; }
     loadTestimonials();
+  }
+
+  // ===== POPUP BANNERS =====
+  let currentPopups = [];
+
+  const popupPageLabels = {
+    'index.html': 'Home', 'listings.html': 'Listings', 'listing-detail.html': 'Property Detail',
+    'offplan-listings.html': 'Off-Plan Listings', 'offplan-detail.html': 'Off-Plan Detail',
+    'services.html': 'Services', 'agents.html': 'Agent Directory', 'agent-detail.html': 'Agent Profile',
+    'contact.html': 'Contact', 'careers.html': 'Careers', 'custom-page.html': 'Custom Pages'
+  };
+
+  async function loadPopups() {
+    const { data, error } = await supabase.from('popup_banners').select('*').order('sort_order', { ascending: true });
+    if (error) { console.error(error); return; }
+    currentPopups = data;
+    const tbody = document.getElementById('popupsTableBody');
+    if (!data.length) {
+      tbody.innerHTML = `<tr class="admin-empty-row"><td colspan="6">No popup banners yet — click "Add Popup Banner" to create one.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = data.map(p => {
+      const shownOn = p.target_scope === 'all' ? 'Every page' : (p.target_pages || []).map(pg => popupPageLabels[pg] || pg).join(', ') || '—';
+      const preview = p.image_url ? `<img src="${escSub(p.image_url)}" class="admin-preview" style="max-width:60px;max-height:60px;margin:0;">` : '—';
+      return `
+      <tr>
+        <td>${p.sort_order}</td>
+        <td>${preview}</td>
+        <td>${escSub(p.title)}</td>
+        <td>${escSub(shownOn)}</td>
+        <td>${p.active ? '<span class="featured-dot"></span>' : ''}</td>
+        <td class="admin-row-actions">
+          <button class="edit-btn" data-edit="${p.id}">Edit</button>
+          <button class="delete-btn" data-delete="${p.id}">Delete</button>
+        </td>
+      </tr>`;
+    }).join('');
+    tbody.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openPopupForm(Number(b.dataset.edit))));
+    tbody.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => deletePopup(Number(b.dataset.delete))));
+  }
+
+  function setPopupTargetScope(scope) {
+    document.getElementById('pu_targetScope').value = scope;
+    document.getElementById('pu_targetPagesFields').style.display = scope === 'specific' ? '' : 'none';
+  }
+  document.getElementById('pu_targetScope').addEventListener('change', (e) => setPopupTargetScope(e.target.value));
+
+  function resetPopupForm() {
+    document.getElementById('popupForm').reset();
+    document.getElementById('pu_id').value = '';
+    document.getElementById('pu_imageUrl').value = '';
+    document.getElementById('pu_imagePreview').style.display = 'none';
+    document.getElementById('pu_width').value = 480;
+    document.getElementById('pu_height').value = 600;
+    document.getElementById('pu_autoDismissSeconds').value = 0;
+    document.getElementById('pu_sortOrder').value = 0;
+    document.getElementById('pu_active').checked = true;
+    document.querySelectorAll('#pu_targetPagesList input').forEach(cb => { cb.checked = false; });
+    setPopupTargetScope('all');
+    document.getElementById('popupFormError').textContent = '';
+  }
+
+  function openPopupForm(id) {
+    resetPopupForm();
+    document.getElementById('popupModalTitle').textContent = id ? 'Edit Popup Banner' : 'Add Popup Banner';
+    if (id) {
+      const p = currentPopups.find(x => x.id === id);
+      document.getElementById('pu_id').value = p.id;
+      document.getElementById('pu_title').value = p.title;
+      document.getElementById('pu_imageUrl').value = p.image_url || '';
+      if (p.image_url) {
+        const preview = document.getElementById('pu_imagePreview');
+        preview.src = p.image_url; preview.style.display = 'block';
+      }
+      document.getElementById('pu_imageAlt').value = p.image_alt || '';
+      document.getElementById('pu_width').value = p.width;
+      document.getElementById('pu_height').value = p.height;
+      document.getElementById('pu_linkUrl').value = p.link_url || '';
+      setPopupTargetScope(p.target_scope || 'all');
+      const pages = p.target_pages || [];
+      document.querySelectorAll('#pu_targetPagesList input').forEach(cb => { cb.checked = pages.includes(cb.value); });
+      document.getElementById('pu_autoDismissSeconds').value = p.auto_dismiss_seconds;
+      document.getElementById('pu_sortOrder').value = p.sort_order;
+      document.getElementById('pu_active').checked = p.active;
+    }
+    openModal('popupModal');
+  }
+
+  document.getElementById('addPopupBtn').addEventListener('click', () => openPopupForm(null));
+
+  document.getElementById('pu_imageFile').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const url = await uploadImage(file);
+      document.getElementById('pu_imageUrl').value = url;
+      const preview = document.getElementById('pu_imagePreview');
+      preview.src = url; preview.style.display = 'block';
+    } catch (err) { document.getElementById('popupFormError').textContent = 'Image upload failed: ' + err.message; }
+  });
+
+  document.getElementById('popupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errorEl = document.getElementById('popupFormError');
+    errorEl.textContent = '';
+    const id = document.getElementById('pu_id').value;
+
+    const imageUrl = document.getElementById('pu_imageUrl').value;
+    if (!imageUrl) { errorEl.textContent = 'Please upload a banner image.'; return; }
+
+    const targetScope = document.getElementById('pu_targetScope').value;
+    const targetPages = targetScope === 'specific'
+      ? [...document.querySelectorAll('#pu_targetPagesList input:checked')].map(cb => cb.value)
+      : [];
+    if (targetScope === 'specific' && !targetPages.length) {
+      errorEl.textContent = 'Choose at least one page, or switch to "Every Page".';
+      return;
+    }
+
+    const record = {
+      title: document.getElementById('pu_title').value,
+      image_url: imageUrl,
+      image_alt: document.getElementById('pu_imageAlt').value,
+      link_url: document.getElementById('pu_linkUrl').value,
+      width: Number(document.getElementById('pu_width').value),
+      height: Number(document.getElementById('pu_height').value),
+      target_scope: targetScope,
+      target_pages: targetPages,
+      auto_dismiss_seconds: Number(document.getElementById('pu_autoDismissSeconds').value),
+      sort_order: Number(document.getElementById('pu_sortOrder').value),
+      active: document.getElementById('pu_active').checked
+    };
+
+    let error;
+    if (id) {
+      ({ error } = await supabase.from('popup_banners').update(record).eq('id', Number(id)));
+    } else {
+      ({ error } = await supabase.from('popup_banners').insert(record));
+    }
+    if (error) { errorEl.textContent = error.message; return; }
+    closeModal('popupModal');
+    loadPopups();
+  });
+
+  async function deletePopup(id) {
+    if (!confirm('Delete this popup banner? This cannot be undone.')) return;
+    const { error } = await supabase.from('popup_banners').delete().eq('id', id);
+    if (error) { alert(error.message); return; }
+    loadPopups();
   }
 
   // ===== CAREERS PAGE TEXT (single row + 3 repeatable lists) =====

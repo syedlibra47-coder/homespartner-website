@@ -205,6 +205,15 @@ window.dataReady = (async function () {
     };
   }
 
+  function popupBannerFromRow(row) {
+    return {
+      id: row.id, title: row.title, imageUrl: row.image_url, imageAlt: row.image_alt,
+      linkUrl: row.link_url, width: row.width, height: row.height,
+      targetScope: row.target_scope, targetPages: row.target_pages || [],
+      autoDismissSeconds: row.auto_dismiss_seconds, active: row.active, sortOrder: row.sort_order
+    };
+  }
+
   function jobListingFromRow(row) {
     return {
       id: row.id, title: row.title, location: row.location, department: row.department || null,
@@ -258,7 +267,7 @@ window.dataReady = (async function () {
   }
 
   try {
-    const [listingsRes, offplanRes, servicesRes, officesRes, faqsRes, contactContentRes, agentsRes, jobListingsRes, careersContentRes, siteSettingsRes, homepageContentRes, siteChromeRes, pageHeadersRes, testimonialsRes] = await Promise.all([
+    const [listingsRes, offplanRes, servicesRes, officesRes, faqsRes, contactContentRes, agentsRes, jobListingsRes, careersContentRes, siteSettingsRes, homepageContentRes, siteChromeRes, pageHeadersRes, testimonialsRes, popupBannersRes] = await Promise.all([
       client.from('listings').select('*').order('created_at', { ascending: false }),
       client.from('offplan_projects').select('*').order('created_at', { ascending: false }),
       client.from('services').select('*').order('sort_order', { ascending: true }),
@@ -272,7 +281,8 @@ window.dataReady = (async function () {
       client.from('homepage_content').select('*').eq('id', 'main').maybeSingle(),
       client.from('site_chrome').select('*').eq('id', 'main').maybeSingle(),
       client.from('page_headers').select('*'),
-      client.from('testimonials').select('*').order('sort_order', { ascending: true })
+      client.from('testimonials').select('*').order('sort_order', { ascending: true }),
+      client.from('popup_banners').select('*').order('sort_order', { ascending: true })
     ]);
 
     if (!listingsRes.error && listingsRes.data) {
@@ -326,6 +336,9 @@ window.dataReady = (async function () {
     }
     if (!testimonialsRes.error && testimonialsRes.data) {
       window.TESTIMONIALS_DATA = testimonialsRes.data.map(testimonialFromRow);
+    }
+    if (!popupBannersRes.error && popupBannersRes.data) {
+      window.POPUP_BANNERS_DATA = popupBannersRes.data.map(popupBannerFromRow);
     }
     if (!siteSettingsRes.error && siteSettingsRes.data) {
       const s = siteSettingsRes.data;

@@ -151,6 +151,10 @@
 .admin-checkbox { flex-direction: row !important; align-items: center; gap: 8px !important; margin-bottom: 18px; }
 .admin-checkbox input { width: auto; }
 
+.admin-checkbox-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 16px; margin-bottom: 18px; }
+.admin-checkbox-grid .admin-checkbox { margin-bottom: 0; }
+@media (max-width: 640px) { .admin-checkbox-grid { grid-template-columns: 1fr; } }
+
 .admin-repeat-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
 .admin-repeat-row input { flex: 1; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.85rem; }
 .admin-repeat-row .remove-row { background: none; border: none; color: #D32F2F; font-size: 1.2rem; cursor: pointer; flex-shrink: 0; }

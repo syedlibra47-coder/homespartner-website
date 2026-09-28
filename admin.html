@@ -68,6 +68,10 @@
           <button type="button" class="admin-tab" data-tab="custompages" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="2" stroke="currentColor" stroke-width="3"/><path d="M15 16h18M15 24h18M15 32h10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Custom Pages</span></button>
         </div>
         <div class="admin-nav-group" data-roles="admin,super_admin">
+          <p class="admin-nav-group-label">Marketing</p>
+          <button type="button" class="admin-tab" data-tab="popups" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="6" y="10" width="36" height="26" rx="2" stroke="currentColor" stroke-width="3"/><path d="M6 30l11-10 8 7 8-9 9 8" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="16" cy="18" r="3" stroke="currentColor" stroke-width="3"/></svg></span><span id="popupsTabLabel">Popup Banners</span></button>
+        </div>
+        <div class="admin-nav-group" data-roles="admin,super_admin">
           <p class="admin-nav-group-label">People</p>
           <button type="button" class="admin-tab" data-tab="agents" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6l14 5v11c0 9-6 15-14 18-8-3-14-9-14-18V11l14-5Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M18 24l4 4 8-8" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Agents</span></button>
           <button type="button" class="admin-tab" data-tab="testimonials" data-roles="admin,super_admin"><span class="admin-tab-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 4 29.5 18 44 20l-11 10.5L36 45 24 37 12 45l3-14.5L4 20l14.5-2z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></span><span>Reviews</span></button>
@@ -420,6 +424,21 @@
       </div>
       <p class="admin-form-error" id="cpFormError"></p>
       <p class="admin-form-success" id="cpFormSuccess"></p>
+    </div>
+  </section>
+
+  <!-- POPUP BANNERS TAB -->
+  <section class="admin-panel" id="panel-popups">
+    <div class="admin-panel-head">
+      <h2>Popup Banners</h2>
+      <button type="button" class="btn btn-gold btn-sm" id="addPopupBtn">+ Add Popup Banner</button>
+    </div>
+    <p style="font-size:0.85rem;color:var(--gray);margin-bottom:16px;">An image popup that appears over the site, either everywhere or on pages you choose. If more than one is active and eligible for the same page at once, only the top one (by Display Order) is shown — they never stack. Visitors who close one won't see it again until they open a new browser session.</p>
+    <div class="admin-table-wrap">
+      <table class="admin-table" id="popupsTable">
+        <thead><tr><th>Order</th><th>Preview</th><th>Title</th><th>Shows On</th><th>Active</th><th></th></tr></thead>
+        <tbody id="popupsTableBody"></tbody>
+      </table>
     </div>
   </section>
 
@@ -1052,6 +1071,70 @@
         <button type="submit" class="btn btn-navy" id="testimonialSaveBtn">Save Review</button>
       </div>
       <p class="admin-form-error" id="testimonialFormError"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ===== POPUP BANNER FORM MODAL ===== -->
+<div class="admin-modal" id="popupModal">
+  <div class="admin-modal-card">
+    <div class="admin-modal-head">
+      <h3 id="popupModalTitle">Add Popup Banner</h3>
+      <button type="button" class="admin-modal-close" data-close-modal="popupModal">&times;</button>
+    </div>
+    <form id="popupForm" class="admin-form">
+      <input type="hidden" id="pu_id">
+      <label class="admin-form-full">Title (internal label — not shown to visitors) <input type="text" id="pu_title" required placeholder="e.g. Ramadan Offer"></label>
+
+      <label class="admin-form-full">Banner Image
+        <input type="file" id="pu_imageFile" accept="image/*">
+        <input type="hidden" id="pu_imageUrl">
+        <img class="admin-preview" id="pu_imagePreview" style="display:none;">
+      </label>
+      <label class="admin-form-full">Image Alt Text (optional, for accessibility) <input type="text" id="pu_imageAlt"></label>
+
+      <div class="admin-form-grid">
+        <label>Width (px) <input type="number" id="pu_width" value="480" min="50" required></label>
+        <label>Height (px) <input type="number" id="pu_height" value="600" min="50" required></label>
+      </div>
+      <p style="font-size:0.78rem;color:var(--gray);margin:-8px 0 14px;">Set these to match your image's real proportions. The popup always scales down to fit smaller screens without cropping or distorting.</p>
+
+      <label class="admin-form-full">Click-Through URL (optional — makes the banner clickable) <input type="text" id="pu_linkUrl" placeholder="https://... or listings.html"></label>
+
+      <label class="admin-form-full">Show On
+        <select id="pu_targetScope">
+          <option value="all">Every Page</option>
+          <option value="specific">Specific Pages Only</option>
+        </select>
+      </label>
+      <div id="pu_targetPagesFields" class="admin-form-full" style="display:none;">
+        <label style="font-size:0.78rem;font-weight:600;color:var(--gray);display:block;margin-bottom:8px;">Choose which pages</label>
+        <div class="admin-checkbox-grid" id="pu_targetPagesList">
+          <label class="admin-checkbox"><input type="checkbox" value="index.html"> Home</label>
+          <label class="admin-checkbox"><input type="checkbox" value="listings.html"> Listings (Buy/Rent search)</label>
+          <label class="admin-checkbox"><input type="checkbox" value="listing-detail.html"> Property Detail Pages</label>
+          <label class="admin-checkbox"><input type="checkbox" value="offplan-listings.html"> Off-Plan Listings</label>
+          <label class="admin-checkbox"><input type="checkbox" value="offplan-detail.html"> Off-Plan Detail Pages</label>
+          <label class="admin-checkbox"><input type="checkbox" value="services.html"> Services</label>
+          <label class="admin-checkbox"><input type="checkbox" value="agents.html"> Agent Directory</label>
+          <label class="admin-checkbox"><input type="checkbox" value="agent-detail.html"> Agent Profile Pages</label>
+          <label class="admin-checkbox"><input type="checkbox" value="contact.html"> Contact</label>
+          <label class="admin-checkbox"><input type="checkbox" value="careers.html"> Careers</label>
+          <label class="admin-checkbox"><input type="checkbox" value="custom-page.html"> Custom Pages (guides, area guides, legal pages)</label>
+        </div>
+      </div>
+
+      <div class="admin-form-grid">
+        <label>Show For (seconds, 0 = stays until closed) <input type="number" id="pu_autoDismissSeconds" value="0" min="0" required></label>
+        <label>Display Order (lower wins if more than one applies) <input type="number" id="pu_sortOrder" value="0" required></label>
+      </div>
+      <label class="admin-checkbox"><input type="checkbox" id="pu_active" checked> Active</label>
+
+      <div class="admin-form-actions">
+        <button type="button" class="btn btn-sm" data-close-modal="popupModal">Cancel</button>
+        <button type="submit" class="btn btn-navy" id="popupSaveBtn">Save Popup Banner</button>
+      </div>
+      <p class="admin-form-error" id="popupFormError"></p>
     </form>
   </div>
 </div>

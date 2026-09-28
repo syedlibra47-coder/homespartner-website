@@ -736,6 +736,48 @@ create policy "Admins can delete subscribers" on newsletter_subscribers for dele
   using (current_user_role() in ('admin', 'super_admin'));
 
 -- ============================================================
+-- POPUP BANNERS (promotional image popups, site-wide or per-page)
+-- ============================================================
+create table if not exists popup_banners (
+  id bigint generated always as identity primary key,
+  title text not null default '',
+  image_url text not null default '',
+  image_alt text not null default '',
+  link_url text not null default '',
+  width int not null default 480,
+  height int not null default 600,
+  target_scope text not null default 'all',      -- 'all' | 'specific'
+  target_pages jsonb not null default '[]',       -- e.g. ['index.html','listings.html']
+  auto_dismiss_seconds int not null default 0,    -- 0 = stays until closed manually
+  active boolean not null default true,
+  sort_order int not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table popup_banners enable row level security;
+
+drop policy if exists "Public can view active popup banners" on popup_banners;
+create policy "Public can view active popup banners" on popup_banners for select
+  using (active = true or current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can insert popup banners" on popup_banners;
+create policy "Admins can insert popup banners" on popup_banners for insert
+  with check (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can update popup banners" on popup_banners;
+create policy "Admins can update popup banners" on popup_banners for update
+  using (current_user_role() in ('admin', 'super_admin'));
+
+drop policy if exists "Admins can delete popup banners" on popup_banners;
+create policy "Admins can delete popup banners" on popup_banners for delete
+  using (current_user_role() in ('admin', 'super_admin'));
+
+drop trigger if exists popup_banners_set_updated_at on popup_banners;
+create trigger popup_banners_set_updated_at before update on popup_banners
+  for each row execute function set_updated_at();
+
+-- ============================================================
 -- STORAGE (run after the tables above)
 -- Creates a public bucket for property photos, uploadable only
 -- by logged-in admins, viewable by everyone.
