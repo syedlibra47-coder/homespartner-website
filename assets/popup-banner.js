@@ -1,13 +1,18 @@
 // Admin-managed promotional image popups — site-wide or targeted to specific
 // pages, each with its own configurable width/height (the box always keeps
 // the image's aspect ratio, so it scales down cleanly on any screen), an
-// optional click-through link, a close button, and an optional auto-dismiss
-// timer. Multiple eligible banners can be shown together, side by side, each
-// running its own auto-dismiss timer independently. Once a banner is closed
-// it stays hidden for that banner's configured "show again after" cooldown
-// (stored in localStorage, so it survives closing the tab — a cooldown
-// measured in hours wouldn't mean anything if it reset every new tab).
+// optional click-through link, a close button, and an optional "Show For"
+// timer. Only one popup is ever on screen at a time: if several are
+// eligible, they queue up in Display Order and each one appears after the
+// previous one closes — either because the visitor closed it, or because
+// its own "Show For" timer ran out. Once a banner has been shown and
+// closed, it stays hidden for that banner's configured "show again after"
+// cooldown (stored in localStorage, so it survives closing the tab — a
+// cooldown measured in hours wouldn't mean anything if it reset every new
+// tab).
 (function () {
+  const TRANSITION_MS = 300;
+
   function esc(str) {
     return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
@@ -31,7 +36,7 @@
 
     const currentPage = (location.pathname.split('/').pop() || 'index.html');
 
-    const eligible = banners.filter(b => {
+    const queue = banners.filter(b => {
       if (!b.active || !b.imageUrl) return false;
       if (b.targetScope === 'specific' && !(b.targetPages || []).includes(currentPage)) return false;
       const lastClosed = dismissedAt(b.id);
@@ -39,40 +44,61 @@
       const cooldownMs = (Number(b.reshowAfterSeconds) || 0) * 1000;
       return Date.now() - lastClosed >= cooldownMs;
     });
-    if (!eligible.length) return;
+    if (!queue.length) return;
 
-    showAll(eligible);
+    runQueue(queue);
   }
 
-  function showAll(banners) {
-    const overlay = document.createElement('div');
-    overlay.className = 'popup-banner-overlay';
+  function runQueue(queue) {
+    let index = 0;
+    let overlay = null;
 
-    const stack = document.createElement('div');
-    stack.className = 'popup-banner-stack';
-    overlay.appendChild(stack);
-    document.body.appendChild(overlay);
-
-    function closeAll() {
-      overlay.classList.remove('is-visible');
-      window.removeEventListener('keydown', onKeydown);
-      setTimeout(() => overlay.remove(), 300);
-    }
     function onKeydown(e) {
-      if (e.key === 'Escape') { banners.forEach(b => markDismissed(b.id)); closeAll(); }
+      if (e.key === 'Escape') stopEntirely();
     }
-    window.addEventListener('keydown', onKeydown);
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) { banners.forEach(b => markDismissed(b.id)); closeAll(); }
-    });
 
-    banners.forEach(banner => addBox(stack, banner, () => {
-      markDismissed(banner.id);
-      if (!stack.querySelector('.popup-banner-box')) closeAll();
-    }));
+    function showCurrent() {
+      const banner = queue[index];
 
-    // next frame, so the CSS transition actually plays instead of snapping in
-    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('is-visible')));
+      overlay = document.createElement('div');
+      overlay.className = 'popup-banner-overlay';
+      const stack = document.createElement('div');
+      stack.className = 'popup-banner-stack';
+      overlay.appendChild(stack);
+      document.body.appendChild(overlay);
+
+      addBox(stack, banner, () => { markDismissed(banner.id); advance(); });
+
+      window.addEventListener('keydown', onKeydown);
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) stopEntirely(); });
+
+      // next frame, so the CSS transition actually plays instead of snapping in
+      requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('is-visible')));
+    }
+
+    function teardownOverlay() {
+      window.removeEventListener('keydown', onKeydown);
+      const el = overlay;
+      el.classList.remove('is-visible');
+      setTimeout(() => el.remove(), TRANSITION_MS);
+    }
+
+    function advance() {
+      teardownOverlay();
+      index++;
+      if (index < queue.length) setTimeout(showCurrent, TRANSITION_MS);
+    }
+
+    // Escape / clicking outside the box means "let me out" — closes the
+    // current popup and cancels the rest of the queue, rather than
+    // advancing to the next one.
+    function stopEntirely() {
+      markDismissed(queue[index].id);
+      teardownOverlay();
+      index = queue.length;
+    }
+
+    showCurrent();
   }
 
   function addBox(stack, banner, onClosed) {
@@ -92,8 +118,10 @@
         : mediaHtml}`;
     stack.appendChild(box);
 
+    let done = false;
     function dismissBox() {
-      box.remove();
+      if (done) return;
+      done = true;
       onClosed();
     }
     box.querySelector('.popup-banner-close').addEventListener('click', dismissBox);
