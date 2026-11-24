@@ -657,8 +657,8 @@
       tbody.innerHTML = `<tr class="admin-empty-row"><td colspan="6">No leads yet.</td></tr>`;
       return;
     }
-    const typeLabels = { valuation: 'Valuation', saved_search: 'Saved Search', enquiry: 'Enquiry' };
-    const typeBadgeClass = { valuation: 'admin', saved_search: 'super_admin', enquiry: 'agent' };
+    const typeLabels = { valuation: 'Valuation', saved_search: 'Saved Search', enquiry: 'Enquiry', quiz: 'Property Match' };
+    const typeBadgeClass = { valuation: 'admin', saved_search: 'super_admin', enquiry: 'agent', quiz: 'super_admin' };
 
     function criteriaSummary(c) {
       if (!c) return '';
@@ -672,12 +672,19 @@
       return parts.length ? parts.join(' · ') : 'Any listing';
     }
 
+    function quizSummary(c) {
+      if (!c) return '';
+      return [c.need, c.budget, c.bedrooms, c.areaType, c.purpose, c.timeline].filter(Boolean).join(' · ');
+    }
+
     tbody.innerHTML = filtered.map(l => {
       let details;
       if (l.lead_type === 'valuation') {
         details = [l.address, l.property_type, l.bedrooms ? l.bedrooms + ' bed' : '', l.size_sqft ? l.size_sqft + ' sqft' : ''].filter(Boolean).join(' · ');
       } else if (l.lead_type === 'saved_search') {
         details = criteriaSummary(l.search_criteria);
+      } else if (l.lead_type === 'quiz') {
+        details = quizSummary(l.search_criteria);
       } else {
         details = [l.listing_title, l.message].filter(Boolean).join(' — ');
       }
