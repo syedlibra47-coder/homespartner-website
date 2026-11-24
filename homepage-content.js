@@ -8,7 +8,17 @@
 
   // ----- Hero -----
   setText('heroBadgeText', c.heroBadgeText);
-  setText('heroHeading', c.heroHeading);
+  const heroHeadingEl = document.getElementById('heroHeading');
+  if (heroHeadingEl && c.heroHeading) {
+    const words = c.heroHeading.trim().split(/\s+/);
+    const lastWord = words.pop();
+    heroHeadingEl.textContent = '';
+    heroHeadingEl.append(document.createTextNode(words.length ? words.join(' ') + ' ' : ''));
+    const accentSpan = document.createElement('span');
+    accentSpan.className = 'hero-heading-accent';
+    accentSpan.textContent = lastWord;
+    heroHeadingEl.appendChild(accentSpan);
+  }
   const heroSubtitleEl = document.getElementById('heroSubtitle');
   if (heroSubtitleEl) {
     const subtitle = (c.heroSubtitle || '').trim();
