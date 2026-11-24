@@ -125,21 +125,6 @@
     }
   }
 
-  // ----- Quick actions -----
-  const quickGrid = document.getElementById('quickActionsGrid');
-  if (quickGrid && c.quickActions) {
-    quickGrid.innerHTML = c.quickActions.map(q => {
-      const iconSvg = (window.ICON_LIBRARY && window.ICON_LIBRARY[q.icon]) || (window.ICON_LIBRARY && window.ICON_LIBRARY.home) || '';
-      return `
-      <a href="${q.href}" class="quick-card reveal in-view">
-        <span class="quick-arrow">&#8599;</span>
-        <span class="quick-icon"><svg viewBox="0 0 24 24" fill="none">${iconSvg}</svg></span>
-        <h4>${q.title}</h4>
-        <p>${q.description}</p>
-      </a>`;
-    }).join('');
-  }
-
   // ----- Stats (with count-up animation) -----
   const statsStrip = document.getElementById('heroStatsStrip');
   if (statsStrip && c.stats) {

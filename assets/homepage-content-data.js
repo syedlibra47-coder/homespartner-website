@@ -16,12 +16,6 @@ window.HOMEPAGE_CONTENT_DATA = {
     { number: 15, suffix: "+", label: "Years Combined Experience" },
     { number: 98, suffix: "%", label: "Client Satisfaction" }
   ],
-  quickActions: [
-    { icon: "home", title: "Buy a Home", description: "Ready and resale properties across Dubai's top communities.", href: "services.html#buying" },
-    { icon: "calendar", title: "Rent a Home", description: "Curated rentals matched to your lifestyle and budget.", href: "services.html#rent" },
-    { icon: "sign", title: "Sell Your Property", description: "Free valuation and full marketing to qualified buyers.", href: "services.html#sell" },
-    { icon: "blueprint", title: "Off-Plan Projects", description: "Early access to launches with flexible payment plans.", href: "offplan-listings.html" }
-  ],
   servicesEyebrow: "What We Do",
   servicesHeading: "Every Real Estate Need, One Partner",
   servicesSubtitle: "From your first Dubai purchase to the day-to-day upkeep after — our team guides you end-to-end.",

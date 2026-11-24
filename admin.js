@@ -1638,39 +1638,8 @@
     hp_ctaHeading: 'cta_heading', hp_ctaSubtitle: 'cta_subtitle'
   };
 
-  function addQuickActionRow(container, item) {
-    const row = document.createElement('div');
-    row.className = 'admin-repeat-row';
-    row.style.flexWrap = 'wrap';
-    const iconOptions = window.ICON_LIBRARY ? Object.keys(window.ICON_LIBRARY).map(key =>
-      `<option value="${key}"${item && item.icon === key ? ' selected' : ''}>${(window.ICON_LIBRARY_LABELS && window.ICON_LIBRARY_LABELS[key]) || key}</option>`).join('') : '';
-    row.innerHTML = `
-      <span class="drag-handle" draggable="true" title="Drag to reorder">⠿</span>
-      <select data-field="icon" style="flex:0 0 120px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:0.85rem;">${iconOptions}</select>
-      <input type="text" data-field="title" placeholder="Title" value="${item ? item.title : ''}" style="flex:1;">
-      <input type="text" data-field="description" placeholder="Description" value="${item ? item.description : ''}" style="flex:2;">
-      <input type="text" data-field="href" placeholder="Link (e.g. listings.html)" value="${item ? item.href : ''}" style="flex:1;">
-    `;
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button'; removeBtn.className = 'remove-row'; removeBtn.textContent = '×';
-    removeBtn.addEventListener('click', () => row.remove());
-    row.appendChild(removeBtn);
-    container.appendChild(row);
-    makeSortable(container, '.admin-repeat-row', '.drag-handle');
-  }
-
-  function readQuickActions(container) {
-    return [...container.querySelectorAll('.admin-repeat-row')].map(row => ({
-      icon: row.querySelector('[data-field="icon"]').value,
-      title: row.querySelector('[data-field="title"]').value,
-      description: row.querySelector('[data-field="description"]').value,
-      href: row.querySelector('[data-field="href"]').value
-    }));
-  }
-
   document.getElementById('hp_addStatRow').addEventListener('click', () =>
     addSimpleRow(document.getElementById('hp_statsList'), [{ key: 'number', placeholder: 'Number e.g. 1200' }, { key: 'suffix', placeholder: 'Suffix e.g. +' }, { key: 'label', placeholder: 'Label e.g. Properties Closed' }]));
-  document.getElementById('hp_addQuickActionRow').addEventListener('click', () => addQuickActionRow(document.getElementById('hp_quickActionsList')));
   document.getElementById('hp_addOffplanFeatureRow').addEventListener('click', () =>
     addSimpleRow(document.getElementById('hp_offplanFeaturesList'), [{ key: 'title', placeholder: 'Title e.g. 0% Commission' }, { key: 'description', placeholder: 'Description e.g. on select launches' }]));
   document.getElementById('hp_addWhyusItemRow').addEventListener('click', () =>
@@ -1784,9 +1753,6 @@
     const statsList = document.getElementById('hp_statsList');
     statsList.innerHTML = '';
     (data.stats || []).forEach(s => addSimpleRow(statsList, [{ key: 'number', placeholder: 'Number' }, { key: 'suffix', placeholder: 'Suffix' }, { key: 'label', placeholder: 'Label' }], s));
-    const qaList = document.getElementById('hp_quickActionsList');
-    qaList.innerHTML = '';
-    (data.quick_actions || []).forEach(q => addQuickActionRow(qaList, q));
     const featList = document.getElementById('hp_offplanFeaturesList');
     featList.innerHTML = '';
     (data.offplan_features || []).forEach(f => addSimpleRow(featList, [{ key: 'title', placeholder: 'Title' }, { key: 'description', placeholder: 'Description' }], f));
@@ -1814,7 +1780,6 @@
     record.hero_overlay_opacity = heroOverlay.opacity;
     record.hero_filters = readHeroFilters();
     record.stats = readSimpleRows(document.getElementById('hp_statsList'), [{ key: 'number', numeric: true }, { key: 'suffix' }, { key: 'label' }]);
-    record.quick_actions = readQuickActions(document.getElementById('hp_quickActionsList'));
     record.offplan_features = readSimpleRows(document.getElementById('hp_offplanFeaturesList'), [{ key: 'title' }, { key: 'description' }]);
     record.whyus_items = readSimpleRows(document.getElementById('hp_whyusItemsList'), [{ key: 'title' }, { key: 'description' }]);
 

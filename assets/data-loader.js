@@ -255,7 +255,7 @@ window.dataReady = (async function () {
       heroBgType: row.hero_bg_type, heroBgImage: row.hero_bg_image, heroBgVideoId: row.hero_bg_video_id,
       heroOverlayColor: row.hero_overlay_color, heroOverlayOpacity: row.hero_overlay_opacity,
       heroSearchPlaceholder: row.hero_search_placeholder, heroFilters: row.hero_filters || [],
-      stats: row.stats || [], quickActions: row.quick_actions || [],
+      stats: row.stats || [],
       servicesEyebrow: row.services_eyebrow, servicesHeading: row.services_heading, servicesSubtitle: row.services_subtitle,
       listingsEyebrow: row.listings_eyebrow, listingsHeading: row.listings_heading, listingsSubtitle: row.listings_subtitle,
       offplanEyebrow: row.offplan_eyebrow, offplanHeading: row.offplan_heading, offplanSubtitle: row.offplan_subtitle,
