@@ -50,13 +50,11 @@
   </div>
 
   <div class="container hero-inner">
-    <p class="eyebrow hero-eyebrow">Dubai &middot; London &middot; Karachi &middot; Ahmedabad</p>
-    <div class="trust-badge">
-      <span class="trust-badge-icon">★</span>
+    <p class="hero-kicker">
+      <span class="hero-kicker-icon">★</span>
       <span id="heroBadgeText">4.9 Rated · Dubai Property Specialists</span>
-    </div>
-    <h1 class="display" id="heroHeading">Dubai Real Estate, Handled <span class="hero-heading-accent">Right</span></h1>
-    <span class="hero-divider" aria-hidden="true"></span>
+    </p>
+    <h1 class="display hero-display" id="heroHeading">Dubai Real Estate, Handled <span class="hero-heading-accent">Right</span></h1>
     <p class="hero-sub" id="heroSubtitle">Buy, rent, sell or invest off-plan in Dubai, then leave the upkeep to us — property management and maintenance once you own it. Backed by our own desks in London, Karachi and Ahmedabad for clients investing from abroad.</p>
 
     <div class="search-panel reveal">
@@ -68,8 +66,11 @@
       </div>
       <div class="search-fields">
         <div class="search-field search-field--grow">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input type="text" id="heroSearchInput" placeholder="Dubai Marina, Palm Jumeirah, Downtown…">
+          <span class="search-field-label">Location</span>
+          <div class="search-field-control">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input type="text" id="heroSearchInput" placeholder="Dubai Marina, Palm Jumeirah, Downtown…">
+          </div>
         </div>
         <div class="search-field-row" id="heroFiltersRow"></div>
         <button type="button" class="btn btn-gold search-btn">
@@ -80,13 +81,18 @@
       <p class="search-alt">Looking to sell instead? <a href="#contact">Get a free valuation &rarr;</a></p>
     </div>
   </div>
+
+  <div class="hero-stats-band">
+    <div class="container">
+      <div class="hero-stats hero-stats--strip reveal" id="heroStatsStrip"></div>
+    </div>
+  </div>
 </section>
 
 <!-- ===== QUICK ACTIONS (overlaps hero) ===== -->
 <section class="quick-actions">
   <div class="container">
     <div class="quick-grid" id="quickActionsGrid"></div>
-    <div class="hero-stats hero-stats--strip reveal" id="heroStatsStrip"></div>
   </div>
 </section>
 

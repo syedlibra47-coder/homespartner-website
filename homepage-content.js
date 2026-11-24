@@ -71,10 +71,13 @@
   if (heroFiltersRow && c.heroFilters) {
     heroFiltersRow.innerHTML = c.heroFilters.map(f => `
       <div class="search-field">
-        <select data-match="${f.matchField || ''}">
-          <option>${f.label}</option>
-          ${(f.options || []).map(o => `<option>${o}</option>`).join('')}
-        </select>
+        <span class="search-field-label">${f.label}</span>
+        <div class="search-field-control">
+          <select data-match="${f.matchField || ''}">
+            <option>Any</option>
+            ${(f.options || []).map(o => `<option>${o}</option>`).join('')}
+          </select>
+        </div>
       </div>`).join('');
   }
 
