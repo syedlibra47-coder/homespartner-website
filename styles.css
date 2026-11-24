@@ -692,7 +692,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 
 .listing-image {
   position: relative;
-  height: 210px;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--navy);
 }
@@ -700,10 +700,59 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .listing-image::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(18,23,61,0) 55%, rgba(18,23,61,0.55) 100%);
+  background: linear-gradient(180deg, rgba(16,15,12,0.1) 0%, rgba(16,15,12,0) 30%, rgba(16,15,12,0.55) 65%, rgba(16,15,12,0.92) 100%);
 }
 
 .listing-tag { position: absolute; top: 16px; left: 16px; z-index: 2; }
+
+/* ===== Premium card overlay (listing + off-plan cards) ===== */
+.card-badges-row { position: absolute; top: 16px; left: 16px; z-index: 2; display: flex; gap: 8px; flex-wrap: wrap; }
+.card-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.card-badge--solid { background: #fff; color: var(--ink); }
+.card-badge--outline { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.5); color: #fff; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+
+.card-fav-btn {
+  position: absolute;
+  top: 16px; right: 16px;
+  z-index: 2;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+.card-fav-btn:hover { transform: scale(1.08); background: rgba(255,255,255,0.3); }
+.card-fav-btn img { width: 20px; height: 20px; object-fit: contain; }
+
+.listing-overlay { position: absolute; left: 20px; right: 20px; bottom: 18px; z-index: 2; color: #fff; }
+.listing-overlay-eyebrow { margin: 0 0 4px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-light); }
+.listing-overlay-title {
+  margin: 0; font-family: var(--font-serif); font-weight: 500; font-size: 1.3rem; line-height: 1.25; color: #fff;
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.listing-overlay-sub { margin: 6px 0 0; font-size: 0.86rem; color: rgba(255,255,255,0.78); }
+
+.listing-footer-stats { padding: 18px 20px 20px; }
+.listing-specs { display: flex; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--line); font-size: 0.8rem; color: var(--gray); font-weight: 600; }
+.listing-specs span { display: inline-flex; align-items: center; gap: 6px; }
+.listing-specs svg { width: 15px; height: 15px; color: var(--gold-dark); flex-shrink: 0; }
+.listing-price-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.listing-price-tag { font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem; color: var(--data-color); }
+.listing-price-tag span { font-family: var(--font-body); font-weight: 500; font-size: 0.76rem; color: var(--gray); }
+.listing-view-link { font-weight: 700; font-size: 0.85rem; color: var(--gold-dark); text-decoration: none; white-space: nowrap; }
+.listing-view-link:hover { color: var(--navy); }
 
 .whatsapp-btn {
   position: absolute;
@@ -1049,8 +1098,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 
 .offplan-image {
   position: relative;
-  height: 170px;
-  padding: 18px;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--navy);
 }
@@ -1058,11 +1106,11 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .offplan-image::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(18,23,61,0.15) 0%, rgba(18,23,61,0.72) 100%);
+  background: linear-gradient(180deg, rgba(16,15,12,0.1) 0%, rgba(16,15,12,0) 30%, rgba(16,15,12,0.55) 65%, rgba(16,15,12,0.92) 100%);
 }
 .offplan-image .badge { position: relative; z-index: 2; }
 
-.offplan-project-body { padding: 24px; }
+.offplan-project-body { padding: 18px 20px 20px; }
 .offplan-project-body h3 { color: #fff; font-size: 1.2rem; margin-bottom: 4px; }
 .offplan-project-body .listing-location { color: rgba(255,255,255,0.6); }
 

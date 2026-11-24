@@ -22,15 +22,15 @@
 .offplan-card:hover .offplan-card-image img { transform: scale(1.06); }
 .offplan-card.is-hidden { display: none; }
 
-.offplan-card-image { position: relative; height: 210px; overflow: hidden; padding: 16px; }
+.offplan-card-image { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
 .offplan-card-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
 .offplan-card-image::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(18,23,61,0.35) 0%, rgba(18,23,61,0) 40%);
+  background: linear-gradient(180deg, rgba(16,15,12,0.1) 0%, rgba(16,15,12,0) 30%, rgba(16,15,12,0.55) 65%, rgba(16,15,12,0.92) 100%);
 }
 
-.offplan-card-body { padding: 22px; }
+.offplan-card-body { padding: 18px 20px 20px; }
 .offplan-card-price { font-family: var(--font-mono); font-weight: 700; font-size: 1.15rem; color: var(--navy); margin-bottom: 8px; }
 .offplan-card-body h3 { font-family: var(--font-card); color: var(--card-color); font-size: 1.1rem; margin-bottom: 6px; }
 .offplan-card-location { display: flex; align-items: center; gap: 6px; color: var(--gray); font-size: 0.88rem; padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--line); }

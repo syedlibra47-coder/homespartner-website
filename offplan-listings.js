@@ -4,7 +4,15 @@
   const grid = document.getElementById('offplanListingsGrid');
   if (!grid || !window.OFFPLAN_DATA) return;
 
+  const WHATSAPP_NUMBER = (window.CONTACT_CONTENT_DATA && window.CONTACT_CONTENT_DATA.whatsappNumber) || '971500000000';
+
   const projects = Object.values(window.OFFPLAN_DATA);
+
+  function unitRangeLabel(unitTypes) {
+    if (!unitTypes || !unitTypes.length) return '';
+    const first = unitTypes[0].type, last = unitTypes[unitTypes.length - 1].type;
+    return first === last ? first : `${first} – ${last}`;
+  }
 
   const statusBtns = document.querySelectorAll('#offplanStatusFilter .filter-btn');
   const typeSelect = document.getElementById('offplanTypeFilter');
@@ -45,27 +53,34 @@
 
   function cardHtml(p) {
     const planLabel = p.paymentPlans[0].label;
+    const waMessage = `Hi, I'm interested in ${p.title} (${p.community}). Could you share more details?`;
+    const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
     return `
     <article class="offplan-card reveal in-view" data-status="${p.status}" data-category="${p.category}" data-developer="${p.developer}" data-plan="${p.paymentPlans[0].segments[0].pct}" data-search="${(p.title + ' ' + p.community + ' ' + p.developer).toLowerCase()}" onclick="window.location.href='offplan-detail.html?id=${p.id}'">
       <div class="offplan-card-image">
         <img src="${p.hero}" alt="${p.title}, ${p.community}">
-        <div class="offplan-gallery-badges">
-          <span class="badge badge--red">${planLabel} Payment Plan</span>
-          <span class="badge badge--white">${p.tags.join(', ').toUpperCase()}</span>
+        <div class="card-badges-row">
+          <span class="card-badge card-badge--solid">${p.status}</span>
+          <span class="card-badge card-badge--outline">${planLabel} Plan</span>
+        </div>
+        <a class="card-fav-btn" href="${waHref}" target="_blank" rel="noopener" aria-label="Enquire about ${p.title} on WhatsApp" onclick="event.stopPropagation()">
+          <img src="assets/WhatsApp.svg.webp" alt="">
+        </a>
+        <div class="listing-overlay">
+          <p class="listing-overlay-eyebrow">${p.community}</p>
+          <h3 class="listing-overlay-title">${p.title}</h3>
+          <p class="listing-overlay-sub">By ${p.developer}</p>
         </div>
       </div>
       <div class="offplan-card-body">
-        <div class="offplan-card-price">from ${p.priceLabel}</div>
-        <h3>${p.title}</h3>
-        <p class="offplan-card-location">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
-          ${p.community}
-        </p>
-        <div class="offplan-card-facts">
-          <div><span>Developer</span><span>${p.developer}</span></div>
-          <div><span>Handover</span><span>${p.handover}</span></div>
+        <div class="listing-specs">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 19v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 19h18M6 11V7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>${unitRangeLabel(p.unitTypes)}</span>
+          <span>Handover ${p.handover}</span>
         </div>
-        <a href="offplan-detail.html?id=${p.id}" class="offplan-card-cta" onclick="event.stopPropagation()">Discover More</a>
+        <div class="listing-price-row">
+          <span class="listing-price-tag">from ${p.priceLabel}</span>
+          <a href="offplan-detail.html?id=${p.id}" class="listing-view-link" onclick="event.stopPropagation()">Discover More &rarr;</a>
+        </div>
       </div>
     </article>`;
   }
