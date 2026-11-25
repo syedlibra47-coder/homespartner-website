@@ -190,6 +190,9 @@
   setText('whyusEyebrow', c.whyusEyebrow);
   setText('whyusHeading', c.whyusHeading);
   setText('whyusSubtitle', c.whyusSubtitle);
+  setText('awardsEyebrow', c.awardsEyebrow);
+  setText('awardsHeading', c.awardsHeading);
+  setText('awardsSubtitle', c.awardsSubtitle);
   setText('ctaHeading', c.ctaHeading);
   setText('ctaSubtitle', c.ctaSubtitle);
 
@@ -205,6 +208,27 @@
   if (whyusGrid && c.whyusItems) {
     whyusGrid.innerHTML = c.whyusItems.map(item => `
       <div class="why-item"><h4>${item.title}</h4><p>${item.description}</p></div>`).join('');
+  }
+
+  // ----- Awards & recognition (hidden entirely until real awards are added) -----
+  const awardsSection = document.getElementById('awards');
+  const awardsGrid = document.getElementById('awardsGrid');
+  if (awardsSection && awardsGrid) {
+    if (c.awards && c.awards.length) {
+      awardsGrid.innerHTML = c.awards.map(a => {
+        const iconSvg = (window.ICON_LIBRARY && window.ICON_LIBRARY[a.icon]) || (window.ICON_LIBRARY && window.ICON_LIBRARY.award) || '';
+        const meta = [a.issuer, a.year].filter(Boolean).join(' · ');
+        return `
+        <div class="award-card">
+          <span class="award-badge"><svg viewBox="0 0 24 24" fill="none">${iconSvg}</svg></span>
+          <h4>${a.title}</h4>
+          ${meta ? `<span class="award-meta">${meta}</span>` : ''}
+        </div>`;
+      }).join('');
+      awardsSection.style.display = '';
+    } else {
+      awardsSection.style.display = 'none';
+    }
   }
 
   // ----- Offices: teaser cards + map (reuses the same offices table as contact.html) -----

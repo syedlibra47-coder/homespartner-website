@@ -1313,6 +1313,51 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .why-item h4 { color: var(--navy); font-size: 1.05rem; margin-bottom: 8px; }
 .why-item p { color: var(--gray); font-size: 0.92rem; }
 
+/* ===== AWARDS & RECOGNITION ===== */
+.awards { background: var(--paper-flat); padding: 90px 0; }
+.awards:empty, .awards.is-empty { display: none; }
+.awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 32px 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.award-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+.award-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  color: var(--navy-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-soft);
+  flex-shrink: 0;
+}
+.award-badge svg { width: 28px; height: 28px; }
+.award-card h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.05rem;
+  color: var(--navy);
+  margin: 0;
+}
+.award-meta {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+  color: var(--gray);
+}
+
 /* ===== CTA / CONTACT ===== */
 .cta-banner {
   background: linear-gradient(135deg, var(--navy-deep), var(--navy));

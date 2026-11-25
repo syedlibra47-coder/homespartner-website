@@ -313,6 +313,10 @@ create table if not exists homepage_content (
   whyus_heading text not null default '',
   whyus_subtitle text not null default '',
   whyus_items jsonb not null default '[]',      -- [{title, description}] x4
+  awards_eyebrow text not null default '',
+  awards_heading text not null default '',
+  awards_subtitle text not null default '',
+  awards jsonb not null default '[]',           -- [{icon, title, issuer, year}]
   cta_heading text not null default '',
   cta_subtitle text not null default '',
   footer_blurb text not null default '',
@@ -353,6 +357,12 @@ alter table homepage_content add column if not exists hero_search_placeholder te
 alter table homepage_content add column if not exists hero_filters jsonb not null default '[]';
 alter table homepage_content add column if not exists hero_overlay_color text not null default '#1F275C';
 alter table homepage_content add column if not exists hero_overlay_opacity int not null default 80;
+
+-- ===== HOMEPAGE AWARDS & RECOGNITION =====
+alter table homepage_content add column if not exists awards_eyebrow text not null default 'Recognition';
+alter table homepage_content add column if not exists awards_heading text not null default 'Awards & Recognition';
+alter table homepage_content add column if not exists awards_subtitle text not null default '';
+alter table homepage_content add column if not exists awards jsonb not null default '[]';
 
 -- ===== SITE CHROME (header nav + footer, shared across every page) =====
 create table if not exists site_chrome (

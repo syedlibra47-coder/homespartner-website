@@ -1635,8 +1635,39 @@
     hp_officesEyebrow: 'offices_eyebrow', hp_officesHeading: 'offices_heading', hp_officesSubtitle: 'offices_subtitle',
     hp_youtubeEyebrow: 'youtube_eyebrow', hp_youtubeHeading: 'youtube_heading', hp_youtubeSubtitle: 'youtube_subtitle',
     hp_whyusEyebrow: 'whyus_eyebrow', hp_whyusHeading: 'whyus_heading', hp_whyusSubtitle: 'whyus_subtitle',
+    hp_awardsEyebrow: 'awards_eyebrow', hp_awardsHeading: 'awards_heading', hp_awardsSubtitle: 'awards_subtitle',
     hp_ctaHeading: 'cta_heading', hp_ctaSubtitle: 'cta_subtitle'
   };
+
+  function addAwardRow(container, item) {
+    const row = document.createElement('div');
+    row.className = 'admin-repeat-row';
+    row.style.flexWrap = 'wrap';
+    const iconOptions = window.ICON_LIBRARY ? Object.keys(window.ICON_LIBRARY).map(key =>
+      `<option value="${key}"${item && item.icon === key ? ' selected' : ''}>${(window.ICON_LIBRARY_LABELS && window.ICON_LIBRARY_LABELS[key]) || key}</option>`).join('') : '';
+    row.innerHTML = `
+      <span class="drag-handle" draggable="true" title="Drag to reorder">⠿</span>
+      <select data-field="icon" style="flex:0 0 120px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:0.85rem;">${iconOptions}</select>
+      <input type="text" data-field="title" placeholder="Award title e.g. Best Boutique Agency" value="${item ? item.title : ''}" style="flex:2;">
+      <input type="text" data-field="issuer" placeholder="Issuer e.g. Arabian Property Awards" value="${item ? item.issuer : ''}" style="flex:2;">
+      <input type="text" data-field="year" placeholder="Year e.g. 2024" value="${item ? item.year : ''}" style="flex:0 0 90px;">
+    `;
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button'; removeBtn.className = 'remove-row'; removeBtn.textContent = '×';
+    removeBtn.addEventListener('click', () => row.remove());
+    row.appendChild(removeBtn);
+    container.appendChild(row);
+    makeSortable(container, '.admin-repeat-row', '.drag-handle');
+  }
+
+  function readAwards(container) {
+    return [...container.querySelectorAll('.admin-repeat-row')].map(row => ({
+      icon: row.querySelector('[data-field="icon"]').value,
+      title: row.querySelector('[data-field="title"]').value,
+      issuer: row.querySelector('[data-field="issuer"]').value,
+      year: row.querySelector('[data-field="year"]').value
+    })).filter(a => a.title.trim());
+  }
 
   document.getElementById('hp_addStatRow').addEventListener('click', () =>
     addSimpleRow(document.getElementById('hp_statsList'), [{ key: 'number', placeholder: 'Number e.g. 1200' }, { key: 'suffix', placeholder: 'Suffix e.g. +' }, { key: 'label', placeholder: 'Label e.g. Properties Closed' }]));
@@ -1644,6 +1675,7 @@
     addSimpleRow(document.getElementById('hp_offplanFeaturesList'), [{ key: 'title', placeholder: 'Title e.g. 0% Commission' }, { key: 'description', placeholder: 'Description e.g. on select launches' }]));
   document.getElementById('hp_addWhyusItemRow').addEventListener('click', () =>
     addSimpleRow(document.getElementById('hp_whyusItemsList'), [{ key: 'title', placeholder: 'Title' }, { key: 'description', placeholder: 'Description' }]));
+  document.getElementById('hp_addAwardRow').addEventListener('click', () => addAwardRow(document.getElementById('hp_awardsList')));
 
   // ===== Hero background: image/video toggle =====
   function setHeroBgType(type) {
@@ -1759,6 +1791,9 @@
     const whyList = document.getElementById('hp_whyusItemsList');
     whyList.innerHTML = '';
     (data.whyus_items || []).forEach(w => addSimpleRow(whyList, [{ key: 'title', placeholder: 'Title' }, { key: 'description', placeholder: 'Description' }], w));
+    const awardsList = document.getElementById('hp_awardsList');
+    awardsList.innerHTML = '';
+    (data.awards || []).forEach(a => addAwardRow(awardsList, a));
   }
 
   document.getElementById('homepageContentForm').addEventListener('submit', async (e) => {
@@ -1782,6 +1817,7 @@
     record.stats = readSimpleRows(document.getElementById('hp_statsList'), [{ key: 'number', numeric: true }, { key: 'suffix' }, { key: 'label' }]);
     record.offplan_features = readSimpleRows(document.getElementById('hp_offplanFeaturesList'), [{ key: 'title' }, { key: 'description' }]);
     record.whyus_items = readSimpleRows(document.getElementById('hp_whyusItemsList'), [{ key: 'title' }, { key: 'description' }]);
+    record.awards = readAwards(document.getElementById('hp_awardsList'));
 
     const { error } = await supabase.from('homepage_content').upsert(record);
     if (error) { errorEl.textContent = error.message; return; }

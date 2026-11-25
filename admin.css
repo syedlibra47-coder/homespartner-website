@@ -30,6 +30,7 @@
 .admin-login-error { color: #D32F2F; font-size: 0.85rem; margin-top: 14px; min-height: 18px; }
 .admin-config-warning { color: var(--gold-dark); font-size: 0.8rem; margin-top: 14px; line-height: 1.5; }
 .admin-config-warning code { background: var(--paper); padding: 2px 6px; border-radius: 4px; }
+.admin-form-hint { color: var(--gray); font-size: 0.8rem; margin: -4px 0 10px; }
 
 /* ----- Shell layout (sidebar + content) ----- */
 .admin-shell { display: flex; min-height: 100vh; align-items: stretch; }

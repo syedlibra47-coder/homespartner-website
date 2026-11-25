@@ -263,6 +263,7 @@ window.dataReady = (async function () {
       officesEyebrow: row.offices_eyebrow, officesHeading: row.offices_heading, officesSubtitle: row.offices_subtitle,
       youtubeEyebrow: row.youtube_eyebrow, youtubeHeading: row.youtube_heading, youtubeSubtitle: row.youtube_subtitle,
       whyusEyebrow: row.whyus_eyebrow, whyusHeading: row.whyus_heading, whyusSubtitle: row.whyus_subtitle, whyusItems: row.whyus_items || [],
+      awardsEyebrow: row.awards_eyebrow, awardsHeading: row.awards_heading, awardsSubtitle: row.awards_subtitle, awards: row.awards || [],
       ctaHeading: row.cta_heading, ctaSubtitle: row.cta_subtitle,
       footerBlurb: row.footer_blurb
     };

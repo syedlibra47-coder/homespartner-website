@@ -46,6 +46,10 @@ window.HOMEPAGE_CONTENT_DATA = {
     { title: "End-to-End Service", description: "From listing to lease to long-term management — all under one roof." },
     { title: "Verified Listings", description: "Every property and developer vetted before it reaches you." }
   ],
+  awardsEyebrow: "Recognition",
+  awardsHeading: "Awards & Recognition",
+  awardsSubtitle: "",
+  awards: [],
   ctaHeading: "Let's Find Your Next Property",
   ctaSubtitle: "Tell us what you're looking for and a HomesPartner advisor from the office nearest you will be in touch.",
   footerBlurb: "Your Dubai property partner, with reach into the UK, Pakistan and India."
