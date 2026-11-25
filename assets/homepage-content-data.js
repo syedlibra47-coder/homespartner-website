@@ -3,7 +3,7 @@ window.HOMEPAGE_CONTENT_DATA = {
   heroHeading: "Dubai Real Estate, Handled Right",
   heroSubtitle: "Buy, rent, sell or invest off-plan in Dubai, then leave the upkeep to us — property management and maintenance once you own it. Backed by our own desks in London, Karachi and Ahmedabad for clients investing from abroad.",
   heroBgType: "image",
-  heroBgImage: "assets/photos/burj-khalifa.jpg",
+  heroBgImage: "assets/photos/dubai-marina-towers.jpg",
   heroBgVideoId: "",
   heroSearchPlaceholder: "Dubai Marina, Palm Jumeirah, Downtown…",
   heroFilters: [
