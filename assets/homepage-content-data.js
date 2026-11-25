@@ -8,7 +8,8 @@ window.HOMEPAGE_CONTENT_DATA = {
   heroSearchPlaceholder: "Dubai Marina, Palm Jumeirah, Downtown…",
   heroFilters: [
     { label: "Property Type", options: ["Apartment", "Villa", "Townhouse", "Commercial"], matchField: "category" },
-    { label: "Bedrooms", options: ["Studio", "1", "2", "3", "4+"], matchField: "beds" }
+    { label: "Bedrooms", options: ["Studio", "1", "2", "3", "4+"], matchField: "beds" },
+    { label: "Price (AED)", options: ["Under 1M", "1M - 2M", "2M - 5M", "5M+"], matchField: "price" }
   ],
   stats: [
     { number: 4, suffix: "", label: "Global Offices" },

@@ -39,6 +39,8 @@
   const pCategory = urlParams.get('category');
   const pBeds = urlParams.get('beds');
   const pKeyword = urlParams.get('q');
+  const pPriceMin = urlParams.get('priceMin');
+  const pPriceMax = urlParams.get('priceMax');
   if (pStatus === 'sale' || pStatus === 'rent') {
     statusBtns.forEach(b => b.classList.toggle('active', b.dataset.filter === pStatus));
     activeStatus = pStatus;
@@ -49,6 +51,8 @@
   }
   if (pBeds && ['0', '1', '2', '3', '4'].includes(pBeds)) bedsSelect.value = pBeds;
   if (pKeyword) keywordInput.value = pKeyword;
+  if (pPriceMin) priceMinInput.value = pPriceMin;
+  if (pPriceMax) priceMaxInput.value = pPriceMax;
 
   function bedsFilterValue(beds) {
     if (beds === 'Studio') return '0';

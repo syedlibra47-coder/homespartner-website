@@ -93,6 +93,15 @@
       return String(Math.min(n, 4));
     };
 
+    const priceBracket = (value) => {
+      const v = value.toLowerCase();
+      if (v.includes('under')) return { max: 1000000 };
+      if (v.includes('+')) return { min: parseFloat(v) * 1000000 };
+      const parts = v.match(/([\d.]+)\s*m?\s*-\s*([\d.]+)\s*m?/);
+      if (parts) return { min: parseFloat(parts[1]) * 1000000, max: parseFloat(parts[2]) * 1000000 };
+      return null;
+    };
+
     const runSearch = () => {
       const mode = (searchToggle.querySelector('.toggle-pill.active') || {}).dataset?.mode || 'buy';
       const params = new URLSearchParams();
@@ -107,6 +116,12 @@
           if (norm) params.set('beds', norm);
         } else if (match === 'category') {
           params.set('category', sel.value);
+        } else if (match === 'price' && mode !== 'offplan') {
+          const range = priceBracket(sel.value);
+          if (range) {
+            if (range.min != null) params.set('priceMin', range.min);
+            if (range.max != null) params.set('priceMax', range.max);
+          }
         }
       });
 
