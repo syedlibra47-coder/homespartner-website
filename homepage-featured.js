@@ -84,8 +84,8 @@
 
     function offplanCardHtml(p) {
       const plan = p.paymentPlans[0];
-      const bookingPct = plan.segments[0].pct;
-      const handoverPct = 100 - bookingPct;
+      const waMessage = `Hi, I'm interested in ${p.title} (${p.community}). Could you share more details?`;
+      const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
       return `
       <article class="offplan-project reveal in-view" data-offplan-id="${p.id}">
         <div class="offplan-image">
@@ -94,24 +94,23 @@
             <span class="card-badge card-badge--solid">${p.status}</span>
             <span class="card-badge card-badge--outline">${plan.label} Plan</span>
           </div>
+          <a class="card-fav-btn" href="${waHref}" target="_blank" rel="noopener" aria-label="Enquire about ${p.title} on WhatsApp">
+            <img src="assets/WhatsApp.svg.webp" alt="">
+          </a>
           <div class="listing-overlay">
             <p class="listing-overlay-eyebrow">${p.community}</p>
             <h3 class="listing-overlay-title">${p.title}</h3>
             <p class="listing-overlay-sub">By ${p.developer}</p>
           </div>
         </div>
-        <div class="offplan-project-body">
-          <div class="listing-specs" style="color:rgba(255,255,255,0.65);border-bottom-color:rgba(255,255,255,0.14);">
+        <div class="listing-footer-stats">
+          <div class="listing-specs">
             <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 19v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><path d="M3 19h18M6 11V7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>${unitRangeLabel(p.unitTypes)}</span>
             <span>Handover ${p.handover}</span>
           </div>
-          <div class="payment-plan">
-            <div class="payment-plan-bar"><span style="width:${bookingPct}%"></span></div>
-            <div class="payment-plan-labels"><span>${bookingPct}% booking</span><span>${handoverPct}% handover</span></div>
-          </div>
           <div class="listing-price-row">
-            <span class="listing-price-tag" style="color:var(--gold-light);">from ${p.priceLabel}</span>
-            <a href="offplan-detail.html?id=${p.id}" class="listing-view-link" style="color:var(--gold-light);">Discover More &rarr;</a>
+            <span class="listing-price-tag">from ${p.priceLabel}</span>
+            <a href="offplan-detail.html?id=${p.id}" class="listing-view-link">Discover More &rarr;</a>
           </div>
         </div>
       </article>`;

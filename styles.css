@@ -1070,13 +1070,13 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .offplan-project {
   flex: 0 0 380px;
   scroll-snap-align: start;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: #fff;
+  border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.offplan-project:hover { transform: translateY(-6px); background: rgba(255,255,255,0.07); }
+.offplan-project:hover { transform: translateY(-6px); box-shadow: var(--shadow-card); }
 .offplan-project:hover .offplan-image img { transform: scale(1.06); }
 
 .offplan-image {
@@ -1094,8 +1094,6 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .offplan-image .badge { position: relative; z-index: 2; }
 
 .offplan-project-body { padding: 18px 20px 20px; }
-.offplan-project-body h3 { color: #fff; font-size: 1.2rem; margin-bottom: 4px; }
-.offplan-project-body .listing-location { color: rgba(255,255,255,0.6); }
 
 .payment-plan { margin-bottom: 20px; }
 .payment-plan-bar {
@@ -1119,18 +1117,6 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   color: rgba(255,255,255,0.55);
 }
 
-.offplan-project-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
-.offplan-project-footer .offplan-price { font-family: var(--font-mono); color: var(--gold-light); font-weight: 600; font-size: 0.95rem; }
-.offplan-project-footer .card-link { color: var(--gold-light); }
-.offplan-project-footer .card-link:hover { color: #fff; }
 
 .badge {
   display: inline-block;
