@@ -303,6 +303,7 @@ create table if not exists homepage_content (
   offplan_heading text not null default '',
   offplan_subtitle text not null default '',
   offplan_features jsonb not null default '[]', -- [{title, description}] x3
+  developers jsonb not null default '[]',        -- [{name, logoUrl}] developers marquee
   offices_eyebrow text not null default '',
   offices_heading text not null default '',
   offices_subtitle text not null default '',
@@ -363,6 +364,7 @@ alter table homepage_content add column if not exists awards_eyebrow text not nu
 alter table homepage_content add column if not exists awards_heading text not null default 'Awards & Recognition';
 alter table homepage_content add column if not exists awards_subtitle text not null default '';
 alter table homepage_content add column if not exists awards jsonb not null default '[]';
+alter table homepage_content add column if not exists developers jsonb not null default '[]';
 
 -- ===== SITE CHROME (header nav + footer, shared across every page) =====
 create table if not exists site_chrome (

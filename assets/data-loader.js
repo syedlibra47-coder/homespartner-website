@@ -260,6 +260,7 @@ window.dataReady = (async function () {
       listingsEyebrow: row.listings_eyebrow, listingsHeading: row.listings_heading, listingsSubtitle: row.listings_subtitle,
       offplanEyebrow: row.offplan_eyebrow, offplanHeading: row.offplan_heading, offplanSubtitle: row.offplan_subtitle,
       offplanFeatures: row.offplan_features || [],
+      developers: row.developers || [],
       officesEyebrow: row.offices_eyebrow, officesHeading: row.offices_heading, officesSubtitle: row.offices_subtitle,
       youtubeEyebrow: row.youtube_eyebrow, youtubeHeading: row.youtube_heading, youtubeSubtitle: row.youtube_subtitle,
       whyusEyebrow: row.whyus_eyebrow, whyusHeading: row.whyus_heading, whyusSubtitle: row.whyus_subtitle, whyusItems: row.whyus_items || [],

@@ -1669,6 +1669,48 @@
     })).filter(a => a.title.trim());
   }
 
+  function addDeveloperRow(container, item) {
+    const row = document.createElement('div');
+    row.className = 'admin-repeat-row';
+    row.style.flexWrap = 'wrap';
+    row.style.alignItems = 'center';
+    const hasLogo = !!(item && item.logoUrl);
+    row.innerHTML = `
+      <span class="drag-handle" draggable="true" title="Drag to reorder">⠿</span>
+      <input type="text" data-field="name" placeholder="Developer name e.g. DAMAC Properties" value="${item ? item.name : ''}" style="flex:2;">
+      <input type="file" accept="image/*" data-field="logoFile" style="flex:1 1 150px;">
+      <input type="hidden" data-field="logoUrl" value="${hasLogo ? item.logoUrl : ''}">
+      <img data-field="logoPreview" style="height:32px;max-width:110px;object-fit:contain;border-radius:4px;${hasLogo ? '' : 'display:none;'}" src="${hasLogo ? item.logoUrl : ''}">
+    `;
+    const fileInput = row.querySelector('[data-field="logoFile"]');
+    const hiddenUrl = row.querySelector('[data-field="logoUrl"]');
+    const preview = row.querySelector('[data-field="logoPreview"]');
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      try {
+        const url = await uploadImage(file);
+        hiddenUrl.value = url;
+        preview.src = url; preview.style.display = 'block';
+      } catch (err) {
+        document.getElementById('homepageContentFormError').textContent = 'Logo upload failed: ' + err.message;
+      }
+    });
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button'; removeBtn.className = 'remove-row'; removeBtn.textContent = '×';
+    removeBtn.addEventListener('click', () => row.remove());
+    row.appendChild(removeBtn);
+    container.appendChild(row);
+    makeSortable(container, '.admin-repeat-row', '.drag-handle');
+  }
+
+  function readDevelopers(container) {
+    return [...container.querySelectorAll('.admin-repeat-row')].map(row => ({
+      name: row.querySelector('[data-field="name"]').value,
+      logoUrl: row.querySelector('[data-field="logoUrl"]').value
+    })).filter(d => d.name.trim());
+  }
+
   document.getElementById('hp_addStatRow').addEventListener('click', () =>
     addSimpleRow(document.getElementById('hp_statsList'), [{ key: 'number', placeholder: 'Number e.g. 1200' }, { key: 'suffix', placeholder: 'Suffix e.g. +' }, { key: 'label', placeholder: 'Label e.g. Properties Closed' }]));
   document.getElementById('hp_addOffplanFeatureRow').addEventListener('click', () =>
@@ -1676,6 +1718,7 @@
   document.getElementById('hp_addWhyusItemRow').addEventListener('click', () =>
     addSimpleRow(document.getElementById('hp_whyusItemsList'), [{ key: 'title', placeholder: 'Title' }, { key: 'description', placeholder: 'Description' }]));
   document.getElementById('hp_addAwardRow').addEventListener('click', () => addAwardRow(document.getElementById('hp_awardsList')));
+  document.getElementById('hp_addDeveloperRow').addEventListener('click', () => addDeveloperRow(document.getElementById('hp_developersList')));
 
   // ===== Hero background: image/video toggle =====
   function setHeroBgType(type) {
@@ -1788,6 +1831,9 @@
     const featList = document.getElementById('hp_offplanFeaturesList');
     featList.innerHTML = '';
     (data.offplan_features || []).forEach(f => addSimpleRow(featList, [{ key: 'title', placeholder: 'Title' }, { key: 'description', placeholder: 'Description' }], f));
+    const devList = document.getElementById('hp_developersList');
+    devList.innerHTML = '';
+    (data.developers || []).forEach(d => addDeveloperRow(devList, d));
     const whyList = document.getElementById('hp_whyusItemsList');
     whyList.innerHTML = '';
     (data.whyus_items || []).forEach(w => addSimpleRow(whyList, [{ key: 'title', placeholder: 'Title' }, { key: 'description', placeholder: 'Description' }], w));
@@ -1816,6 +1862,7 @@
     record.hero_filters = readHeroFilters();
     record.stats = readSimpleRows(document.getElementById('hp_statsList'), [{ key: 'number', numeric: true }, { key: 'suffix' }, { key: 'label' }]);
     record.offplan_features = readSimpleRows(document.getElementById('hp_offplanFeaturesList'), [{ key: 'title' }, { key: 'description' }]);
+    record.developers = readDevelopers(document.getElementById('hp_developersList'));
     record.whyus_items = readSimpleRows(document.getElementById('hp_whyusItemsList'), [{ key: 'title' }, { key: 'description' }]);
     record.awards = readAwards(document.getElementById('hp_awardsList'));
 
