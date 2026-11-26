@@ -8,13 +8,13 @@
 
   const serviceImages = {
     'buying': 'assets/photos/burj-khalifa.jpg',
-    'rent': 'assets/photos/palm-jumeirah.jpg',
+    'rent': 'assets/photos/dubai-marina-towers.jpg',
     'sell': 'assets/photos/interior-dining.jpg',
     'offplan-projects': 'assets/photos/business-bay.jpg',
     'property-management': 'assets/photos/interior-living.jpg',
     'property-maintenance': 'assets/photos/interior-kitchen.jpg'
   };
-  const fallbackImage = 'assets/photos/dubai-marina-towers.jpg';
+  const fallbackImage = 'assets/photos/palm-jumeirah.jpg';
 
   grid.innerHTML = services.map((s, i) => {
     const href = s.id === 'offplan-projects' ? 'offplan-listings.html' : `services.html#${s.id}`;
