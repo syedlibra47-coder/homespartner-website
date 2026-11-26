@@ -1713,8 +1713,6 @@
 
   document.getElementById('hp_addStatRow').addEventListener('click', () =>
     addSimpleRow(document.getElementById('hp_statsList'), [{ key: 'number', placeholder: 'Number e.g. 1200' }, { key: 'suffix', placeholder: 'Suffix e.g. +' }, { key: 'label', placeholder: 'Label e.g. Properties Closed' }]));
-  document.getElementById('hp_addOffplanFeatureRow').addEventListener('click', () =>
-    addSimpleRow(document.getElementById('hp_offplanFeaturesList'), [{ key: 'title', placeholder: 'Title e.g. 0% Commission' }, { key: 'description', placeholder: 'Description e.g. on select launches' }]));
   document.getElementById('hp_addWhyusItemRow').addEventListener('click', () =>
     addSimpleRow(document.getElementById('hp_whyusItemsList'), [{ key: 'title', placeholder: 'Title' }, { key: 'description', placeholder: 'Description' }]));
   document.getElementById('hp_addAwardRow').addEventListener('click', () => addAwardRow(document.getElementById('hp_awardsList')));
@@ -1828,9 +1826,6 @@
     const statsList = document.getElementById('hp_statsList');
     statsList.innerHTML = '';
     (data.stats || []).forEach(s => addSimpleRow(statsList, [{ key: 'number', placeholder: 'Number' }, { key: 'suffix', placeholder: 'Suffix' }, { key: 'label', placeholder: 'Label' }], s));
-    const featList = document.getElementById('hp_offplanFeaturesList');
-    featList.innerHTML = '';
-    (data.offplan_features || []).forEach(f => addSimpleRow(featList, [{ key: 'title', placeholder: 'Title' }, { key: 'description', placeholder: 'Description' }], f));
     const devList = document.getElementById('hp_developersList');
     devList.innerHTML = '';
     (data.developers || []).forEach(d => addDeveloperRow(devList, d));
@@ -1861,7 +1856,6 @@
     record.hero_overlay_opacity = heroOverlay.opacity;
     record.hero_filters = readHeroFilters();
     record.stats = readSimpleRows(document.getElementById('hp_statsList'), [{ key: 'number', numeric: true }, { key: 'suffix' }, { key: 'label' }]);
-    record.offplan_features = readSimpleRows(document.getElementById('hp_offplanFeaturesList'), [{ key: 'title' }, { key: 'description' }]);
     record.developers = readDevelopers(document.getElementById('hp_developersList'));
     record.whyus_items = readSimpleRows(document.getElementById('hp_whyusItemsList'), [{ key: 'title' }, { key: 'description' }]);
     record.awards = readAwards(document.getElementById('hp_awardsList'));

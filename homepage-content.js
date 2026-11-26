@@ -196,13 +196,6 @@
   setText('ctaHeading', c.ctaHeading);
   setText('ctaSubtitle', c.ctaSubtitle);
 
-  // ----- Off-plan features strip -----
-  const offplanFeatures = document.getElementById('offplanFeaturesStrip');
-  if (offplanFeatures && c.offplanFeatures) {
-    offplanFeatures.innerHTML = c.offplanFeatures.map(f => `
-      <div class="offplan-feature"><strong>${f.title}</strong><span>${f.description}</span></div>`).join('');
-  }
-
   // ----- Why-us grid -----
   const whyusGrid = document.getElementById('whyusGrid');
   if (whyusGrid && c.whyusItems) {

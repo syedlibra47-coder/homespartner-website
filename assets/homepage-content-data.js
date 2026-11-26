@@ -26,11 +26,6 @@ window.HOMEPAGE_CONTENT_DATA = {
   offplanEyebrow: "Off-Plan Projects",
   offplanHeading: "Invest Early in Tomorrow's Skyline",
   offplanSubtitle: "Exclusive access to pre-launch and under-construction developments, offering investor-friendly payment plans and strong capital appreciation potential.",
-  offplanFeatures: [
-    { title: "0% Commission", description: "on select launches" },
-    { title: "Escrow Protected", description: "RERA-registered developers" },
-    { title: "Flexible Plans", description: "up to 80/20 post-handover" }
-  ],
   officesEyebrow: "Global Presence",
   officesHeading: "Dubai-Based, Built for Overseas Investors",
   officesSubtitle: "Our head office sits on Sheikh Zayed Road — with feeder desks in the UK, Pakistan and India for clients investing from abroad.",
