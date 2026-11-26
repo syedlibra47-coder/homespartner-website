@@ -25,15 +25,14 @@
         <img src="${image}" alt="${s.title}">
         <span class="service-index">${String(i + 1).padStart(2, '0')}</span>
         <div class="service-image-overlay">
-          <h3>${s.title}</h3>
+          <div class="service-image-overlay-text">
+            <h3>${s.title}</h3>
+            <p>${s.cardSummary}</p>
+          </div>
           <a href="${href}" class="service-arrow-btn" aria-label="${s.ctaLabel}" onclick="event.stopPropagation()">
             <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M17 7H8M17 7v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
         </div>
-      </div>
-      <div class="service-body">
-        <p>${s.cardSummary}</p>
-        <a href="${href}" class="card-link">${s.ctaLabel} <span class="card-link-arrow">&rarr;</span></a>
       </div>
     </div>`;
   }).join('');
