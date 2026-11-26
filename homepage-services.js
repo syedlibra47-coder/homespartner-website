@@ -20,7 +20,7 @@
     const href = s.id === 'offplan-projects' ? 'offplan-listings.html' : `services.html#${s.id}`;
     const image = serviceImages[s.id] || fallbackImage;
     return `
-    <div class="service-card reveal in-view" data-href="${href}">
+    <div class="service-card reveal in-view" data-href="${href}" data-service-id="${s.id}">
       <div class="service-image">
         <img src="${image}" alt="${s.title}">
         <span class="service-index">${String(i + 1).padStart(2, '0')}</span>
