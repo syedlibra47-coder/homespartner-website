@@ -6,18 +6,30 @@
 
   const services = [...window.SERVICES_DATA].sort((a, b) => a.sortOrder - b.sortOrder);
 
+  const serviceImages = {
+    'buying': 'assets/photos/burj-khalifa.jpg',
+    'rent': 'assets/photos/palm-jumeirah.jpg',
+    'sell': 'assets/photos/interior-dining.jpg',
+    'offplan-projects': 'assets/photos/business-bay.jpg',
+    'property-management': 'assets/photos/interior-living.jpg',
+    'property-maintenance': 'assets/photos/interior-kitchen.jpg'
+  };
+  const fallbackImage = 'assets/photos/dubai-marina-towers.jpg';
+
   grid.innerHTML = services.map((s, i) => {
-    const iconSvg = (window.ICON_LIBRARY && window.ICON_LIBRARY[s.icon]) || (window.ICON_LIBRARY && window.ICON_LIBRARY.home) || '';
     const href = s.id === 'offplan-projects' ? 'offplan-listings.html' : `services.html#${s.id}`;
+    const image = serviceImages[s.id] || fallbackImage;
     return `
     <div class="service-card reveal in-view" data-href="${href}">
-      <span class="service-index">${String(i + 1).padStart(2, '0')}</span>
-      <div class="service-icon">
-        <svg viewBox="0 0 24 24" fill="none">${iconSvg}</svg>
+      <div class="service-image">
+        <img src="${image}" alt="${s.title}">
+        <span class="service-index">${String(i + 1).padStart(2, '0')}</span>
       </div>
-      <h3>${s.title}</h3>
-      <p>${s.cardSummary}</p>
-      <a href="${href}" class="card-link">${s.ctaLabel} <span class="card-link-arrow">&rarr;</span></a>
+      <div class="service-body">
+        <h3>${s.title}</h3>
+        <p>${s.cardSummary}</p>
+        <a href="${href}" class="card-link">${s.ctaLabel} <span class="card-link-arrow">&rarr;</span></a>
+      </div>
     </div>`;
   }).join('');
 

@@ -605,7 +605,6 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   background: #fff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 34px 26px;
   box-shadow: var(--shadow-soft);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
@@ -616,6 +615,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+  z-index: 2;
 }
 .service-card:hover::before { transform: scaleX(1); }
 .service-card:hover {
@@ -624,33 +624,37 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   border-color: transparent;
 }
 
+.service-image {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.service-image img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.service-card:hover .service-image img { transform: scale(1.07); }
+.service-image::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,15,46,0) 50%, rgba(10,15,46,0.55) 100%);
+}
 .service-index {
   position: absolute;
-  top: 24px; right: 26px;
+  bottom: 10px; right: 16px;
+  z-index: 1;
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: 2.3rem;
+  font-size: 2rem;
   line-height: 1;
-  color: var(--tint);
-  z-index: 0;
+  color: rgba(255,255,255,0.85);
 }
 
-.service-icon {
-  position: relative;
-  z-index: 1;
-  width: 56px; height: 56px;
-  border-radius: 14px;
-  background: var(--tint);
-  color: var(--navy);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 22px;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-.service-icon svg { width: 28px; height: 28px; }
-.service-card:hover .service-icon { background: var(--navy); color: var(--gold-light); }
-
-.service-card h3 { position: relative; z-index: 1; font-size: 1.25rem; margin-bottom: 10px; }
-.service-card p { position: relative; z-index: 1; color: var(--gray); font-size: 0.95rem; margin-bottom: 18px; }
+.service-body { padding: 26px 26px 30px; }
+.service-card h3 { font-size: 1.25rem; margin-bottom: 10px; }
+.service-card p { color: var(--gray); font-size: 0.95rem; margin-bottom: 18px; }
 .service-card .card-link { position: relative; z-index: 1; }
 .service-card .card-link-arrow { display: inline-block; transition: transform 0.25s ease; }
 .service-card:hover .card-link-arrow { transform: translateX(4px); }
