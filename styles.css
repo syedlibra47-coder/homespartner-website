@@ -1690,12 +1690,12 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 }
 .marquee-item:hover { color: var(--navy); }
 .marquee-item--logo img {
-  height: 34px;
-  max-width: 150px;
+  height: 42px;
+  max-width: 170px;
   width: auto;
   object-fit: contain;
   filter: grayscale(1);
-  opacity: 0.6;
+  opacity: 0.85;
   transition: filter 0.2s ease, opacity 0.2s ease;
 }
 .marquee-item--logo:hover img { filter: grayscale(0); opacity: 1; }
@@ -1703,7 +1703,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (max-width: 720px) {
   .marquee-item { font-size: 1.3rem; gap: 24px; padding-right: 24px; }
-  .marquee-item--logo img { height: 26px; max-width: 110px; }
+  .marquee-item--logo img { height: 32px; max-width: 130px; }
 }
 
 /* ===== PROPERTY MATCH QUIZ ===== */
