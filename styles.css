@@ -622,7 +622,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 }
 .service-card[data-service-id="buying"] .service-image { flex: 1 1 auto; aspect-ratio: auto; min-height: 0; }
 .service-card[data-service-id="buying"] .service-body { flex: 0 0 auto; }
-.service-card[data-service-id="buying"] h3 { font-size: 1.5rem; }
+.service-card[data-service-id="buying"] .service-image-overlay h3 { font-size: 1.5rem; }
 .service-card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0; height: 3px;
@@ -654,21 +654,54 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .service-image::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(10,15,46,0) 50%, rgba(10,15,46,0.55) 100%);
+  background: linear-gradient(180deg, rgba(10,15,46,0) 40%, rgba(10,15,46,0.78) 100%);
 }
 .service-index {
   position: absolute;
-  bottom: 10px; right: 16px;
+  top: 14px; right: 16px;
   z-index: 1;
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 1.6rem;
   line-height: 1;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255,255,255,0.9);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
 }
 
-.service-body { padding: 26px 26px 30px; }
-.service-card h3 { font-size: 1.25rem; margin-bottom: 10px; }
+.service-image-overlay {
+  position: absolute;
+  left: 20px; right: 16px; bottom: 16px;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.service-image-overlay h3 {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.92rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.service-arrow-btn {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #fff;
+  transition: transform 0.25s ease, background-color 0.25s ease;
+}
+.service-arrow-btn svg { width: 16px; height: 16px; }
+.service-arrow-btn:hover { transform: scale(1.1); background: var(--gold-light); color: var(--navy-deep); border-color: var(--gold-light); }
+
+.service-body { padding: 22px 26px 28px; }
 .service-card p { color: var(--gray); font-size: 0.95rem; margin-bottom: 18px; }
 .service-card .card-link { position: relative; z-index: 1; }
 .service-card .card-link-arrow { display: inline-block; transition: transform 0.25s ease; }
@@ -1511,7 +1544,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   .service-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
   .service-card { grid-column: auto !important; grid-row: auto !important; }
   .service-card[data-service-id="buying"] .service-image { flex: 0 0 auto; aspect-ratio: 16 / 10; }
-  .service-card[data-service-id="buying"] h3 { font-size: 1.25rem; }
+  .service-card[data-service-id="buying"] .service-image-overlay h3 { font-size: 0.92rem; }
   .office-grid { grid-template-columns: repeat(2, 1fr); }
   .why-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-inner { grid-template-columns: 1fr 1fr; }
