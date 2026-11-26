@@ -1,19 +1,19 @@
 /* ===== HomesPartner Real Estate — Landing Page ===== */
 
 :root {
-  --navy: #1F275C;
-  --navy-deep: #12173D;
-  --navy-soft: #2E3878;
-  --gold: #C9A869;
-  --gold-light: #E2C980;
-  --gold-dark: #B59E5A;
+  --navy: #0A0F2E;
+  --navy-deep: #000219;
+  --navy-soft: #161B45;
+  --gold: #CDA773;
+  --gold-light: #E7C598;
+  --gold-dark: #B89D63;
   --gray: #5A5F73;
   --ink: #1B1F3B;
   --paper: #F8F8FB;
   --paper-flat: #FFFFFF;
   --line: #DCDEEA;
   --tint: #EEEFF5;
-  --hairline: rgba(31, 39, 92, 0.10);
+  --hairline: rgba(10, 15, 46, 0.10);
 
   --font-head: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

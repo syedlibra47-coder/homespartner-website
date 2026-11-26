@@ -2,16 +2,16 @@ window.SITE_SETTINGS_DATA = {
   colorPalette: "navy-gold",
   typography: {
     headingFont: "Fraunces",
-    headingColor: "#1F275C",
+    headingColor: "#0A0F2E",
     bodyFont: "Manrope",
     bodyColor: "#1B1D28",
     dataFont: "IBM Plex Mono",
-    dataColor: "#1F275C",
+    dataColor: "#0A0F2E",
     cardFont: "Manrope",
-    cardColor: "#1F275C",
+    cardColor: "#0A0F2E",
     blogFont: "Manrope",
-    blogColor: "#1F275C",
+    blogColor: "#0A0F2E",
     formFont: "Manrope",
-    formColor: "#1F275C"
+    formColor: "#0A0F2E"
   }
 };

@@ -333,17 +333,17 @@ create trigger homepage_content_set_updated_at before update on homepage_content
 
 -- ===== TYPOGRAPHY: per-role font + color, on top of the color palette =====
 alter table site_settings add column if not exists heading_font text not null default 'Fraunces';
-alter table site_settings add column if not exists heading_color text not null default '#1F275C';
+alter table site_settings add column if not exists heading_color text not null default '#0A0F2E';
 alter table site_settings add column if not exists body_font text not null default 'Manrope';
 alter table site_settings add column if not exists body_color text not null default '#1B1D28';
 alter table site_settings add column if not exists data_font text not null default 'IBM Plex Mono';
-alter table site_settings add column if not exists data_color text not null default '#1F275C';
+alter table site_settings add column if not exists data_color text not null default '#0A0F2E';
 alter table site_settings add column if not exists card_font text not null default 'Manrope';
-alter table site_settings add column if not exists card_color text not null default '#1F275C';
+alter table site_settings add column if not exists card_color text not null default '#0A0F2E';
 alter table site_settings add column if not exists blog_font text not null default 'Manrope';
-alter table site_settings add column if not exists blog_color text not null default '#1F275C';
+alter table site_settings add column if not exists blog_color text not null default '#0A0F2E';
 alter table site_settings add column if not exists form_font text not null default 'Manrope';
-alter table site_settings add column if not exists form_color text not null default '#1F275C';
+alter table site_settings add column if not exists form_color text not null default '#0A0F2E';
 
 -- ===== CONTACT PAGE: general WhatsApp/phone/email used site-wide =====
 alter table contact_page_content add column if not exists whatsapp_number text not null default '971500000000';
@@ -356,7 +356,7 @@ alter table homepage_content add column if not exists hero_bg_image text not nul
 alter table homepage_content add column if not exists hero_bg_video_id text not null default '';
 alter table homepage_content add column if not exists hero_search_placeholder text not null default 'Dubai Marina, Palm Jumeirah, Downtown…';
 alter table homepage_content add column if not exists hero_filters jsonb not null default '[]';
-alter table homepage_content add column if not exists hero_overlay_color text not null default '#1F275C';
+alter table homepage_content add column if not exists hero_overlay_color text not null default '#0A0F2E';
 alter table homepage_content add column if not exists hero_overlay_opacity int not null default 80;
 
 -- ===== HOMEPAGE AWARDS & RECOGNITION =====
@@ -540,10 +540,10 @@ create policy "Admins can insert site chrome" on site_chrome for insert with che
 create table if not exists page_headers (
   page_id text primary key,
   bg_type text not null default 'default',
-  bg_color text not null default '#1F275C',
+  bg_color text not null default '#0A0F2E',
   bg_image text,
   bg_video_id text,
-  overlay_color text not null default '#1F275C',
+  overlay_color text not null default '#0A0F2E',
   overlay_opacity int not null default 70,
   banner_image text,
   banner_link text,
@@ -551,7 +551,7 @@ create table if not exists page_headers (
   banner_height_mobile int not null default 250
 );
 
-alter table page_headers add column if not exists overlay_color text not null default '#1F275C';
+alter table page_headers add column if not exists overlay_color text not null default '#0A0F2E';
 alter table page_headers add column if not exists overlay_opacity int not null default 70;
 alter table page_headers add column if not exists banner_image text;
 alter table page_headers add column if not exists banner_link text;

@@ -9,8 +9,8 @@ window.THEME_PALETTES = {
   "navy-gold": {
     label: "Navy & Gold",
     tokens: {
-      "--navy": "#1F275C", "--navy-deep": "#12173D", "--navy-soft": "#2E3878",
-      "--gold": "#C9AF6C", "--gold-light": "#E4CE93", "--gold-dark": "#A98A45",
+      "--navy": "#0A0F2E", "--navy-deep": "#000219", "--navy-soft": "#161B45",
+      "--gold": "#CDA773", "--gold-light": "#E7C598", "--gold-dark": "#B89D63",
       "--gray": "#6B6B70", "--ink": "#1B1D28",
       "--paper": "#FFFFFF", "--paper-flat": "#F7F8FB", "--line": "#E4E6EE"
     }

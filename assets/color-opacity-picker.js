@@ -52,7 +52,7 @@ function copHsvToRgb(h, s, v) {
 }
 
 window.createColorOpacityPicker = function ({ color, opacity, onChange }) {
-  let hex = color || '#1F275C';
+  let hex = color || '#0A0F2E';
   let alpha = opacity != null ? opacity : 100;
   const rgb0 = copHexToRgb(hex);
   let hsv = copRgbToHsv(rgb0.r, rgb0.g, rgb0.b);

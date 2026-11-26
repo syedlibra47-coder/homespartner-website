@@ -1747,7 +1747,7 @@
     document.getElementById('hp_heroBgVideoId').value = extractYouTubeId(e.target.value);
   });
 
-  const hp_heroOverlayPicker = window.createColorOpacityPicker({ color: '#1F275C', opacity: 80 });
+  const hp_heroOverlayPicker = window.createColorOpacityPicker({ color: '#0A0F2E', opacity: 80 });
   document.getElementById('hp_heroOverlayPicker').appendChild(hp_heroOverlayPicker.el);
 
   document.getElementById('hp_heroBgImageFile').addEventListener('change', async (e) => {
@@ -1817,7 +1817,7 @@
     }
     document.getElementById('hp_heroBgVideoId').value = data.hero_bg_video_id || '';
     document.getElementById('hp_heroBgVideoUrl').value = data.hero_bg_video_id ? `https://www.youtube.com/watch?v=${data.hero_bg_video_id}` : '';
-    hp_heroOverlayPicker.setValue(data.hero_overlay_color || '#1F275C', data.hero_overlay_opacity != null ? data.hero_overlay_opacity : 80);
+    hp_heroOverlayPicker.setValue(data.hero_overlay_color || '#0A0F2E', data.hero_overlay_opacity != null ? data.hero_overlay_opacity : 80);
 
     const filtersList = document.getElementById('hp_heroFiltersList');
     filtersList.innerHTML = '';
@@ -2049,12 +2049,12 @@
   }
 
   const typoDefaults = {
-    heading: { font: 'Fraunces', color: '#1F275C' },
+    heading: { font: 'Fraunces', color: '#0A0F2E' },
     body: { font: 'Manrope', color: '#1B1D28' },
-    data: { font: 'IBM Plex Mono', color: '#1F275C' },
-    card: { font: 'Manrope', color: '#1F275C' },
-    blog: { font: 'Manrope', color: '#1F275C' },
-    form: { font: 'Manrope', color: '#1F275C' }
+    data: { font: 'IBM Plex Mono', color: '#0A0F2E' },
+    card: { font: 'Manrope', color: '#0A0F2E' },
+    blog: { font: 'Manrope', color: '#0A0F2E' },
+    form: { font: 'Manrope', color: '#0A0F2E' }
   };
 
   async function loadThemeSettings() {
@@ -2116,7 +2116,7 @@
         </div>
         <input type="hidden" class="pagebg-type" value="default">
         <div class="pagebg-color-fields" style="display:none;">
-          <label>Background Color <input type="color" class="pagebg-color" value="#1F275C"></label>
+          <label>Background Color <input type="color" class="pagebg-color" value="#0A0F2E"></label>
         </div>
         <div class="pagebg-image-fields" style="display:none;">
           <label class="admin-form-full">Background Image
@@ -2194,7 +2194,7 @@
           preview.src = url; preview.style.display = 'block';
         } catch (err) { document.getElementById('pageHeadersFormError').textContent = 'Image upload failed: ' + err.message; }
       });
-      const overlayPicker = window.createColorOpacityPicker({ color: '#1F275C', opacity: 70 });
+      const overlayPicker = window.createColorOpacityPicker({ color: '#0A0F2E', opacity: 70 });
       block.querySelector('.pagebg-overlay-picker').appendChild(overlayPicker.el);
       block.__overlayPicker = overlayPicker;
       block.__setType = setType;
@@ -2211,7 +2211,7 @@
       const row = byId[block.dataset.page];
       if (!row) return;
       block.__setType(row.bg_type || 'default');
-      block.querySelector('.pagebg-color').value = row.bg_color || '#1F275C';
+      block.querySelector('.pagebg-color').value = row.bg_color || '#0A0F2E';
       block.querySelector('.pagebg-image').value = row.bg_image || '';
       if (row.bg_image) {
         const preview = block.querySelector('.pagebg-image-preview');
@@ -2219,7 +2219,7 @@
       }
       block.querySelector('.pagebg-video-id').value = row.bg_video_id || '';
       block.querySelector('.pagebg-video-url').value = row.bg_video_id ? `https://www.youtube.com/watch?v=${row.bg_video_id}` : '';
-      block.__overlayPicker.setValue(row.overlay_color || '#1F275C', row.overlay_opacity != null ? row.overlay_opacity : 70);
+      block.__overlayPicker.setValue(row.overlay_color || '#0A0F2E', row.overlay_opacity != null ? row.overlay_opacity : 70);
       block.querySelector('.pagebg-banner-image').value = row.banner_image || '';
       if (row.banner_image) {
         const preview = block.querySelector('.pagebg-banner-preview');
