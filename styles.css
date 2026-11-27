@@ -634,6 +634,14 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   object-fit: cover;
   transition: transform 0.6s cubic-bezier(.4,0,.2,1);
 }
+.service-card[data-service-id="rent"] .service-image,
+.service-card[data-service-id="sell"] .service-image {
+  background: var(--navy-deep);
+}
+.service-card[data-service-id="rent"] .service-image img,
+.service-card[data-service-id="sell"] .service-image img {
+  object-fit: contain;
+}
 .service-card:hover .service-image img {
   transform: scale(1.08);
 }
