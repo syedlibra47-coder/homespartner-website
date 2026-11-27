@@ -7,9 +7,9 @@
   const services = [...window.SERVICES_DATA].sort((a, b) => a.sortOrder - b.sortOrder);
 
   const serviceImages = {
-    'buying': 'assets/photos/burj-khalifa.jpg',
-    'rent': 'assets/photos/hero-dubai-marina.jpg',
-    'sell': 'assets/photos/interior-dining.jpg',
+    'buying': 'assets/photos/service-buying.jpg',
+    'rent': 'assets/photos/service-rent.webp',
+    'sell': 'assets/photos/service-sell.jpg',
     'offplan-projects': 'assets/photos/business-bay.jpg',
     'property-management': 'assets/photos/interior-living.jpg',
     'property-maintenance': 'assets/photos/interior-kitchen.jpg'
