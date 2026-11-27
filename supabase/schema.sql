@@ -317,7 +317,7 @@ create table if not exists homepage_content (
   awards_eyebrow text not null default '',
   awards_heading text not null default '',
   awards_subtitle text not null default '',
-  awards jsonb not null default '[]',           -- [{icon, title, issuer, year}]
+  awards jsonb not null default '[]',           -- [{icon, title, issuer, year, imageUrl}]
   cta_heading text not null default '',
   cta_subtitle text not null default '',
   footer_blurb text not null default '',

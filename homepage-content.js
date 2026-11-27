@@ -191,7 +191,17 @@
   setText('whyusHeading', c.whyusHeading);
   setText('whyusSubtitle', c.whyusSubtitle);
   setText('awardsEyebrow', c.awardsEyebrow);
-  setText('awardsHeading', c.awardsHeading);
+  const awardsHeadingEl = document.getElementById('awardsHeading');
+  if (awardsHeadingEl && c.awardsHeading) {
+    const words = c.awardsHeading.trim().split(/\s+/);
+    const firstWord = words.shift();
+    awardsHeadingEl.textContent = '';
+    awardsHeadingEl.append(document.createTextNode(firstWord + (words.length ? ' ' : '')));
+    const accentSpan = document.createElement('span');
+    accentSpan.className = 'awards-heading-accent';
+    accentSpan.textContent = words.join(' ');
+    awardsHeadingEl.appendChild(accentSpan);
+  }
   setText('awardsSubtitle', c.awardsSubtitle);
   setText('ctaHeading', c.ctaHeading);
   setText('ctaSubtitle', c.ctaSubtitle);
@@ -209,11 +219,16 @@
   if (awardsSection && awardsGrid) {
     if (c.awards && c.awards.length) {
       awardsGrid.innerHTML = c.awards.map(a => {
-        const iconSvg = (window.ICON_LIBRARY && window.ICON_LIBRARY[a.icon]) || (window.ICON_LIBRARY && window.ICON_LIBRARY.award) || '';
         const meta = [a.issuer, a.year].filter(Boolean).join(' · ');
+        const media = a.imageUrl
+          ? `<div class="award-image"><img src="${a.imageUrl}" alt="${a.title}" loading="lazy"></div>`
+          : (() => {
+              const iconSvg = (window.ICON_LIBRARY && window.ICON_LIBRARY[a.icon]) || (window.ICON_LIBRARY && window.ICON_LIBRARY.award) || '';
+              return `<span class="award-badge"><svg viewBox="0 0 24 24" fill="none">${iconSvg}</svg></span>`;
+            })();
         return `
         <div class="award-card">
-          <span class="award-badge"><svg viewBox="0 0 24 24" fill="none">${iconSvg}</svg></span>
+          ${media}
           <h4>${a.title}</h4>
           ${meta ? `<span class="award-meta">${meta}</span>` : ''}
         </div>`;

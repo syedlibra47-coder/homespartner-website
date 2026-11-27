@@ -1356,25 +1356,46 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .why-item p { color: var(--gray); font-size: 0.92rem; }
 
 /* ===== AWARDS & RECOGNITION ===== */
-.awards { background: var(--paper-flat); padding: 90px 0; }
+.awards { background: var(--navy); padding: 100px 0; }
 .awards:empty, .awards.is-empty { display: none; }
+.awards .eyebrow { color: var(--gold-light); justify-content: center; }
+.awards .section-head { text-align: center; }
+.awards .display {
+  color: #fff;
+  margin: 10px 0 14px;
+}
+.awards-heading-accent { color: var(--gold-light); }
+.awards .section-sub { color: rgba(255,255,255,0.65); max-width: 560px; margin-left: auto; margin-right: auto; }
+
 .awards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 32px 24px;
-  max-width: 1000px;
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.12);
+  margin-top: 50px;
 }
 .award-card {
+  background: var(--navy);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 14px;
+  padding: 28px 22px 32px;
 }
+.award-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 22px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+}
+.award-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .award-badge {
   width: 64px;
   height: 64px;
+  margin-bottom: 20px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
   color: var(--navy-deep);
@@ -1387,17 +1408,16 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .award-badge svg { width: 28px; height: 28px; }
 .award-card h4 {
   font-family: var(--font-serif);
-  font-weight: 500;
-  font-size: 1.05rem;
-  color: var(--navy);
-  margin: 0;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--gold-light);
+  margin: 0 0 10px;
+  line-height: 1.3;
 }
 .award-meta {
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 0.7rem;
-  color: var(--gray);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.55);
 }
 
 /* ===== CTA / CONTACT ===== */

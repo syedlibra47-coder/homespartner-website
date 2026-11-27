@@ -1643,15 +1643,34 @@
     const row = document.createElement('div');
     row.className = 'admin-repeat-row';
     row.style.flexWrap = 'wrap';
+    row.style.alignItems = 'center';
     const iconOptions = window.ICON_LIBRARY ? Object.keys(window.ICON_LIBRARY).map(key =>
       `<option value="${key}"${item && item.icon === key ? ' selected' : ''}>${(window.ICON_LIBRARY_LABELS && window.ICON_LIBRARY_LABELS[key]) || key}</option>`).join('') : '';
+    const hasImage = !!(item && item.imageUrl);
     row.innerHTML = `
       <span class="drag-handle" draggable="true" title="Drag to reorder">⠿</span>
-      <select data-field="icon" style="flex:0 0 120px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:0.85rem;">${iconOptions}</select>
       <input type="text" data-field="title" placeholder="Award title e.g. Best Boutique Agency" value="${item ? item.title : ''}" style="flex:2;">
       <input type="text" data-field="issuer" placeholder="Issuer e.g. Arabian Property Awards" value="${item ? item.issuer : ''}" style="flex:2;">
       <input type="text" data-field="year" placeholder="Year e.g. 2024" value="${item ? item.year : ''}" style="flex:0 0 90px;">
+      <select data-field="icon" title="Fallback icon, used only if no photo is uploaded" style="flex:0 0 120px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:0.85rem;">${iconOptions}</select>
+      <input type="file" accept="image/*" data-field="imageFile" title="Trophy/certificate photo" style="flex:1 1 150px;">
+      <input type="hidden" data-field="imageUrl" value="${hasImage ? item.imageUrl : ''}">
+      <img data-field="imagePreview" style="height:36px;width:48px;object-fit:cover;border-radius:4px;${hasImage ? '' : 'display:none;'}" src="${hasImage ? item.imageUrl : ''}">
     `;
+    const fileInput = row.querySelector('[data-field="imageFile"]');
+    const hiddenUrl = row.querySelector('[data-field="imageUrl"]');
+    const preview = row.querySelector('[data-field="imagePreview"]');
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      try {
+        const url = await uploadImage(file);
+        hiddenUrl.value = url;
+        preview.src = url; preview.style.display = 'block';
+      } catch (err) {
+        document.getElementById('homepageContentFormError').textContent = 'Award photo upload failed: ' + err.message;
+      }
+    });
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button'; removeBtn.className = 'remove-row'; removeBtn.textContent = '×';
     removeBtn.addEventListener('click', () => row.remove());
@@ -1665,7 +1684,8 @@
       icon: row.querySelector('[data-field="icon"]').value,
       title: row.querySelector('[data-field="title"]').value,
       issuer: row.querySelector('[data-field="issuer"]').value,
-      year: row.querySelector('[data-field="year"]').value
+      year: row.querySelector('[data-field="year"]').value,
+      imageUrl: row.querySelector('[data-field="imageUrl"]').value
     })).filter(a => a.title.trim());
   }
 
