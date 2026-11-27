@@ -646,20 +646,16 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  filter: grayscale(0.5) sepia(0.35) hue-rotate(180deg) saturate(1.6) brightness(0.92);
-  transition: transform 0.6s cubic-bezier(.4,0,.2,1), filter 0.6s ease;
+  transition: transform 0.6s cubic-bezier(.4,0,.2,1);
 }
 .service-card:hover .service-image img {
   transform: scale(1.08);
-  filter: grayscale(0) sepia(0) hue-rotate(0deg) saturate(1) brightness(1);
 }
 .service-image::after {
   content: '';
   position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(10,15,46,0) 35%, rgba(10,15,46,0.85) 100%);
-  transition: opacity 0.5s ease;
 }
-.service-card:hover .service-image::after { opacity: 0.75; }
 .service-index {
   position: absolute;
   top: 16px; right: 18px;
