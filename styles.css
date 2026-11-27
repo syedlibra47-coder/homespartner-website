@@ -600,7 +600,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-auto-rows: 1fr;
-  gap: 10px;
+  gap: 14px;
   aspect-ratio: 2 / 1;
 }
 
@@ -616,9 +616,9 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .service-card {
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-soft);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft), 0 0 0 1px rgba(205, 167, 115, 0.16);
+  transition: transform 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.4s ease;
 }
 .service-card[data-service-id="buying"] .service-image-overlay h3 { font-size: 1.6rem; }
 .service-card[data-service-id="buying"] .service-image-overlay p { font-size: 0.92rem; }
@@ -633,8 +633,8 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 }
 .service-card:hover::before { transform: scaleX(1); }
 .service-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-card);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-card), 0 0 0 1px rgba(231, 197, 152, 0.45);
 }
 
 .service-image {
@@ -646,23 +646,29 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  filter: grayscale(0.5) sepia(0.35) hue-rotate(180deg) saturate(1.6) brightness(0.92);
+  transition: transform 0.6s cubic-bezier(.4,0,.2,1), filter 0.6s ease;
 }
-.service-card:hover .service-image img { transform: scale(1.07); }
+.service-card:hover .service-image img {
+  transform: scale(1.08);
+  filter: grayscale(0) sepia(0) hue-rotate(0deg) saturate(1) brightness(1);
+}
 .service-image::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(10,15,46,0) 40%, rgba(10,15,46,0.78) 100%);
+  background: linear-gradient(180deg, rgba(10,15,46,0) 35%, rgba(10,15,46,0.85) 100%);
+  transition: opacity 0.5s ease;
 }
+.service-card:hover .service-image::after { opacity: 0.75; }
 .service-index {
   position: absolute;
-  top: 14px; right: 16px;
+  top: 16px; right: 18px;
   z-index: 1;
   font-family: var(--font-serif);
   font-weight: 600;
   font-size: 1.6rem;
   line-height: 1;
-  color: rgba(255,255,255,0.9);
+  color: rgba(231, 197, 152, 0.9);
   text-shadow: 0 1px 6px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.4);
 }
 
@@ -678,12 +684,21 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .service-image-overlay-text { min-width: 0; }
 .service-image-overlay h3 {
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: #fff;
   font-family: var(--font-body);
   font-weight: 800;
   font-size: 0.92rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+.service-image-overlay h3::before {
+  content: '';
+  flex-shrink: 0;
+  width: 16px; height: 2px;
+  background: var(--gold-light);
 }
 .service-image-overlay p {
   margin: 6px 0 0;
@@ -697,18 +712,18 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 }
 .service-arrow-btn {
   flex-shrink: 0;
-  width: 38px; height: 38px;
+  width: 40px; height: 40px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.5);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(231, 197, 152, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #fff;
-  transition: transform 0.25s ease, background-color 0.25s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 .service-arrow-btn svg { width: 16px; height: 16px; }
-.service-arrow-btn:hover { transform: scale(1.1); background: var(--gold-light); color: var(--navy-deep); border-color: var(--gold-light); }
+.service-arrow-btn:hover { transform: scale(1.1) rotate(8deg); background: var(--gold-light); color: var(--navy-deep); border-color: var(--gold-light); }
 
 .card-link {
   color: var(--gold-dark);
