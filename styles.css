@@ -253,6 +253,12 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   object-fit: cover;
   object-position: center 58%;
   opacity: 0.7;
+  transform-origin: center 58%;
+  animation: heroKenBurns 22s ease-out forwards;
+}
+@keyframes heroKenBurns {
+  from { transform: scale(1); }
+  to { transform: scale(1.09); }
 }
 .hero-bg::after {
   content: '';
@@ -348,6 +354,24 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 .hero-kicker-icon { color: var(--gold-light); font-size: 0.95rem; }
 
 .hero-heading-accent { color: var(--gold-light); }
+
+/* ===== HERO ENTRANCE (staggered fade-up, plays once on load) ===== */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(26px); }
+  to { opacity: 1; transform: none; }
+}
+.hero-kicker, .hero-display, .hero-sub, .hero .search-panel {
+  animation: heroFadeUp 0.9s cubic-bezier(.2,.7,.3,1) both;
+}
+.hero-kicker { animation-delay: 0.1s; }
+.hero-display { animation-delay: 0.22s; }
+.hero-sub { animation-delay: 0.38s; }
+.hero .search-panel { animation-delay: 0.52s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo { animation: none; }
+  .hero-kicker, .hero-display, .hero-sub, .hero .search-panel { animation: none; opacity: 1; transform: none; }
+}
 
 /* ===== SEARCH PANEL ===== */
 .search-panel {
