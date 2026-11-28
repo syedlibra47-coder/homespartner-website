@@ -1831,7 +1831,9 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   text-decoration: none;
   transition: color 0.2s ease;
 }
+.marquee-item:visited { color: var(--ink); }
 .marquee-item:hover { color: var(--navy); }
+.marquee-item:hover:visited { color: var(--navy); }
 .marquee-item--logo img {
   height: 48px;
   max-width: 190px;

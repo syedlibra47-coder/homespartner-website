@@ -8,6 +8,21 @@
   const track = document.getElementById('marqueeTrack');
   if (!track) return;
 
+  function esc(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  // Admins may type a link either as a full URL (https://...) or just a bare
+  // domain (www.damacproperties.com) without thinking about the protocol --
+  // without a scheme, the browser would treat it as relative to this page.
+  function normalizeLinkUrl(url) {
+    const trimmed = String(url || '').trim();
+    if (!trimmed) return '';
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) return trimmed;
+    if (/^[/#?]/.test(trimmed)) return trimmed;
+    return 'https://' + trimmed;
+  }
+
   const fallbackDevelopers = [
     { name: 'Emaar Properties', logoUrl: 'assets/logos/emaar.png' },
     { name: 'DAMAC Properties', logoUrl: 'assets/logos/damac.png' },
@@ -23,9 +38,13 @@
   const diamond = '<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 14 10 22 12 14 14 12 22 10 14 2 12 10 10z"></path></svg>';
   const itemsHtml = developers.map(d => {
     const content = d.logoUrl
-      ? `<img src="${d.logoUrl}" alt="${d.name || ''}" loading="lazy">`
-      : d.name;
-    return `<span class="marquee-item${d.logoUrl ? ' marquee-item--logo' : ''}">${content}${diamond}</span>`;
+      ? `<img src="${esc(d.logoUrl)}" alt="${esc(d.name || '')}" loading="lazy">`
+      : esc(d.name);
+    const cls = `marquee-item${d.logoUrl ? ' marquee-item--logo' : ''}`;
+    const href = normalizeLinkUrl(d.linkUrl);
+    return href
+      ? `<a class="${cls}" href="${esc(href)}" target="_blank" rel="noopener">${content}${diamond}</a>`
+      : `<span class="${cls}">${content}${diamond}</span>`;
   }).join('');
 
   // doubled so the -50% translateX loop point is seamless

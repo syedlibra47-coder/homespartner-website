@@ -303,7 +303,7 @@ create table if not exists homepage_content (
   offplan_heading text not null default '',
   offplan_subtitle text not null default '',
   offplan_features jsonb not null default '[]', -- [{title, description}] x3
-  developers jsonb not null default '[]',        -- [{name, logoUrl}] developers marquee
+  developers jsonb not null default '[]',        -- [{name, logoUrl, linkUrl}] developers marquee
   offices_eyebrow text not null default '',
   offices_heading text not null default '',
   offices_subtitle text not null default '',

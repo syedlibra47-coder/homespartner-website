@@ -1697,7 +1697,8 @@
     const hasLogo = !!(item && item.logoUrl);
     row.innerHTML = `
       <span class="drag-handle" draggable="true" title="Drag to reorder">⠿</span>
-      <input type="text" data-field="name" placeholder="Developer name e.g. DAMAC Properties" value="${item ? item.name : ''}" style="flex:2;">
+      <input type="text" data-field="name" placeholder="Developer name e.g. DAMAC Properties" value="${item ? item.name : ''}" style="flex:1 1 180px;">
+      <input type="text" data-field="linkUrl" placeholder="Link URL (optional) e.g. damacproperties.com" value="${item && item.linkUrl ? item.linkUrl : ''}" style="flex:1 1 200px;">
       <input type="file" accept="image/*" data-field="logoFile" style="flex:1 1 150px;">
       <input type="hidden" data-field="logoUrl" value="${hasLogo ? item.logoUrl : ''}">
       <img data-field="logoPreview" style="height:32px;max-width:110px;object-fit:contain;border-radius:4px;${hasLogo ? '' : 'display:none;'}" src="${hasLogo ? item.logoUrl : ''}">
@@ -1727,6 +1728,7 @@
   function readDevelopers(container) {
     return [...container.querySelectorAll('.admin-repeat-row')].map(row => ({
       name: row.querySelector('[data-field="name"]').value,
+      linkUrl: row.querySelector('[data-field="linkUrl"]').value.trim(),
       logoUrl: row.querySelector('[data-field="logoUrl"]').value
     })).filter(d => d.name.trim());
   }
