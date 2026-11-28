@@ -373,58 +373,79 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   .hero-kicker, .hero-display, .hero-sub, .hero .search-panel { animation: none; opacity: 1; transform: none; }
 }
 
-/* ===== SEARCH PANEL ===== */
+/* ===== SEARCH PANEL (frosted glass, sits directly on the hero photo) ===== */
 .search-panel {
   position: relative;
-  max-width: 815px;
+  max-width: 850px;
   margin: 40px 0 0;
-  background: var(--paper-flat);
-  border-radius: 8px;
+  background: rgba(14, 18, 46, 0.45);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 20px;
   overflow: hidden;
   text-align: left;
-  box-shadow: 0 30px 60px rgba(8,10,26,0.4);
+  box-shadow: 0 30px 70px rgba(2,3,12,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 .search-toggle {
   position: relative;
-  display: flex;
+  display: inline-flex;
+  gap: 4px;
+  margin: 18px 20px 0;
+  padding: 5px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 999px;
 }
 .toggle-pill {
   position: relative;
   z-index: 2;
-  background: rgba(31, 39, 92, 0.7);
+  background: none;
   border: none;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255,255,255,0.7);
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  padding: 12px 22px;
+  padding: 10px 20px;
+  border-radius: 999px;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: color 0.25s ease;
 }
-.toggle-pill.active { background: var(--paper-flat); color: var(--navy); }
-.toggle-highlight { display: none; }
+.toggle-pill.active { color: var(--navy-deep); }
+.toggle-highlight {
+  position: absolute;
+  top: 5px; left: 4px;
+  height: calc(100% - 10px);
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  box-shadow: 0 6px 16px rgba(169, 138, 69, 0.4);
+  z-index: 1;
+  transition: transform 0.35s cubic-bezier(.4,0,.2,1), width 0.35s cubic-bezier(.4,0,.2,1);
+}
 
 .search-fields {
   display: flex;
   align-items: stretch;
   flex-wrap: wrap;
-  border-top: 1px solid var(--line);
-  padding-right: 10px;
+  margin-top: 18px;
+  padding: 0 10px 4px;
 }
 .search-field {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
   padding: 12px 18px;
   flex: 1 1 150px;
-  border-right: 1px solid var(--line);
+  border-right: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
   transition: background 0.2s ease;
 }
-.search-field:focus-within { background: var(--tint); }
+.search-field:focus-within { background: rgba(255,255,255,0.07); }
+.search-field:last-child { border-right: none; }
 .search-field--grow { flex: 2 1 220px; }
 .search-field-row { display: contents; }
 .search-field-label {
@@ -433,10 +454,10 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   letter-spacing: 0.06em;
   font-size: 0.6rem;
   font-weight: 600;
-  color: var(--gray);
+  color: rgba(255,255,255,0.5);
 }
 .search-field-control { position: relative; display: flex; align-items: center; gap: 8px; }
-.search-field svg { width: 15px; height: 15px; color: var(--gold-dark); flex-shrink: 0; }
+.search-field svg { width: 15px; height: 15px; color: var(--gold-light); flex-shrink: 0; }
 .search-field input, .search-field select {
   border: none;
   outline: none;
@@ -444,13 +465,15 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   font-family: var(--font-body);
   font-size: 0.86rem;
   font-weight: 600;
-  color: var(--ink);
+  color: #fff;
   width: 100%;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
+.search-field input::placeholder { color: rgba(255,255,255,0.4); }
 .search-field select { padding-right: 16px; cursor: pointer; }
+.search-field select option { color: var(--ink); background: var(--paper-flat); }
 .search-field-control .field-chevron {
   position: absolute;
   right: 0;
@@ -458,29 +481,30 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   transform: translateY(-50%);
   width: 10px;
   height: 10px;
-  color: var(--gray);
+  color: rgba(255,255,255,0.5);
   pointer-events: none;
 }
 .search-btn {
   flex: 0 0 auto;
   height: auto;
-  border-radius: 0;
-  padding: 0 26px;
-  border-right: none;
-  background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold-dark) 100%);
-  box-shadow: none;
+  margin: 2px 2px 2px 8px;
+  border-radius: 12px;
+  padding: 0 28px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  box-shadow: 0 10px 24px rgba(169, 138, 69, 0.35);
   font-size: 0.85rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+.search-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(169, 138, 69, 0.45); }
 
 .search-alt {
   margin: 0;
-  padding: 11px 18px;
+  padding: 14px 20px 18px;
   font-size: 0.8rem;
-  color: var(--gray);
-  border-top: 1px solid var(--line);
+  color: rgba(255,255,255,0.6);
 }
-.search-alt a { color: var(--gold-dark); font-weight: 600; text-decoration: none; }
-.search-alt a:hover { color: var(--navy); }
+.search-alt a { color: var(--gold-light); font-weight: 600; text-decoration: none; }
+.search-alt a:hover { color: #fff; }
 
 .eyebrow {
   display: inline-flex;
@@ -1589,8 +1613,9 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
   .hero-stats--strip .stat:nth-child(odd)::before { display: none; }
   .search-fields { flex-direction: column; }
   .search-field, .search-btn, .search-field-row { width: 100%; flex-basis: auto; }
-  .search-field { border-right: none; border-bottom: 1px solid var(--line); }
-  .search-btn { padding: 16px 30px; }
+  .search-field { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.12); }
+  .search-btn { padding: 16px 30px; margin: 10px 0 0; }
+  .search-toggle { width: calc(100% - 40px); }
   .toggle-pill { flex: 1 1 auto; text-align: center; }
   .listing-grid-full { grid-template-columns: repeat(2, 1fr); }
   .youtube-grid { grid-template-columns: repeat(2, 1fr); }
