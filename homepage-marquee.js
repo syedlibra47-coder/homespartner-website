@@ -11,12 +11,10 @@
   const fallbackDevelopers = [
     { name: 'Emaar Properties', logoUrl: 'assets/logos/emaar.png' },
     { name: 'DAMAC Properties', logoUrl: 'assets/logos/damac.png' },
-    { name: 'Nakheel' },
     { name: 'Sobha Realty', logoUrl: 'assets/logos/sobha.png' },
     { name: 'Binghatti', logoUrl: 'assets/logos/binghatti.png' },
     { name: 'Danube Properties', logoUrl: 'assets/logos/danube.png' },
-    { name: 'Azizi Developments', logoUrl: 'assets/logos/azizi.png' },
-    { name: 'Meraas' }
+    { name: 'Azizi Developments', logoUrl: 'assets/logos/azizi.png' }
   ];
 
   const configured = (window.HOMEPAGE_CONTENT_DATA && window.HOMEPAGE_CONTENT_DATA.developers) || [];
