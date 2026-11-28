@@ -1784,8 +1784,8 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 }
 .marquee-item:hover { color: var(--navy); }
 .marquee-item--logo img {
-  height: 42px;
-  max-width: 170px;
+  height: 48px;
+  max-width: 190px;
   width: auto;
   object-fit: contain;
   filter: grayscale(1);
@@ -1797,7 +1797,7 @@ h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
 @keyframes marqueeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (max-width: 720px) {
   .marquee-item { font-size: 1.3rem; gap: 24px; padding-right: 24px; }
-  .marquee-item--logo img { height: 32px; max-width: 130px; }
+  .marquee-item--logo img { height: 36px; max-width: 148px; }
 }
 
 /* ===== PROPERTY MATCH QUIZ ===== */
